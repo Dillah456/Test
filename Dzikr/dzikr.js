@@ -95,3 +95,11 @@ function drawCON(threshold) {
 // === Utility Functions ===
 function updateCounter(id, value) { document.getElementById(id).innerText = value; }
 function updateStat(id, value) { document.getElementById(id).innerText = value; }
+
+// Example function to update MP
+function updateMP(newValue){
+  MP = newValue;
+  // Update both segments
+  document.getElementById("mp").innerText = MP;   // Dzikr segment
+  document.getElementById("mp2").innerText = MP;  // Mujahadah segment
+}
