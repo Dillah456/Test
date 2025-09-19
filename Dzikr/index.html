@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dzikr Dashboard</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #f0f8ff, #cce7ff);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    text-align: center;
+    color: #004080;
+    padding: 15px 0;
+    text-shadow: 1px 1px 2px #aaa;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    background-color: #007acc;
+    color: white;
+    transition: 0.2s;
+  }
+
+  .tab:hover { background-color: #005fa3; }
+  .tab.active { background-color: #004080; }
+
+  .segment {
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    background: #ffffffdd;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .segment.active { display: block; }
+
+  .status p, .segment p { margin: 5px 0; font-size: 1.1em; }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  button {
+    padding: 12px 18px;
+    font-size: 1em;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  button:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+
+  button.dzikr { background-color: #007acc; color: white; }
+  button.arousal { background-color: #ff9933; color: white; }
+  button.fujur { background-color: #cc0000; color: white; }
+  button.info { background-color: #33cc99; color: white; }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center; align-items: center;
+  }
+
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .close-btn {
+    margin-top: 15px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #cc0000;
+    color: white;
+    cursor: pointer;
+  }
+
+  .close-btn:hover { background-color: #990000; }
+</style>
+</head>
+<body>
+
+<h1>Dzikr & Mujahadah Dashboard</h1>
+
+<div class="tabs">
+  <div class="tab active" onclick="showSegment('dzikr')">Dzikr</div>
+  <div class="tab" onclick="showSegment('mujahadah')">Mujahadah An Nafs</div>
+</div>
+
+<!-- Dzikr Segment -->
+<div id="dzikr" class="segment active">
+  <h2>Dzikr</h2>
+  <p>Hamdalah: <span id="hamdalah">0</span></p>
+  <p>Tasbih: <span id="tasbih">0</span></p>
+  <p>Takbir: <span id="takbir">0</span></p>
+  <p>Istigfar: <span id="istigfar">0</span></p>
+
+  <div class="buttons">
+    <button class="dzikr" onclick="addDzikr('Hamdalah')">+1 Hamdalah</button>
+    <button class="dzikr" onclick="addDzikr('Tasbih')">+1 Tasbih</button>
+    <button class="dzikr" onclick="addDzikr('Takbir')">+1 Takbir</button>
+    <button class="dzikr" onclick="addDzikr('Istigfar')">+1 Istigfar</button>
+  </div>
+
+  <p>Ijtihad: <span id="ijtihad">0</span></p>
+  <p>MP: <span id="mp">0</span></p>
+  <div class="buttons">
+    <button class="info" onclick="showInfo()">Information</button>
+  </div>
+</div>
+
+<!-- Mujahadah Segment -->
+<div id="mujahadah" class="segment">
+  <h2>Mujahadah An Nafs</h2>
+  <p>INT: <span id="intStat">8</span></p>
+  <p>WIS: <span id="wisStat">7</span></p>
+  <p>Arousal: <span id="arousalStat">4</span></p>
+
+  <div class="buttons">
+    <button class="arousal" onclick="awake()">Awake (Random Arousal)</button>
+    <button class="arousal" onclick="defineArousal()">Define Arousal</button>
+    <button class="fujur" onclick="Fujur()">Fujur</button>
+    <button class="info" onclick="showInfo()">Information</button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="infoModal" class="modal">
+  <div class="modal-content">
+    <h3>Information</h3>
+    <p>
+      This dashboard tracks your Dzikr and Mujahadah An Nafs.
+      <br><br>
+      - Dzikr includes Hamdalah, Tasbih, Takbir, Istigfar.
+      <br>
+      - Every 33 dzikr adds 1 Ijtihad and 33 MP.
+      <br>
+      - Istigfar contributes to Ijtihad and WIS.
+      <br>
+      - Arousal and Fujur reflect self-discipline challenges.
+      <br>
+      for more info 
+      <a href="Info.html"> Click me</a>
+    </p>
+    
+    <button class="close-btn" onclick="closeInfo()">Close</button>
+  </div>
+</div>
+
+<script src="dzikr.js"></script>
+<script>
+function showSegment(id) {
+  document.querySelectorAll('.segment').forEach(seg => seg.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Show Information Modal
+function showInfo() {
+  document.getElementById('infoModal').style.display = 'flex';
+}
+
+// Close Information Modal
+function closeInfo() {
+  document.getElementById('infoModal').style.display = 'none';
+}
+</script>
+</body>
+</html>
