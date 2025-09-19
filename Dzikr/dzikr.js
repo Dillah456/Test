@@ -4,9 +4,9 @@ let Tasbih = 0;
 let Takbir = 0;
 let Istigfar = 0;
 
-let INT = 8;
-let WIS = 7;
-let arousal = 4;
+let INT = 16;
+let WIS = 12;
+let arousal = 0;
 
 let Ijtihad = 0;
 let MP = 0;
@@ -103,3 +103,4 @@ function updateMP(newValue){
   document.getElementById("mp").innerText = MP;   // Dzikr segment
   document.getElementById("mp2").innerText = MP;  // Mujahadah segment
 }
+
