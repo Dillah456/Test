@@ -171,8 +171,131 @@
       <button class="saveStat" onclick="deleteProgress()">Delete Cloud Data</button>
     </div>
 
-<script type="module" src="dzikr.js"></script>
+<script src="dzikr.js"></script>
+<script type="module">
+  // Firebase v12 modular imports (satu kali, tidak duplikat)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
+  // === CONFIG: gunakan nilai yang benar dari project Firebase-mu ===
+  // Aku ambil dari filemu; periksa kembali storageBucket jika perlu
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHA88x1Xdkwz9mKkD_Mo3gMV7V8by7cwY",
+    authDomain: "shangri-la-e2628.firebaseapp.com",
+    databaseURL: "https://shangri-la-e2628-default-rtdb.firebaseio.com",
+    projectId: "shangri-la-e2628",
+    // Catatan: biasanya storageBucket berakhiran 'appspot.com'
+    storageBucket: "shangri-la-e2628.appspot.com",
+    messagingSenderId: "270526568319",
+    appId: "1:270526568319:web:5e61baa01f91e9efa2ec4a",
+    measurementId: "G-4WE22LBJ7V"
+  };
+
+  // Initialize Firebase (sekali)
+  const app = initializeApp(firebaseConfig);
+  // analytics mungkin gagal pada environment tertentu — bungkus try/catch
+  try { getAnalytics(app); } catch (e) { console.warn("Analytics init failed:", e); }
+
+  // Database
+  const db = getDatabase(app);
+
+  // Pastikan variabel aplikasi ada; ambil dari DOM jika tersedia
+  // Jika dzikr.js sudah mengelola variabel ini, ini hanya fallback agar tidak undefined
+  window.Ijtihad = typeof window.Ijtihad !== 'undefined' ? window.Ijtihad : parseInt(document.getElementById("ijtihad")?.innerText || "0", 10);
+  window.MP = typeof window.MP !== 'undefined' ? window.MP : parseInt(document.getElementById("mp")?.innerText || document.getElementById("mp2")?.innerText || "0", 10);
+
+  // Utility: update MP pada DOM (dan sinkronisasi kecil)
+  function updateMPDisplay(newMP) {
+    window.MP = Number(newMP) || 0;
+    const el1 = document.getElementById("mp");
+    const el2 = document.getElementById("mp2");
+    if (el1) el1.innerText = window.MP;
+    if (el2) el2.innerText = window.MP;
+  }
+  // expose supaya file lain bisa pakai
+  window.updateMP = updateMPDisplay;
+
+  // --- Firebase operations ---
+  // Save progress (overwrite at path progress/1)
+  async function saveProgress() {
+    try {
+      const payload = {
+        ijtihad: Number(window.Ijtihad) || 0,
+        mp: Number(window.MP) || 0,
+        updatedAt: Date.now()
+      };
+      await set(ref(db, "progress/1"), payload);
+      notify("Data saved to Firebase!");
+    } catch (err) {
+      console.error("saveProgress error:", err);
+      notify("Gagal menyimpan: " + (err.message || err));
+    }
+  }
+
+  // Load progress (jika ada)
+  async function loadProgress() {
+    try {
+      const snapshot = await get(ref(db, "progress/1"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        window.Ijtihad = Number(data.ijtihad) || 0;
+        updateMPDisplay(Number(data.mp) || 0);
+
+        // update DOM ijtihad jika ada
+        const ijEl = document.getElementById("ijtihad");
+        if (ijEl) ijEl.innerText = window.Ijtihad;
+
+        notify("Data loaded from Firebase!");
+      } else {
+        notify("Tidak ada data yang ditemukan di Firebase.");
+      }
+    } catch (err) {
+      console.error("loadProgress error:", err);
+      notify("Gagal memuat: " + (err.message || err));
+    }
+  }
+
+  // Update sebagian (contoh: hanya MP)
+  async function updateMPFirebase(newMP) {
+    try {
+      newMP = Number(newMP) || 0;
+      await update(ref(db, "progress/1"), { mp: newMP, updatedAt: Date.now() });
+      updateMPDisplay(newMP);
+      notify("MP updated in Firebase!");
+    } catch (err) {
+      console.error("updateMPFirebase error:", err);
+      notify("Gagal update MP: " + (err.message || err));
+    }
+  }
+
+  // Hapus data
+  async function deleteProgress() {
+    try {
+      await remove(ref(db, "progress/1"));
+      // reset lokal
+      window.Ijtihad = 0;
+      updateMPDisplay(0);
+      const ijEl = document.getElementById("ijtihad");
+      if (ijEl) ijEl.innerText = "0";
+      notify("Progress deleted from Firebase!");
+    } catch (err) {
+      console.error("deleteProgress error:", err);
+      notify("Gagal menghapus: " + (err.message || err));
+    }
+  }
+
+  // Expose fungsi agar bisa dipanggil dari HTML tombol
+  window.saveProgress = saveProgress;
+  window.loadProgress = loadProgress;
+  window.updateMPFirebase = updateMPFirebase;
+  window.deleteProgress = deleteProgress;
+
+  // OPTIONAL: load on start (jika mau otomatis load saat halaman dibuka)
+  // Uncomment baris ini bila ingin auto-load:
+  // loadProgress();
+
+</script>
 <script>
 function showSegment(id){
   document.querySelectorAll('.segment').forEach(seg=>seg.classList.remove('active'));
@@ -191,6 +314,7 @@ function notify(msg,dur=3000){
 </script>
 </body>
 </html>
+
 
 
 
