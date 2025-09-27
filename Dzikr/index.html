@@ -172,6 +172,23 @@
     </div>
 
 <script src="dzikr.js"></script>
+  
+<script>
+function showSegment(id){
+  document.querySelectorAll('.segment').forEach(seg=>seg.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(tab=>tab.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function showInfo(){ document.getElementById('infoModal').style.display='flex'; }
+function closeInfo(){ document.getElementById('infoModal').style.display='none'; }
+function notify(msg,dur=3000){
+  const n=document.getElementById('notification');
+  n.innerText=msg;
+  n.style.display='block';
+  setTimeout(()=>{ n.style.display='none'; },dur);
+}
+</script>
 <script type="module">
   // Firebase v12 modular imports (satu kali, tidak duplikat)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
@@ -296,24 +313,9 @@
   // loadProgress();
 
 </script>
-<script>
-function showSegment(id){
-  document.querySelectorAll('.segment').forEach(seg=>seg.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(tab=>tab.classList.remove('active'));
-  event.target.classList.add('active');
-}
-function showInfo(){ document.getElementById('infoModal').style.display='flex'; }
-function closeInfo(){ document.getElementById('infoModal').style.display='none'; }
-function notify(msg,dur=3000){
-  const n=document.getElementById('notification');
-  n.innerText=msg;
-  n.style.display='block';
-  setTimeout(()=>{ n.style.display='none'; },dur);
-}
-</script>
 </body>
 </html>
+
 
 
 
