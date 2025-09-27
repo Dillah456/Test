@@ -183,5 +183,30 @@ function notify(msg,dur=3000){
   setTimeout(()=>{ n.style.display='none'; },dur);
 }
 </script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHA88x1Xdkwz9mKkD_Mo3gMV7V8by7cwY",
+    authDomain: "shangri-la-e2628.firebaseapp.com",
+    databaseURL: "https://shangri-la-e2628-default-rtdb.firebaseio.com",
+    projectId: "shangri-la-e2628",
+    storageBucket: "shangri-la-e2628.firebasestorage.app",
+    messagingSenderId: "270526568319",
+    appId: "1:270526568319:web:5e61baa01f91e9efa2ec4a",
+    measurementId: "G-4WE22LBJ7V"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
+
