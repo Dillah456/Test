@@ -1,268 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dzikr & Mujahadah Dashboard</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #f0f8ff, #cce7ff);
-    margin: 0;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  h1 { 
-    text-align: center; 
-    color: #004080; 
-    padding: 15px 0; 
-    font-size: 1.8em; 
-    text-shadow: 1px 1px 2px #aaa; 
-  }
-
-  .tabs {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-    gap: 5px;
-  }
-  .tab {
-    padding: 10px 15px;
-    border-radius: 10px 10px 0 0;
-    cursor: pointer;
-    background-color: #007acc;
-    color: white;
-    font-size: 1em;
-    flex: 1 1 40%;
-    text-align: center;
-    transition: 0.2s;
-  }
-  .tab:hover { background-color: #005fa3; }
-  .tab.active { background-color: #004080; }
-
-  .segment {
-    display: none;
-    width: 100%;
-    max-width: 500px;
-    background: #ffffffdd;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 15px;
-    margin-bottom: 20px;
-    position: relative;
-  }
-  .segment.active { display: block; }
-
-  .segment p { margin: 6px 0; font-size: 1em; }
-  .buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  button { 
-    padding: 12px 15px;
-    font-size: 0.95em;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    flex: 1 1 40%;
-    min-width: 120px;
-    text-align: center;
-  }
-  button:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-
-  button.dzikr { background-color: #007acc; color: white; }
-  button.arousal { background-color: #ff9933; color: white; }
-  button.fujur { background-color: #cc0000; color: white; }
-  button.info { background-color: #33cc99; color: white; }
-  button.saveStat { background-color: #6600cc; color: white; }
-
-  /* Modal */
-  .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
-  .modal-content { background-color: white; padding: 20px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; }
-  .close-btn { margin-top: 15px; padding: 8px 15px; border: none; border-radius: 8px; background-color: #cc0000; color: white; cursor: pointer; }
-  .close-btn:hover { background-color: #990000; }
-
-  /* Notification */
-  #notification { position: fixed; top: 20px; right: 10px; background: #ffcc00; padding: 10px 12px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); display: none; font-weight: bold; z-index: 200; font-size: 0.95em; max-width: 200px; text-align: center; word-wrap: break-word;}
-</style>
-</head>
-<body>
-
-<h1>Dzikr & Mujahadah Dashboard</h1>
-
-<div id="notification"></div>
-
-<div class="tabs">
-  <div class="tab active" onclick="showSegment('dzikr')">Dzikr</div>
-  <div class="tab" onclick="showSegment('mujahadah')">Mujahadah An Nafs</div>
-</div>
-
-<!-- Dzikr Segment -->
-<div id="dzikr" class="segment active">
-  <h2>Dzikr</h2>
-  <p>Hamdalah: <span id="hamdalah">0</span></p>
-  <p>Tasbih: <span id="tasbih">0</span></p>
-  <p>Takbir: <span id="takbir">0</span></p>
-  <p>Istigfar: <span id="istigfar">0</span></p>
-
-  <div class="buttons">
-    <button class="dzikr" onclick="addDzikr('Hamdalah')">+1 Hamdalah</button>
-    <button class="dzikr" onclick="addDzikr('Tasbih')">+1 Tasbih</button>
-    <button class="dzikr" onclick="addDzikr('Takbir')">+1 Takbir</button>
-    <button class="dzikr" onclick="addDzikr('Istigfar')">+1 Istigfar</button>
-  </div>
-
-  <p>Ijtihad: <span id="ijtihad">0</span></p>
-  <p>MP: <span id="mp">0</span></p>
-  <div class="buttons">
-    <button class="info" onclick="showInfo()">Information</button>
-  </div>
-</div>
-
-<!-- Mujahadah Segment -->
-<div id="mujahadah" class="segment">
-  <h2>Mujahadah An Nafs</h2>
-  <p>INT: <span id="intStat">0</span></p>
-  <p>WIS: <span id="wisStat">0</span></p>
-  <p>Arousal: <span id="arousalStat">0</span></p>
-  <p>CON Save: <span id="conStat">0</span></p>
-  <p>MP: <span id="mp2">0</span></p>
-
-  <div class="buttons">
-    <button class="arousal" onclick="awake()">Awake</button>
-    <button class="arousal" onclick="defineArousal()">Define Arousal</button>
-    <button class="fujur" onclick="Fight()">Fight</button>
-    <button class="saveStat" onclick="saveStats()">Save INT/WIS</button>
-    <button class="saveStat" onclick="Heal()">Heal (-9 MP)</button>
-    <button class="info" onclick="showInfo()">Information</button>
-  </div>
-</div>
-
-<!-- Modal -->
-<div id="infoModal" class="modal">
-  <div class="modal-content">
-    <h3>Information</h3>
-    <p>
-      Dashboard mechanics:<br><br>
-      - Dzikr: Hamdalah, Tasbih, Takbir, Istigfar (+1 each button)<br>
-      - Every 33 dzikr → +1 Ijtihad, +33 MP<br>
-      - Istigfar contributes to Ijtihad and WIS<br>
-      - INT, WIS, Arousal stats for Mujahadah<br>
-      - Fight checks Arousal, INT/WIS penalties, CON save<br>
-      - Heal uses 9 MP to restore INT/WIS<br>
-      - Low stats triggers Devour/Master choice<br>
-      - MP synced between Dzikr & Mujahadah<br><br>
-      For more detailed mechanics, see: 
-      <a href="info.html" target="_blank" style="color:#007acc; text-decoration:underline;">Full Info Page</a>
-    </p>
-    <button class="close-btn" onclick="closeInfo()">Close</button>
-  </div>
-</div>
-    <div class="buttons">
-      <button class="saveStat" onclick="saveProgress()">Save to Cloud</button>
-      <button class="saveStat" onclick="loadProgress()">Load from Cloud</button>
-      <button class="saveStat" onclick="deleteProgress()">Delete Cloud Data</button>
-    </div>
-
-<script src="dzikr.js"></script>
-<script>
-function showSegment(id){
-  document.querySelectorAll('.segment').forEach(seg=>seg.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(tab=>tab.classList.remove('active'));
-  event.target.classList.add('active');
-}
-function showInfo(){ document.getElementById('infoModal').style.display='flex'; }
-function closeInfo(){ document.getElementById('infoModal').style.display='none'; }
-function notify(msg,dur=3000){
-  const n=document.getElementById('notification');
-  n.innerText=msg;
-  n.style.display='block';
-  setTimeout(()=>{ n.style.display='none'; },dur);
-}
-</script>
-  <script type="module">
-  // Import the functions you need from the SDKs you need
+<script type="module">
+  // Firebase v12 modular imports (satu kali, tidak duplikat)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  // === CONFIG: gunakan nilai yang benar dari project Firebase-mu ===
+  // Aku ambil dari filemu; periksa kembali storageBucket jika perlu
   const firebaseConfig = {
     apiKey: "AIzaSyDHA88x1Xdkwz9mKkD_Mo3gMV7V8by7cwY",
     authDomain: "shangri-la-e2628.firebaseapp.com",
     databaseURL: "https://shangri-la-e2628-default-rtdb.firebaseio.com",
     projectId: "shangri-la-e2628",
-    storageBucket: "shangri-la-e2628.firebasestorage.app",
+    // Catatan: biasanya storageBucket berakhiran 'appspot.com'
+    storageBucket: "shangri-la-e2628.appspot.com",
     messagingSenderId: "270526568319",
     appId: "1:270526568319:web:5e61baa01f91e9efa2ec4a",
     measurementId: "G-4WE22LBJ7V"
   };
 
-  // Initialize Firebase
+  // Initialize Firebase (sekali)
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+  // analytics mungkin gagal pada environment tertentu — bungkus try/catch
+  try { getAnalytics(app); } catch (e) { console.warn("Analytics init failed:", e); }
 
-  const firebaseConfig = { ... }; // config kamu
-  const app = initializeApp(firebaseConfig);
+  // Database
   const db = getDatabase(app);
 
-  // Simpan data Ijtihad & MP
-  function saveProgress() {
-    set(ref(db, "progress/1"), {
-      ijtihad: Ijtihad,
-      mp: MP
-    });
-    notify("Data saved to Firebase!");
-  }
+  // Pastikan variabel aplikasi ada; ambil dari DOM jika tersedia
+  // Jika dzikr.js sudah mengelola variabel ini, ini hanya fallback agar tidak undefined
+  window.Ijtihad = typeof window.Ijtihad !== 'undefined' ? window.Ijtihad : parseInt(document.getElementById("ijtihad")?.innerText || "0", 10);
+  window.MP = typeof window.MP !== 'undefined' ? window.MP : parseInt(document.getElementById("mp")?.innerText || document.getElementById("mp2")?.innerText || "0", 10);
 
-  // Baca data
-  async function loadProgress() {
-    const snapshot = await get(ref(db, "progress/1"));
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      Ijtihad = data.ijtihad;
-      MP = data.mp;
-      document.getElementById("ijtihad").innerText = Ijtihad;
-      updateMP(MP);
-      notify("Data loaded from Firebase!");
-    } else {
-      notify("No data found!");
+  // Utility: update MP pada DOM (dan sinkronisasi kecil)
+  function updateMPDisplay(newMP) {
+    window.MP = Number(newMP) || 0;
+    const el1 = document.getElementById("mp");
+    const el2 = document.getElementById("mp2");
+    if (el1) el1.innerText = window.MP;
+    if (el2) el2.innerText = window.MP;
+  }
+  // expose supaya file lain bisa pakai
+  window.updateMP = updateMPDisplay;
+
+  // --- Firebase operations ---
+  // Save progress (overwrite at path progress/1)
+  async function saveProgress() {
+    try {
+      const payload = {
+        ijtihad: Number(window.Ijtihad) || 0,
+        mp: Number(window.MP) || 0,
+        updatedAt: Date.now()
+      };
+      await set(ref(db, "progress/1"), payload);
+      notify("Data saved to Firebase!");
+    } catch (err) {
+      console.error("saveProgress error:", err);
+      notify("Gagal menyimpan: " + (err.message || err));
     }
   }
 
-  // Update sebagian (misalnya cuma MP)
-  function updateMPFirebase(newMP) {
-    update(ref(db, "progress/1"), { mp: newMP });
-    notify("MP updated in Firebase!");
+  // Load progress (jika ada)
+  async function loadProgress() {
+    try {
+      const snapshot = await get(ref(db, "progress/1"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        window.Ijtihad = Number(data.ijtihad) || 0;
+        updateMPDisplay(Number(data.mp) || 0);
+
+        // update DOM ijtihad jika ada
+        const ijEl = document.getElementById("ijtihad");
+        if (ijEl) ijEl.innerText = window.Ijtihad;
+
+        notify("Data loaded from Firebase!");
+      } else {
+        notify("Tidak ada data yang ditemukan di Firebase.");
+      }
+    } catch (err) {
+      console.error("loadProgress error:", err);
+      notify("Gagal memuat: " + (err.message || err));
+    }
+  }
+
+  // Update sebagian (contoh: hanya MP)
+  async function updateMPFirebase(newMP) {
+    try {
+      newMP = Number(newMP) || 0;
+      await update(ref(db, "progress/1"), { mp: newMP, updatedAt: Date.now() });
+      updateMPDisplay(newMP);
+      notify("MP updated in Firebase!");
+    } catch (err) {
+      console.error("updateMPFirebase error:", err);
+      notify("Gagal update MP: " + (err.message || err));
+    }
   }
 
   // Hapus data
-  function deleteProgress() {
-    remove(ref(db, "progress/1"));
-    notify("Progress deleted from Firebase!");
+  async function deleteProgress() {
+    try {
+      await remove(ref(db, "progress/1"));
+      // reset lokal
+      window.Ijtihad = 0;
+      updateMPDisplay(0);
+      const ijEl = document.getElementById("ijtihad");
+      if (ijEl) ijEl.innerText = "0";
+      notify("Progress deleted from Firebase!");
+    } catch (err) {
+      console.error("deleteProgress error:", err);
+      notify("Gagal menghapus: " + (err.message || err));
+    }
   }
 
-  // Biar bisa dipanggil dari HTML button
+  // Expose fungsi agar bisa dipanggil dari HTML tombol
   window.saveProgress = saveProgress;
   window.loadProgress = loadProgress;
   window.updateMPFirebase = updateMPFirebase;
   window.deleteProgress = deleteProgress;
+
+  // OPTIONAL: load on start (jika mau otomatis load saat halaman dibuka)
+  // Uncomment baris ini bila ingin auto-load:
+  // loadProgress();
+
 </script>
-</body>
-</html>
-
-
-
-
