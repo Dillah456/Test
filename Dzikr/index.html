@@ -163,6 +163,12 @@
       <a href="info.html" target="_blank" style="color:#007acc; text-decoration:underline;">Full Info Page</a>
     </p>
     <button class="close-btn" onclick="closeInfo()">Close</button>
+    <div class="buttons">
+      <button class="saveStat" onclick="saveProgress()">Save to Cloud</button>
+      <button class="saveStat" onclick="loadProgress()">Load from Cloud</button>
+      <button class="saveStat" onclick="deleteProgress()">Delete Cloud Data</button>
+    </div>
+
   </div>
 </div>
 
@@ -206,7 +212,56 @@ function notify(msg,dur=3000){
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+  const firebaseConfig = { ... }; // config kamu
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Simpan data Ijtihad & MP
+  function saveProgress() {
+    set(ref(db, "progress/1"), {
+      ijtihad: Ijtihad,
+      mp: MP
+    });
+    notify("Data saved to Firebase!");
+  }
+
+  // Baca data
+  async function loadProgress() {
+    const snapshot = await get(ref(db, "progress/1"));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      Ijtihad = data.ijtihad;
+      MP = data.mp;
+      document.getElementById("ijtihad").innerText = Ijtihad;
+      updateMP(MP);
+      notify("Data loaded from Firebase!");
+    } else {
+      notify("No data found!");
+    }
+  }
+
+  // Update sebagian (misalnya cuma MP)
+  function updateMPFirebase(newMP) {
+    update(ref(db, "progress/1"), { mp: newMP });
+    notify("MP updated in Firebase!");
+  }
+
+  // Hapus data
+  function deleteProgress() {
+    remove(ref(db, "progress/1"));
+    notify("Progress deleted from Firebase!");
+  }
+
+  // Biar bisa dipanggil dari HTML button
+  window.saveProgress = saveProgress;
+  window.loadProgress = loadProgress;
+  window.updateMPFirebase = updateMPFirebase;
+  window.deleteProgress = deleteProgress;
 </script>
 </body>
 </html>
+
 
