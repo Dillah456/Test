@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — ALTAIR</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --card:#171a21;
+    --card-border:#262b35;
+    --text:#e6e8ec;
+    --muted:#9aa3b2;
+    --accent:#7c9eff;
+    --accent-soft:#7c9eff22;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    line-height:1.6;
+  }
+  .layout{
+    display:flex;
+    max-width:1100px;
+    margin:0 auto;
+    min-height:100vh;
+  }
+
+  /* Sidebar */
+  .sidebar{
+    width:220px;
+    flex-shrink:0;
+    border-right:1px solid var(--card-border);
+    padding:30px 18px;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .sidebar h1{
+    font-size:1.3em;
+    letter-spacing:0.1em;
+    color:var(--accent);
+    margin:0 0 2px;
+  }
+  .sidebar .role{
+    color:var(--muted);
+    font-size:0.8em;
+    margin-bottom:24px;
+  }
+  .sidebar nav a{
+    display:block;
+    padding:9px 12px;
+    margin-bottom:4px;
+    border-radius:8px;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:0.88em;
+  }
+  .sidebar nav a:hover{
+    background:var(--accent-soft);
+    color:var(--accent);
+  }
+
+  /* Main */
+  .main{
+    flex:1;
+    padding:30px 32px 60px;
+  }
+  .top-status{
+    display:inline-block;
+    padding:4px 14px;
+    border-radius:20px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:0.82em;
+    font-weight:600;
+    margin-bottom:24px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:22px 26px;
+    margin-bottom:20px;
+  }
+  .card h2{
+    margin-top:0;
+    font-size:1.1em;
+    color:var(--accent);
+    border-bottom:1px solid var(--card-border);
+    padding-bottom:10px;
+  }
+  .card h3{color:var(--text);margin-bottom:4px;}
+  table{width:100%;border-collapse:collapse;}
+  td,th{padding:9px 8px;text-align:left;border-bottom:1px solid var(--card-border);}
+  th{color:var(--muted);font-weight:600;font-size:0.88em;}
+  tr:last-child td{border-bottom:none;}
+  ul,ol{padding-left:22px;}
+  li{margin-bottom:6px;}
+  label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    color:var(--text);
+    cursor:pointer;
+  }
+  input[type="checkbox"]{
+    width:18px;height:18px;accent-color:var(--accent);cursor:pointer;
+  }
+  .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+  .bar-track{flex:1;height:8px;background:#0f1115;border-radius:4px;overflow:hidden;border:1px solid var(--card-border);}
+  .bar-fill{height:100%;background:var(--accent);}
+
+  /* Link-style summary cards */
+  .grid-links{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:16px;
+  }
+  .link-card{
+    display:block;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:20px 22px;
+    text-decoration:none;
+    color:var(--text);
+    transition:border-color .15s, transform .15s;
+  }
+  .link-card:hover{
+    border-color:var(--accent);
+    transform:translateY(-2px);
+  }
+  .link-card h2{
+    margin:0 0 6px;
+    font-size:1.05em;
+    color:var(--accent);
+    border:none;
+    padding:0;
+  }
+  .link-card p{
+    margin:0;
+    color:var(--muted);
+    font-size:0.85em;
+  }
+  .link-card .arrow{
+    float:right;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <h1>ALTAIR</h1>
+    <p class="role">Builder • Cartographer • Translator</p>
+    <nav>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#core-need">Core Need</a>
+      <a href="#nilai">Nilai Inti</a>
+      <a href="#entitas">Entitas Psikis</a>
+      <a href="#affinity">Affinity</a>
+      <a href="#trust">Relasi & Trust</a>
+      <a href="#misi">Misi & Arah</a>
+      <a href="#anti-rumination">Anti Rumination</a>
+      <a href="#reality-check">Reality Check</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+
+    <span class="top-status">Status: Fase Rekonstruksi Aktif</span>
+
+    <section class="card" id="dashboard">
+      <h2>Dashboard</h2>
+      <div class="bar-row">
+        <span style="min-width:130px;color:var(--muted);">Energi Mental</span>
+        <div class="bar-track"><div class="bar-fill" style="width:72%;"></div></div>
+        <span>72%</span>
+      </div>
+      <table style="margin-top:14px;">
+        <tr><td>Trust Sosial</td><td>Dalam Rekonstruksi</td></tr>
+        <tr><td>Fase</td><td>Transisi</td></tr>
+        <tr><td>Mode Dominan</td><td>Builder / Analyst</td></tr>
+      </table>
+    </section>
+
+    <section class="card" id="core-need">
+      <h2>Core Need</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <h3 id="cn-title" style="margin:0 0 2px;">Dipahami</h3>
+          <p id="cn-desc" style="margin:0;color:var(--muted);font-size:0.9em;">Kebutuhan agar nilai, motivasi, pengalaman, dan model internal dapat direkonstruksi secara cukup akurat oleh pihak lain.</p>
+        </div>
+        <button onclick="openCoreForm()" style="background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:0.85em;white-space:nowrap;flex-shrink:0;">
+          Pilih Core Form
+        </button>
+      </div>
+      <div id="cn-badge" style="display:none;margin-top:10px;padding:8px 14px;background:var(--accent-soft);border-radius:8px;border:1px solid var(--accent);font-size:0.85em;">
+        <span style="color:var(--muted);">Core Form Aktif: </span>
+        <span id="cn-badge-label" style="color:var(--accent);font-weight:600;"></span>
+        <span id="cn-wing-label" style="color:var(--muted);margin-left:6px;"></span>
+      </div>
+    </section>
+
+    <!-- Core Form Popup Overlay -->
+    <div id="cf-overlay" style="display:none;position:fixed;inset:0;background:#000a;z-index:1000;align-items:center;justify-content:center;">
+      <div style="background:var(--card);border:1px solid var(--card-border);border-radius:16px;width:min(560px,94vw);max-height:88vh;overflow-y:auto;padding:28px 28px 24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+          <h2 style="margin:0;font-size:1.1em;color:var(--accent);">Pilih Core Form</h2>
+          <button onclick="closeCoreForm()" style="background:none;border:none;color:var(--muted);font-size:1.4em;cursor:pointer;line-height:1;">×</button>
+        </div>
+        <p style="margin:0 0 18px;color:var(--muted);font-size:0.85em;">Pilih tipe Enneagram dan Wing yang sesuai. Disimpan secara lokal di browser.</p>
+
+        <div id="cf-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+
+        <div style="margin-top:20px;border-top:1px solid var(--card-border);padding-top:18px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="color:var(--muted);font-size:0.85em;">Wing:</span>
+            <div id="cf-wings" style="display:flex;gap:8px;"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;">
+            <button onclick="saveCoreForm()" style="flex:1;background:var(--accent);color:#0f1115;border:none;border-radius:8px;padding:10px;font-weight:700;cursor:pointer;font-size:0.9em;">Simpan</button>
+            <button onclick="resetCoreForm()" style="background:none;border:1px solid var(--card-border);color:var(--muted);border-radius:8px;padding:10px 16px;cursor:pointer;font-size:0.85em;">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="card" id="nilai">
+      <h2>Core Values</h2>
+      <ul>
+        <li>Pertumbuhan</li>
+        <li>Kejujuran Intelektual</li>
+        <li>Kebebasan Berpikir</li>
+        <li>Konsistensi Internal</li>
+        <li>Pemahaman</li>
+        <li>Kontribusi</li>
+      </ul>
+    </section>
+
+    <div class="grid-links">
+      <a class="link-card" href="#" id="entitas">
+        <span class="arrow">→</span>
+        <h2>Psychological Entities</h2>
+        <p>Lihat entitas psikis aktif</p>
+      </a>
+
+      <a class="link-card" href="#" id="affinity">
+        <span class="arrow">→</span>
+        <h2>Affinity Map</h2>
+        <p>Lihat peta afinitas</p>
+      </a>
+
+      <a class="link-card" href="#" id="anti-rumination">
+        <span class="arrow">→</span>
+        <h2>Anti Rumination Protocol</h2>
+        <p>Lihat protokol</p>
+      </a>
+    </div>
+
+    <section class="card" id="trust" style="margin-top:20px;">
+      <h2>Relasi dan Trust</h2>
+      <table>
+        <tr><th>Relasi</th><th>Ekspektasi Dipahami</th></tr>
+        <tr><td>Kolega</td><td>Peran dan Kompetensi</td></tr>
+        <tr><td>Teman</td><td>Minat dan Kebiasaan</td></tr>
+        <tr><td>Keluarga</td><td>Kebutuhan Dasar</td></tr>
+        <tr><td>Mentor</td><td>Potensi dan Arah</td></tr>
+        <tr><td>Sahabat</td><td>Nilai dan Konflik Internal</td></tr>
+        <tr><td>Pasangan</td><td>Pertumbuhan Bersama</td></tr>
+      </table>
+    </section>
+
+    <section class="card" id="misi">
+      <h2>Arah dan Misi</h2>
+      <p>Belum menentukan takdir.<br>Sedang mengamati pola kontribusi yang berulang.</p>
+      <ul>
+        <li>Membangun Sistem</li>
+        <li>Menerjemahkan Konsep</li>
+        <li>Menghubungkan Disiplin</li>
+        <li>Membantu Proses Belajar</li>
+      </ul>
+    </section>
+
+    <section class="card" id="reality-check">
+      <h2>Reality Check</h2>
+      <label><input type="checkbox"> Apakah ini fakta?</label>
+      <label><input type="checkbox"> Apakah ini interpretasi?</label>
+      <label><input type="checkbox"> Apakah ada alternatif?</label>
+      <label><input type="checkbox"> Apakah emosi sedang stabil?</label>
+      <label><input type="checkbox"> Apakah aku sedang membuat narasi besar terlalu cepat?</label>
+    </section>
+
+  </main>
+
+</div>
+<script>
+const ENNEAGRAM = [
+  { type: 1, name: "Reformer", core: "Ingin Sempurna", desc: "Kebutuhan untuk menjadi baik, benar, dan berintegritas.", wings: [9, 2] },
+  { type: 2, name: "Helper", core: "Dicintai & Dibutuhkan", desc: "Kebutuhan untuk disukai dan merasa penting bagi orang lain.", wings: [1, 3] },
+  { type: 3, name: "Achiever", core: "Berhasil & Dikagumi", desc: "Kebutuhan untuk meraih prestasi dan diakui nilainya.", wings: [2, 4] },
+  { type: 4, name: "Individualist", core: "Dipahami & Autentik", desc: "Kebutuhan untuk dilihat sebagai diri yang unik dan berarti.", wings: [3, 5] },
+  { type: 5, name: "Investigator", core: "Kompeten & Mandiri", desc: "Kebutuhan untuk memahami dunia dan tidak bergantung pada orang lain.", wings: [4, 6] },
+  { type: 6, name: "Loyalist", core: "Aman & Didukung", desc: "Kebutuhan untuk merasa terlindungi dan memiliki kepastian.", wings: [5, 7] },
+  { type: 7, name: "Enthusiast", core: "Bebas & Puas", desc: "Kebutuhan untuk mengalami banyak hal dan menghindari rasa sakit.", wings: [6, 8] },
+  { type: 8, name: "Challenger", core: "Kuat & Bebas Terkontrol", desc: "Kebutuhan untuk menguasai diri sendiri dan tidak dikuasai orang lain.", wings: [7, 9] },
+  { type: 9, name: "Peacemaker", core: "Damai & Harmoni", desc: "Kebutuhan untuk menghindari konflik dan merasa bersatu dengan semua.", wings: [8, 1] }
+];
+
+const STORAGE_KEY = "altair_core_form";
+let selectedType = null;
+let selectedWing = null;
+
+function loadStored() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+function applyForm(data) {
+  if (!data) return;
+  const entry = ENNEAGRAM.find(e => e.type === data.type);
+  if (!entry) return;
+  document.getElementById("cn-title").textContent = entry.core;
+  document.getElementById("cn-desc").textContent = entry.desc;
+  const badge = document.getElementById("cn-badge");
+  badge.style.display = "block";
+  document.getElementById("cn-badge-label").textContent = `Tipe ${entry.type} — ${entry.name}`;
+  document.getElementById("cn-wing-label").textContent = data.wing ? `w${data.wing}` : "";
+}
+
+function buildGrid() {
+  const grid = document.getElementById("cf-grid");
+  grid.innerHTML = "";
+  ENNEAGRAM.forEach(e => {
+    const btn = document.createElement("button");
+    btn.id = "cftype-" + e.type;
+    btn.onclick = () => selectType(e.type);
+    btn.style.cssText = "text-align:left;background:var(--bg);border:1px solid var(--card-border);border-radius:10px;padding:12px 14px;cursor:pointer;color:var(--text);transition:border-color .15s;";
+    btn.innerHTML = `<div style="font-size:0.8em;color:var(--muted);">Tipe ${e.type}</div><div style="font-weight:600;font-size:0.95em;margin:2px 0;">${e.name}</div><div style="font-size:0.78em;color:var(--muted);">${e.core}</div>`;
+    grid.appendChild(btn);
+  });
+}
+
+function selectType(type) {
+  selectedType = type;
+  selectedWing = null;
+  document.querySelectorAll("[id^='cftype-']").forEach(b => {
+    b.style.borderColor = "var(--card-border)";
+    b.style.background = "var(--bg)";
+  });
+  const active = document.getElementById("cftype-" + type);
+  if (active) { active.style.borderColor = "var(--accent)"; active.style.background = "var(--accent-soft)"; }
+  buildWings(type);
+}
+
+function buildWings(type) {
+  const entry = ENNEAGRAM.find(e => e.type === type);
+  const container = document.getElementById("cf-wings");
+  container.innerHTML = "";
+  if (!entry) return;
+  entry.wings.forEach(w => {
+    const btn = document.createElement("button");
+    btn.id = "cfwing-" + w;
+    btn.textContent = "w" + w;
+    btn.onclick = () => selectWing(w);
+    btn.style.cssText = "background:var(--bg);border:1px solid var(--card-border);border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--muted);font-size:0.88em;transition:all .15s;";
+    container.appendChild(btn);
+  });
+}
+
+function selectWing(wing) {
+  selectedWing = wing;
+  document.querySelectorAll("[id^='cfwing-']").forEach(b => {
+    b.style.borderColor = "var(--card-border)";
+    b.style.color = "var(--muted)";
+    b.style.background = "var(--bg)";
+  });
+  const active = document.getElementById("cfwing-" + wing);
+  if (active) { active.style.borderColor = "var(--accent)"; active.style.color = "var(--accent)"; active.style.background = "var(--accent-soft)"; }
+}
+
+function openCoreForm() {
+  const overlay = document.getElementById("cf-overlay");
+  overlay.style.display = "flex";
+  buildGrid();
+  const stored = loadStored();
+  if (stored) {
+    selectedType = stored.type;
+    selectedWing = stored.wing;
+    setTimeout(() => {
+      selectType(stored.type);
+      if (stored.wing) selectWing(stored.wing);
+    }, 10);
+  }
+}
+
+function closeCoreForm() {
+  document.getElementById("cf-overlay").style.display = "none";
+}
+
+function saveCoreForm() {
+  if (!selectedType) { alert("Pilih tipe terlebih dahulu."); return; }
+  const data = { type: selectedType, wing: selectedWing };
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+  applyForm(data);
+  closeCoreForm();
+}
+
+function resetCoreForm() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  selectedType = null;
+  selectedWing = null;
+  document.getElementById("cn-title").textContent = "Dipahami";
+  document.getElementById("cn-desc").textContent = "Kebutuhan agar nilai, motivasi, pengalaman, dan model internal dapat direkonstruksi secara cukup akurat oleh pihak lain.";
+  document.getElementById("cn-badge").style.display = "none";
+  closeCoreForm();
+}
+
+document.getElementById("cf-overlay").addEventListener("click", function(e) {
+  if (e.target === this) closeCoreForm();
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const stored = loadStored();
+  if (stored) applyForm(stored);
+});
+</script>
+</body>
+</html>
