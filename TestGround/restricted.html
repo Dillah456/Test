@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALTAIR — Restricted</title>
+<style>
+  :root {
+    --bg: #0d0f13;
+    --card: #13161d;
+    --card-border: #1e2330;
+    --text: #dde1ea;
+    --muted: #8892a4;
+    --accent: #f87171;
+    --accent-soft: #f8717114;
+    --orange: #fb923c;
+    --orange-soft: #fb923c14;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* Warning overlay on load */
+  #gate {
+    position: fixed; inset: 0; background: #0d0f13;
+    z-index: 999; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 20px; padding: 32px;
+    text-align: center;
+  }
+  #gate h2 { font-size: 1.3em; color: var(--accent); }
+  #gate p { color: var(--muted); font-size: 0.88em; max-width: 420px; line-height: 1.7; }
+  #gate .gate-icon { font-size: 3em; }
+  #gate button {
+    margin-top: 8px; padding: 11px 28px; border-radius: 10px;
+    border: 1px solid var(--accent); background: var(--accent-soft);
+    color: var(--accent); font-size: 0.9em; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  #gate button:hover { background: #f8717122; }
+  .gate-border {
+    border: 1px solid #f8717130; border-radius: 16px;
+    padding: 32px 36px; max-width: 480px; width: 100%;
+    background: var(--card);
+  }
+
+  .topbar {
+    border-bottom: 1px solid var(--card-border);
+    padding: 12px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: var(--bg); z-index: 100;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-brand h1 { font-size: 1.1em; letter-spacing: 0.12em; color: var(--accent); }
+  .access-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid #f8717128; border-radius: 20px;
+    padding: 4px 12px; font-size: 0.78em; font-weight: 600;
+  }
+  .access-pill::before { content: '🔐'; font-size: 0.9em; }
+  .topbar-nav { display: flex; gap: 6px; }
+  .topbar-nav a {
+    color: var(--muted); text-decoration: none; font-size: 0.82em;
+    padding: 5px 12px; border-radius: 6px; transition: color .15s, background .15s;
+  }
+  .topbar-nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  .topbar-nav a.active { color: var(--accent); background: var(--accent-soft); }
+
+  .layout { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .notice {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--accent-soft); border: 1px solid #f8717128;
+    border-left: 3px solid var(--accent);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 36px;
+  }
+  .notice-icon { font-size: 1.2em; flex-shrink: 0; }
+  .notice p { font-size: 0.84em; color: var(--muted); }
+  .notice p strong { color: var(--text); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 0.77em; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+
+  .maturity {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75em; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; float: right; margin-top: -2px;
+  }
+  .mat-sandbox { background: #f8717118; color: #f87171; border: 1px solid #f8717130; }
+  .mat-recon { background: #fbbf2418; color: #fbbf24; border: 1px solid #fbbf2430; }
+
+  /* Console */
+  .console {
+    background: #0a0c0f; border: 1px solid var(--card-border);
+    border-radius: 10px; padding: 18px 20px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.83em; color: #a0aec0; line-height: 1.8;
+  }
+  .console .c-comment { color: #4a5568; }
+  .console .c-key { color: var(--accent); }
+  .console .c-val { color: #68d391; }
+  .console .c-section { color: #a78bfa; font-weight: 600; }
+  .console .c-warn { color: #fbbf24; }
+  .console .c-line { margin-bottom: 2px; }
+
+  /* Emotional map */
+  .emotion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .emotion-card {
+    background: #0d0f13; border: 1px solid var(--card-border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .emotion-card .em-label { font-size: 0.78em; color: var(--muted); margin-bottom: 4px; }
+  .emotion-card .em-val { font-size: 0.92em; font-weight: 600; }
+  .em-present { color: var(--accent); }
+  .em-past { color: var(--muted); }
+  .em-integrated { color: #4ade80; }
+
+  /* Hypotheses */
+  .hyp-item {
+    background: #0a0c0f; border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 10px;
+  }
+  .hyp-item .hyp-id { font-size: 0.72em; color: var(--accent); font-family: monospace; margin-bottom: 4px; }
+  .hyp-item h4 { font-size: 0.9em; font-weight: 600; margin-bottom: 4px; }
+  .hyp-item p { font-size: 0.82em; color: var(--muted); }
+  .hyp-item .hyp-status {
+    display: inline-block; font-size: 0.72em; font-weight: 600;
+    padding: 2px 8px; border-radius: 20px; margin-top: 6px;
+  }
+  .hs-open { background: var(--accent-soft); color: var(--accent); }
+  .hs-testing { background: #fbbf2418; color: #fbbf24; }
+  .hs-integrated { background: #4ade8018; color: #4ade80; }
+
+  /* Identity sandbox */
+  .sandbox-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid var(--card-border);
+  }
+  .sandbox-item:last-child { border-bottom: none; }
+  .sandbox-icon { font-size: 1.1em; flex-shrink: 0; width: 28px; text-align: center; }
+  .sandbox-text h4 { font-size: 0.88em; font-weight: 600; }
+  .sandbox-text p { font-size: 0.82em; color: var(--muted); margin-top: 2px; }
+
+  /* Event processing */
+  .event-block {
+    border: 1px solid var(--card-border); border-radius: 12px;
+    overflow: hidden; margin-bottom: 16px;
+  }
+  .event-header {
+    background: #0a0c0f; padding: 12px 18px;
+    font-size: 0.85em; font-weight: 600;
+    border-bottom: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .event-header span { color: var(--muted); font-size: 0.78em; font-weight: 400; }
+  .event-layers { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .event-layer { padding: 14px 16px; border-right: 1px solid var(--card-border); }
+  .event-layer:last-child { border-right: none; }
+  .event-layer .el-label {
+    font-size: 0.72em; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .el-public { color: #4ade80; }
+  .el-private { color: #a78bfa; }
+  .el-restricted { color: var(--accent); }
+  .event-layer p { font-size: 0.8em; color: var(--muted); line-height: 1.7; }
+  @media (max-width: 600px) {
+    .event-layers { grid-template-columns: 1fr; }
+    .event-layer { border-right: none; border-bottom: 1px solid var(--card-border); }
+  }
+
+  /* Anti rumination */
+  .protocol-step {
+    display: flex; gap: 14px; padding: 12px 0;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .protocol-step:last-child { border-bottom: none; }
+  .ps-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8em; font-weight: 700; flex-shrink: 0;
+  }
+  .ps-body h4 { font-size: 0.9em; font-weight: 600; margin-bottom: 2px; }
+  .ps-body p { font-size: 0.82em; color: var(--muted); }
+
+  /* Dialogue with self */
+  .dialogue { background: #0a0c0f; border-radius: 10px; padding: 18px 20px; }
+  .dialogue-msg {
+    margin-bottom: 12px; display: flex; flex-direction: column;
+  }
+  .dialogue-msg.question { align-items: flex-start; }
+  .dialogue-msg.answer { align-items: flex-end; }
+  .dialogue-bubble {
+    display: inline-block; max-width: 80%; padding: 10px 14px;
+    border-radius: 12px; font-size: 0.85em; line-height: 1.6;
+  }
+  .question .dialogue-bubble { background: var(--card); border: 1px solid var(--card-border); color: var(--text); }
+  .answer .dialogue-bubble { background: var(--accent-soft); border: 1px solid #f8717128; color: var(--text); }
+  .dialogue-label { font-size: 0.72em; color: var(--muted); margin-bottom: 4px; padding: 0 4px; }
+
+  /* Reflection */
+  .ref-block {
+    background: #0a0c0f; border: 1px solid var(--card-border);
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 12px;
+  }
+  .ref-block .ref-q { font-size: 0.78em; color: var(--accent); font-weight: 600; margin-bottom: 6px; font-family: monospace; }
+  .ref-block p { font-size: 0.87em; color: var(--text); }
+
+  .page-footer {
+    margin-top: 50px; padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .page-footer span { font-size: 0.8em; color: var(--muted); }
+  .level-links { display: flex; gap: 8px; }
+  .level-link {
+    font-size: 0.8em; padding: 5px 14px; border-radius: 8px;
+    border: 1px solid var(--card-border); color: var(--muted);
+    text-decoration: none; transition: all .15s;
+  }
+  .level-link:hover { border-color: var(--accent); color: var(--accent); }
+  .level-link.current { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- Gate -->
+<div id="gate">
+  <div class="gate-border">
+    <div class="gate-icon">🔐</div>
+    <h2>Restricted Access</h2>
+    <p style="margin-top:12px;">
+      Area ini berisi proses internal yang membutuhkan konteks tinggi agar tidak disalahpahami.<br><br>
+      Ini bukan rahasia — ini narasi yang belum selesai dan hipotesis yang masih dalam pengujian.
+    </p>
+    <button onclick="enterPage()">Saya memahami konteks ini →</button>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <h1>ALTAIR</h1>
+    <span class="access-pill">Restricted</span>
+  </div>
+  <nav class="topbar-nav">
+    <a href="#console" class="active">Console</a>
+    <a href="#entities">Entitas</a>
+    <a href="#hyp">Hipotesis</a>
+    <a href="#events">Events</a>
+    <a href="#protocol">Protokol</a>
+  </nav>
+</header>
+
+<div class="layout">
+
+  <div class="notice">
+    <span class="notice-icon">⚠️</span>
+    <p><strong>Konteks yang diperlukan:</strong> Konten di sini adalah bahan mentah pemikiran — bukan kesimpulan. Hipotesis bukan fakta. Dialog internal bukan instruksi. Harap baca dengan mempertahankan ambiguitas, bukan mencari kepastian.</p>
+  </div>
+
+  <!-- Psychological Console -->
+  <div class="card" id="console">
+    <div class="card-title">🧠 Psychological Console <span class="maturity mat-sandbox">🔴 Live</span></div>
+    <div class="console">
+      <div class="c-line"><span class="c-comment">// ALTAIR :: Internal State Monitor</span></div>
+      <div class="c-line"><span class="c-comment">// Last sync: sekarang</span></div>
+      <div class="c-line">&nbsp;</div>
+      <div class="c-line"><span class="c-section">SYSTEM:</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">phase</span>: <span class="c-val">"reconstruction_active"</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">mode</span>: <span class="c-val">"builder + analyst"</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">energy</span>: <span class="c-val">72</span></div>
+      <div class="c-line">&nbsp;</div>
+      <div class="c-line"><span class="c-section">ACTIVE_PROCESSES:</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">trust_model</span>: <span class="c-warn">"rebuilding"</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">identity_labels</span>: <span class="c-warn">"under_review"</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">affirmation_processing</span>: <span class="c-warn">"learning"</span></div>
+      <div class="c-line">&nbsp;</div>
+      <div class="c-line"><span class="c-section">SUPPRESSED_LOOPS:</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">rumination_v1</span>: <span class="c-val">"contained"</span></div>
+      <div class="c-line">&nbsp;&nbsp;<span class="c-key">over_analysis</span>: <span class="c-warn">"monitoring"</span></div>
+      <div class="c-line">&nbsp;</div>
+      <div class="c-line"><span class="c-comment">// No critical errors. System stable.</span></div>
+    </div>
+  </div>
+
+  <!-- Psychological Entities -->
+  <div class="card" id="entities">
+    <div class="card-title">🎭 Entitas Psikis <span class="maturity mat-sandbox">🔴 Sandbox</span></div>
+    <p style="font-size:0.82em;color:var(--muted);margin-bottom:16px;">Bagian-bagian dari cara berfungsi yang cukup konsisten untuk dikenali, tetapi belum tentu merupakan identitas permanen.</p>
+
+    <div class="sandbox-item">
+      <span class="sandbox-icon">🏗️</span>
+      <div class="sandbox-text">
+        <h4>The Builder</h4>
+        <p>Aktif saat membangun sistem, kerangka, atau struktur dari konsep. Paling produktif. Mudah over-engineer jika tidak dikontrol.</p>
+      </div>
+    </div>
+    <div class="sandbox-item">
+      <span class="sandbox-icon">🔬</span>
+      <div class="sandbox-text">
+        <h4>The Analyst</h4>
+        <p>Hadir saat ada data atau pola yang perlu dipahami. Sering menginterupsi mode lain untuk memverifikasi asumsi.</p>
+      </div>
+    </div>
+    <div class="sandbox-item">
+      <span class="sandbox-icon">🗺️</span>
+      <div class="sandbox-text">
+        <h4>The Cartographer</h4>
+        <p>Memetakan hubungan antar konsep. Aktif dalam membaca dan mendengarkan. Sulit berhenti jika sudah menemukan pola baru.</p>
+      </div>
+    </div>
+    <div class="sandbox-item">
+      <span class="sandbox-icon">🔇</span>
+      <div class="sandbox-text">
+        <h4>The Observer</h4>
+        <p>Tidak berbicara tetapi selalu hadir. Mencatat perbedaan antara apa yang dirasakan dan apa yang diucapkan.</p>
+      </div>
+    </div>
+    <div class="sandbox-item" style="opacity:0.6;">
+      <span class="sandbox-icon">🌪️</span>
+      <div class="sandbox-text">
+        <h4>The Ruminator <small style="color:var(--accent);font-weight:600;">[CONTAINED]</small></h4>
+        <p>Entitas lama. Cenderung membuat narasi berulang tentang hal yang tidak dapat diubah. Sedang aktif dikontrol.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emotional Processing -->
+  <div class="card">
+    <div class="card-title">❤️ Pemrosesan Emosional</div>
+    <div class="emotion-grid">
+      <div class="emotion-card">
+        <div class="em-label">Sedang diproses</div>
+        <div class="em-val em-present">Ambiguitas Sosial</div>
+      </div>
+      <div class="emotion-card">
+        <div class="em-label">Sedang diproses</div>
+        <div class="em-val em-present">Ekspektasi vs Realita</div>
+      </div>
+      <div class="emotion-card">
+        <div class="em-label">Sedang diuji</div>
+        <div class="em-val" style="color:#fbbf24;">Penerimaan Diri</div>
+      </div>
+      <div class="emotion-card">
+        <div class="em-label">Terintegrasi</div>
+        <div class="em-val em-integrated">Rasa Ingin Tahu</div>
+      </div>
+      <div class="emotion-card">
+        <div class="em-label">Terintegrasi</div>
+        <div class="em-val em-integrated">Komitmen pada Proses</div>
+      </div>
+      <div class="emotion-card">
+        <div class="em-label">Masa lalu</div>
+        <div class="em-val em-past">Defensif terhadap Kritik</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hypotheses -->
+  <div class="card" id="hyp">
+    <div class="card-title">🔬 Hipotesis Aktif <span class="maturity mat-sandbox">🔴 Uji Coba</span></div>
+
+    <div class="hyp-item">
+      <div class="hyp-id">HYP-001</div>
+      <h4>Kesulitan menerima afirmasi karena belum punya model yang memadai untuk memvalidasinya</h4>
+      <p>Ketika seseorang memberikan apresiasi, ada ketidaknyamanan yang mungkin bukan dari ketidakpercayaan pada orang itu, tetapi dari ketidakpercayaan pada kemampuan diri untuk menilai apakah apresiasi itu akurat.</p>
+      <span class="hyp-status hs-testing">Sedang diuji</span>
+    </div>
+
+    <div class="hyp-item">
+      <div class="hyp-id">HYP-002</div>
+      <h4>Model trust yang lama dibangun untuk efisiensi, bukan untuk kedalaman</h4>
+      <p>Cara lama memutuskan kepercayaan lebih cepat tetapi juga lebih rapuh. Revisi saat ini mungkin menghasilkan model yang lebih lambat tetapi lebih tahan lama.</p>
+      <span class="hyp-status hs-testing">Sedang diuji</span>
+    </div>
+
+    <div class="hyp-item">
+      <div class="hyp-id">HYP-003</div>
+      <h4>Kecenderungan over-analyze mungkin merupakan mekanisme untuk menunda keputusan yang belum siap diambil</h4>
+      <p>Bukan karena tidak bisa memutuskan, tetapi karena ada bagian yang menyadari bahwa memutuskan terlalu cepat sering menghasilkan keputusan yang harus direvisi.</p>
+      <span class="hyp-status hs-open">Belum diuji</span>
+    </div>
+
+    <div class="hyp-item" style="border-color:#4ade80;">
+      <div class="hyp-id" style="color:#4ade80;">HYP-004</div>
+      <h4>Membangun sistem adalah cara utama untuk memahami sesuatu secara personal</h4>
+      <p>Bukan hanya sebagai output, tetapi sebagai proses kognisi. Membuat framework berarti benar-benar memahami.</p>
+      <span class="hyp-status hs-integrated">Terintegrasi</span>
+    </div>
+  </div>
+
+  <!-- Event Processing -->
+  <div class="card" id="events">
+    <div class="card-title">📓 Pemrosesan Event</div>
+
+    <div class="event-block">
+      <div class="event-header">
+        Afirmasi Sosial Setelah KP
+        <span>2024 · Masih aktif diproses</span>
+      </div>
+      <div class="event-layers">
+        <div class="event-layer">
+          <div class="el-label el-public">Public</div>
+          <p>KP selesai. Mendapat apresiasi dari dosen dan teman. Bersyukur atas hasil kerja tim.</p>
+        </div>
+        <div class="event-layer">
+          <div class="el-label el-private">Private</div>
+          <p>Apresiasi yang datang cukup banyak. Merasa senang sekaligus bingung menerima perhatian tersebut.</p>
+        </div>
+        <div class="event-layer">
+          <div class="el-label el-restricted">Restricted</div>
+          <p>Terjadi lonjakan afektif yang tidak terduga. Hipotesis: belum memiliki model yang cukup untuk memproses afirmasi sosial dalam volume tersebut. Mungkin terkait rekonstruksi identitas yang sedang berlangsung.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-block">
+      <div class="event-header">
+        Revisi Definisi Trust
+        <span>2025 · Dalam proses</span>
+      </div>
+      <div class="event-layers">
+        <div class="event-layer">
+          <div class="el-label el-public">Public</div>
+          <p>Sedang meninjau ulang cara membangun kepercayaan dengan orang lain.</p>
+        </div>
+        <div class="event-layer">
+          <div class="el-label el-private">Private</div>
+          <p>Model trust lama terasa tidak akurat lagi. Menemukan bahwa ada asumsi yang belum pernah diuji.</p>
+        </div>
+        <div class="event-layer">
+          <div class="el-label el-restricted">Restricted</div>
+          <p>Ada kemungkinan bahwa model trust lama dibangun sebagai mekanisme protektif, bukan sebagai framework yang akurat. Jika itu benar, implikasinya terhadap relasi masa lalu perlu dievaluasi ulang dengan hati-hati.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anti Rumination Protocol -->
+  <div class="card" id="protocol">
+    <div class="card-title">⚠️ Anti Rumination Protocol</div>
+
+    <div class="protocol-step">
+      <div class="ps-num">1</div>
+      <div class="ps-body">
+        <h4>Deteksi Loop</h4>
+        <p>Jika pikiran yang sama kembali lebih dari 3 kali dalam satu jam tanpa membawa informasi baru — itu adalah loop, bukan insight.</p>
+      </div>
+    </div>
+    <div class="protocol-step">
+      <div class="ps-num">2</div>
+      <div class="ps-body">
+        <h4>Label, Jangan Selesaikan</h4>
+        <p>Beri nama loopnya. Simpan sebagai "sedang diproses". Tidak setiap pemikiran perlu diselesaikan saat ini juga.</p>
+      </div>
+    </div>
+    <div class="protocol-step">
+      <div class="ps-num">3</div>
+      <div class="ps-body">
+        <h4>Redirect ke Sesuatu yang Konkret</h4>
+        <p>Pindah ke aktivitas yang membutuhkan tindakan nyata — menulis, membangun, bergerak. Bukan mengganti pikiran, tetapi mengalihkan sumber daya kognitif.</p>
+      </div>
+    </div>
+    <div class="protocol-step">
+      <div class="ps-num">4</div>
+      <div class="ps-body">
+        <h4>Catat, Bukan Analisis</h4>
+        <p>Jika perlu mengekspresikan, tulis secara faktual. "Saya memikirkan X lagi." — bukan interpretasi atau narasi besar.</p>
+      </div>
+    </div>
+    <div class="protocol-step">
+      <div class="ps-num">5</div>
+      <div class="ps-body">
+        <h4>Buka Kembali Hanya Saat Stabil</h4>
+        <p>Pemrosesan yang bermakna terjadi ketika energi mental di atas 60%. Di bawah itu, simpan saja.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialogue with self -->
+  <div class="card">
+    <div class="card-title">🪞 Dialog Internal</div>
+    <div class="dialogue">
+      <div class="dialogue-msg question">
+        <div class="dialogue-label">Pertanyaan</div>
+        <div class="dialogue-bubble">Kenapa sulit menerima pujian meskipun mungkin memang layak?</div>
+      </div>
+      <div class="dialogue-msg answer">
+        <div class="dialogue-label">Hipotesis</div>
+        <div class="dialogue-bubble">Mungkin karena "layak" itu sendiri belum pernah benar-benar didefinisikan secara internal — jadi ketika orang lain mengklaim aku layak, tidak ada referensi internal untuk memvalidasinya.</div>
+      </div>
+      <div class="dialogue-msg question">
+        <div class="dialogue-label">Pertanyaan</div>
+        <div class="dialogue-bubble">Apakah ini artinya butuh validasi eksternal untuk merasa layak?</div>
+      </div>
+      <div class="dialogue-msg answer">
+        <div class="dialogue-label">Counter</div>
+        <div class="dialogue-bubble">Belum tentu. Mungkin sebaliknya — tidak nyaman dengan validasi eksternal justru karena tidak ingin bergantung padanya. Ini masih perlu observasi lebih lanjut.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="card">
+    <div class="card-title">🔑 Refleksi Terbuka</div>
+    <div class="ref-block">
+      <div class="ref-q">// Apa yang paling tidak ingin diakui?</div>
+      <p>Bahwa beberapa pilihan yang terasa seperti kemandirian mungkin sebetulnya adalah cara untuk menghindari ketergantungan yang terasa berbahaya.</p>
+    </div>
+    <div class="ref-block">
+      <div class="ref-q">// Apa yang sedang terjadi di bawah permukaan?</div>
+      <p>Ada proses yang mencoba mendefinisikan ulang apa artinya "aman" dalam konteks relasi — bukan aman dari konflik, tetapi aman untuk benar-benar terlihat.</p>
+    </div>
+    <div class="ref-block">
+      <div class="ref-q">// Narasi yang belum selesai</div>
+      <p>Masih belum jelas apakah kecenderungan membangun sistem adalah cara untuk memahami dunia, atau cara untuk merasa aman dalam dunia yang terasa tidak dapat diprediksi.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <span>🔐 Level Akses: Restricted — Pasangan, diri sendiri</span>
+    <div class="level-links">
+      <a href="public.html" class="level-link">🌐 Public</a>
+      <a href="private.html" class="level-link">🔒 Private</a>
+      <a href="restricted.html" class="level-link current">🔐 Restricted</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function enterPage() {
+  const gate = document.getElementById('gate');
+  gate.style.opacity = '0';
+  gate.style.transition = 'opacity 0.4s ease';
+  setTimeout(() => { gate.style.display = 'none'; }, 400);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALTAIR — Public Profile</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #171a21;
+    --card-border: #262b35;
+    --text: #e6e8ec;
+    --muted: #9aa3b2;
+    --accent: #7c9eff;
+    --accent-soft: #7c9eff18;
+    --green: #4ade80;
+    --green-soft: #4ade8018;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* Top bar */
+  .topbar {
+    border-bottom: 1px solid var(--card-border);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-brand h1 { font-size: 1.1em; letter-spacing: 0.12em; color: var(--accent); }
+  .access-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green-soft); color: var(--green);
+    border: 1px solid #4ade8033;
+    border-radius: 20px; padding: 4px 12px; font-size: 0.78em; font-weight: 600;
+  }
+  .access-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; }
+  .topbar-nav { display: flex; gap: 6px; }
+  .topbar-nav a {
+    color: var(--muted); text-decoration: none; font-size: 0.82em;
+    padding: 5px 12px; border-radius: 6px; transition: color .15s, background .15s;
+  }
+  .topbar-nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  .topbar-nav a.active { color: var(--accent); background: var(--accent-soft); }
+
+  /* Layout */
+  .layout { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Hero */
+  .hero {
+    display: flex; align-items: flex-start; gap: 32px;
+    margin-bottom: 40px;
+  }
+  .avatar {
+    width: 80px; height: 80px; border-radius: 16px;
+    background: var(--accent-soft); border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2em; flex-shrink: 0;
+  }
+  .hero-text h2 { font-size: 1.8em; font-weight: 700; margin-bottom: 4px; }
+  .hero-text .roles { color: var(--muted); font-size: 0.9em; margin-bottom: 14px; }
+  .hero-text .bio {
+    color: var(--text); font-size: 0.95em; max-width: 580px;
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 10px; padding: 14px 18px;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* Section grid */
+  .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 680px) { .section-grid { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px 24px;
+  }
+  .card h3 {
+    font-size: 0.78em; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h3::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+
+  /* Tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid #7c9eff28; border-radius: 8px;
+    padding: 5px 12px; font-size: 0.82em;
+  }
+  .tag.neutral {
+    background: #ffffff08; color: var(--text); border-color: var(--card-border);
+  }
+
+  /* Competency bars */
+  .comp-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .comp-label { min-width: 140px; font-size: 0.85em; color: var(--text); }
+  .comp-track {
+    flex: 1; height: 6px; background: #0f1115;
+    border-radius: 3px; overflow: hidden; border: 1px solid var(--card-border);
+  }
+  .comp-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  .comp-pct { font-size: 0.78em; color: var(--muted); min-width: 34px; text-align: right; }
+
+  /* Timeline */
+  .timeline-item {
+    display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start;
+  }
+  .tl-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); margin-top: 6px; flex-shrink: 0;
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .tl-body {}
+  .tl-body strong { font-size: 0.9em; }
+  .tl-body .tl-meta { color: var(--muted); font-size: 0.78em; margin-top: 2px; }
+
+  /* Collab */
+  .collab-item { margin-bottom: 14px; }
+  .collab-item .cl-label { font-size: 0.8em; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .collab-item .cl-val { font-size: 0.9em; color: var(--text); }
+
+  /* Project cards */
+  .project-card {
+    border: 1px solid var(--card-border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 12px;
+  }
+  .project-card h4 { font-size: 0.9em; margin-bottom: 4px; }
+  .project-card p { font-size: 0.82em; color: var(--muted); }
+  .project-card .status {
+    display: inline-block; font-size: 0.75em; font-weight: 600;
+    padding: 2px 10px; border-radius: 20px; margin-top: 8px;
+  }
+  .status.active { background: var(--green-soft); color: var(--green); }
+  .status.planned { background: #fbbf2418; color: #fbbf24; }
+
+  /* Full width card */
+  .card.full { grid-column: 1 / -1; }
+
+  /* Mission list */
+  .mission-list { list-style: none; }
+  .mission-list li {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid var(--card-border);
+    font-size: 0.9em;
+  }
+  .mission-list li:last-child { border-bottom: none; }
+  .mission-list li::before { content: '→'; color: var(--accent); font-weight: 700; }
+
+  /* Bottom nav */
+  .page-footer {
+    margin-top: 50px; padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .page-footer span { font-size: 0.8em; color: var(--muted); }
+  .level-links { display: flex; gap: 8px; }
+  .level-link {
+    font-size: 0.8em; padding: 5px 14px; border-radius: 8px;
+    border: 1px solid var(--card-border); color: var(--muted);
+    text-decoration: none; transition: all .15s;
+  }
+  .level-link:hover { border-color: var(--accent); color: var(--accent); }
+  .level-link.locked { cursor: default; opacity: 0.5; }
+  .level-link.locked:hover { border-color: var(--card-border); color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <h1>ALTAIR</h1>
+    <span class="access-pill">Public</span>
+  </div>
+  <nav class="topbar-nav">
+    <a href="#profil" class="active">Profil</a>
+    <a href="#misi">Misi</a>
+    <a href="#knowledge">Knowledge</a>
+    <a href="#collab">Kolaborasi</a>
+    <a href="#timeline">Timeline</a>
+  </nav>
+</header>
+
+<div class="layout">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="avatar">⬡</div>
+    <div class="hero-text">
+      <h2>Altair</h2>
+      <div class="roles">Builder · Cartographer · Translator</div>
+      <div class="bio">
+        Seseorang yang membangun sistem untuk memahami hal-hal yang kompleks — lalu menerjemahkannya agar dapat digunakan oleh orang lain. Tertarik pada pola, koneksi antar disiplin, dan cara pengetahuan menjadi tindakan.
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="section-grid">
+
+    <!-- Profil -->
+    <div class="card" id="profil">
+      <h3>🎭 Peran</h3>
+      <div class="tags">
+        <span class="tag">Builder</span>
+        <span class="tag">Analyst</span>
+        <span class="tag">Translator</span>
+        <span class="tag">Cartographer</span>
+      </div>
+    </div>
+
+    <!-- Minat -->
+    <div class="card">
+      <h3>🔭 Minat</h3>
+      <div class="tags">
+        <span class="tag neutral">Sistem Informasi</span>
+        <span class="tag neutral">Psikologi Kognitif</span>
+        <span class="tag neutral">Desain Konseptual</span>
+        <span class="tag neutral">Bahasa & Makna</span>
+        <span class="tag neutral">Filsafat Praktis</span>
+      </div>
+    </div>
+
+    <!-- Kompetensi -->
+    <div class="card" id="knowledge">
+      <h3>⚙️ Kompetensi</h3>
+      <div class="comp-row">
+        <span class="comp-label">Sistem Thinking</span>
+        <div class="comp-track"><div class="comp-fill" style="width:88%;"></div></div>
+        <span class="comp-pct">88%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Analisis Konsep</span>
+        <div class="comp-track"><div class="comp-fill" style="width:82%;"></div></div>
+        <span class="comp-pct">82%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Translasi Pengetahuan</span>
+        <div class="comp-track"><div class="comp-fill" style="width:79%;"></div></div>
+        <span class="comp-pct">79%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Desain Struktur</span>
+        <div class="comp-track"><div class="comp-fill" style="width:74%;"></div></div>
+        <span class="comp-pct">74%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Fasilitasi Diskusi</span>
+        <div class="comp-track"><div class="comp-fill" style="width:68%;"></div></div>
+        <span class="comp-pct">68%</span>
+      </div>
+    </div>
+
+    <!-- Afinitas -->
+    <div class="card">
+      <h3>💠 Afinitas</h3>
+      <div class="tags" style="margin-bottom:12px;">
+        <span class="tag">Framework</span>
+        <span class="tag">Mental Model</span>
+        <span class="tag">Ontologi</span>
+        <span class="tag">Rekonstruksi</span>
+      </div>
+      <p style="font-size:0.82em;color:var(--muted);">Tertarik pada hal-hal yang memiliki struktur tersembunyi — sistem yang tampak sederhana tetapi memiliki banyak lapisan internal.</p>
+    </div>
+
+    <!-- Cara Bekerja -->
+    <div class="card" id="collab">
+      <h3>🤝 Cara Bekerja</h3>
+      <div class="collab-item">
+        <div class="cl-label">Komunikasi</div>
+        <div class="cl-val">Lebih suka tertulis atau asinkron; diskusi langsung perlu agenda yang jelas.</div>
+      </div>
+      <div class="collab-item">
+        <div class="cl-label">Diskusi</div>
+        <div class="cl-val">Membutuhkan waktu untuk memproses sebelum merespons secara mendalam.</div>
+      </div>
+      <div class="collab-item">
+        <div class="cl-label">Feedback</div>
+        <div class="cl-val">Lebih mudah menerima kritik yang diformulasikan sebagai analisis, bukan evaluasi personal.</div>
+      </div>
+    </div>
+
+    <!-- Project Aktif -->
+    <div class="card">
+      <h3>🎯 Project Aktif</h3>
+      <div class="project-card">
+        <h4>Personal OS — ALTAIR</h4>
+        <p>Sistem dokumentasi diri berbasis tingkat akses.</p>
+        <span class="status active">Aktif</span>
+      </div>
+      <div class="project-card">
+        <h4>Knowledge Framework</h4>
+        <p>Pemetaan koneksi antar konsep dan disiplin ilmu.</p>
+        <span class="status active">Aktif</span>
+      </div>
+      <div class="project-card">
+        <h4>Trust Reconstruction</h4>
+        <p>Revisi model kepercayaan sosial.</p>
+        <span class="status planned">Dalam Proses</span>
+      </div>
+    </div>
+
+    <!-- Misi -->
+    <div class="card full" id="misi">
+      <h3>🧭 Misi & Arah</h3>
+      <ul class="mission-list">
+        <li>Membangun sistem yang membantu orang memahami diri dan dunianya</li>
+        <li>Menerjemahkan konsep kompleks menjadi sesuatu yang dapat digunakan</li>
+        <li>Menghubungkan disiplin yang tampak tidak berkaitan</li>
+        <li>Membantu proses belajar menjadi lebih terstruktur dan bermakna</li>
+      </ul>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card full" id="timeline">
+      <h3>📅 Timeline Publik</h3>
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <strong>Kerja Praktik — Selesai</strong>
+          <div class="tl-meta">Mendapat apresiasi dari dosen pembimbing dan rekan tim · 2024</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <strong>Memulai Pembangunan Personal OS</strong>
+          <div class="tl-meta">Merancang sistem dokumentasi diri berbasis akses · 2025</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <strong>Fase Rekonstruksi Aktif</strong>
+          <div class="tl-meta">Merevisi model internal tentang kepercayaan dan identitas · Sekarang</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <span>🌐 Level Akses: Public — Dapat dibagikan kepada siapa saja</span>
+    <div class="level-links">
+      <a href="public.html" class="level-link" style="border-color:var(--accent);color:var(--accent);">🌐 Public</a>
+      <a href="private.html" class="level-link">🔒 Private</a>
+      <a href="restricted.html" class="level-link">🔐 Restricted</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

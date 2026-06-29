@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saldo Update</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Chakra+Petch:wght@300;500;700&display=swap');
+
+    /* =====================================================
+       THEME — Light
+       ===================================================== */
+    :root {
+      --bg:        #f0f4f8;
+      --panel:     #ffffff;
+      --border:    #d0dce8;
+      --accent:    #2563eb;
+      --accent2:   #16a34a;
+      --gold:      #b45309;
+      --text:      #1e293b;
+      --muted:     #64748b;
+      --danger:    #dc2626;
+      --flash-col: rgba(22,163,74,0.15);
+      --grid-col:  rgba(37,99,235,0.04);
+      --bar-bg:    rgba(0,0,0,0.06);
+      --particle:  #16a34a;
+    }
+
+    /* =====================================================
+       RESET & BASE
+       ===================================================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Chakra Petch', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-col) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-col) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridDrift 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes gridDrift {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(40px, 40px); }
+    }
+
+    /* =====================================================
+       CARD
+       ===================================================== */
+    .container {
+      position: relative;
+      width: 420px;
+      max-width: 95vw;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 36px;
+      position: relative;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(37,99,235,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* =====================================================
+       HEADER ELEMENTS
+       ===================================================== */
+    .badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent2);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .ship-name {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.1;
+    }
+
+    .reg-no {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 36px;
+    }
+
+    /* =====================================================
+       SALDO DISPLAY
+       ===================================================== */
+    .saldo-section { margin-bottom: 36px; }
+
+    .saldo-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .saldo-track {
+      background: var(--bar-bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      height: 8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .saldo-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 999px;
+      width: 0%;
+      transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+    }
+
+    .saldo-fill::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0;
+      width: 40px; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7));
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { opacity: 0; }
+      50%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .saldo-numbers {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .saldo-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 52px;
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: -2px;
+      transition: color 0.3s;
+    }
+
+    .saldo-value.increasing {
+      color: var(--accent2);
+      text-shadow: 0 0 20px rgba(22,163,74,0.3);
+    }
+
+    .saldo-delta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 18px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
+    }
+
+    .saldo-delta.show { opacity: 1; transform: translateY(0); }
+
+    /* =====================================================
+       FLOATING PARTICLES
+       ===================================================== */
+    .particle {
+      position: fixed;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 18px;
+      color: var(--particle);
+      pointer-events: none;
+      animation: floatUp 1.4s ease-out forwards;
+      z-index: 999;
+    }
+
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-100px) scale(1.3); }
+    }
+
+    /* =====================================================
+       STATUS LOG
+       ===================================================== */
+    .status-log {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      min-height: 60px;
+    }
+
+    .log-line {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 6px;
+      opacity: 0;
+      transform: translateX(-8px);
+      animation: logIn 0.3s ease forwards;
+    }
+
+    @keyframes logIn { to { opacity: 1; transform: translateX(0); } }
+
+    .log-time { color: var(--accent); }
+    .log-ok   { color: var(--accent2); }
+    .log-err  { color: var(--danger); }
+
+    /* =====================================================
+       REDIRECT BAR
+       ===================================================== */
+    .redirect-bar { margin-top: 20px; display: none; }
+    .redirect-bar.show { display: block; }
+
+    .redirect-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .redirect-countdown { color: var(--gold); }
+
+    .redirect-track {
+      background: rgba(180,83,9,0.1);
+      border: 1px solid rgba(180,83,9,0.25);
+      border-radius: 999px;
+      height: 4px;
+      overflow: hidden;
+    }
+
+    .redirect-fill {
+      height: 100%;
+      background: var(--gold);
+      width: 100%;
+      transform-origin: left;
+      /* duration is set inline via JS */
+    }
+
+    @keyframes drain {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
+    }
+
+    /* =====================================================
+       FLASH OVERLAY
+       ===================================================== */
+    .flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, var(--flash-col) 0%, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+      transition: opacity 0.1s;
+    }
+
+    .flash.active { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="flash" id="flash"></div>
+
+<div class="container">
+  <div class="card">
+    <div class="badge">REGISTRY UPDATE // LIVE</div>
+    <div class="ship-name" id="shipName">—</div>
+    <div class="reg-no"   id="regNo">REG NO. —</div>
+
+    <div class="saldo-section">
+      <div class="saldo-label">SALDO</div>
+      <div class="saldo-track">
+        <div class="saldo-fill" id="saldoFill"></div>
+      </div>
+      <div class="saldo-numbers">
+        <div class="saldo-value" id="saldoDisplay">0</div>
+        <div class="saldo-delta" id="saldoDelta"></div>
+      </div>
+    </div>
+
+    <div class="status-log" id="statusLog"></div>
+
+    <div class="redirect-bar" id="redirectBar">
+      <div class="redirect-label">
+        <span>REDIRECTING TO EXTERNAL HOST</span>
+        <span class="redirect-countdown" id="countdown">3s</span>
+      </div>
+      <div class="redirect-track">
+        <div class="redirect-fill" id="redirectFill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ==========================================================
+     ▌ CONFIGURATION — edit only this block
+     ========================================================== */
+  const CONFIG = {
+    apiBase:        'https://x8ki-letl-twmt.n7.xano.io/api:X6h8irt0/formalhault',
+    targetId:       7,          // record ID to update (HMS Javelin = 7)
+    saldoIncrement: 10,         // how much to add to Saldo each visit
+    redirectUrl:    'https://www.google.com',   // where to go after update
+    redirectDelay:  3,          // countdown seconds before redirect
+    barMax:         100,        // saldo value that equals 100% bar width
+  };
+  /* ========================================================== */
+
+
+  /* ----------------------------------------------------------
+     DOM refs
+  ---------------------------------------------------------- */
+  const els = {
+    shipName:    document.getElementById('shipName'),
+    regNo:       document.getElementById('regNo'),
+    saldoDisplay:document.getElementById('saldoDisplay'),
+    saldoDelta:  document.getElementById('saldoDelta'),
+    saldoFill:   document.getElementById('saldoFill'),
+    statusLog:   document.getElementById('statusLog'),
+    redirectBar: document.getElementById('redirectBar'),
+    countdown:   document.getElementById('countdown'),
+    redirectFill:document.getElementById('redirectFill'),
+    flash:       document.getElementById('flash'),
+  };
+
+  /* ----------------------------------------------------------
+     Utilities
+  ---------------------------------------------------------- */
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function log(msg, type = '') {
+    const ts   = new Date().toTimeString().slice(0, 8);
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="log-time">[${ts}]</span><span class="${type}">${msg}</span>`;
+    els.statusLog.appendChild(line);
+  }
+
+  function animateCounter(el, from, to, duration = 1800) {
+    const start = performance.now();
+    (function tick(now) {
+      const t    = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 4);
+      el.textContent = Math.round(from + (to - from) * ease);
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = to;
+    })(performance.now());
+  }
+
+  function spawnParticles(x, y, count = 8) {
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className   = 'particle';
+      p.textContent = `+${Math.ceil(CONFIG.saldoIncrement / count)}`;
+      p.style.left            = (x + (Math.random() - 0.5) * 120) + 'px';
+      p.style.top             = (y + (Math.random() - 0.5) * 40)  + 'px';
+      p.style.animationDelay  = (Math.random() * 0.4) + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2000);
+    }
+  }
+
+  function startRedirect() {
+    els.redirectBar.classList.add('show');
+    els.redirectFill.style.animation = `drain ${CONFIG.redirectDelay}s linear forwards`;
+    let sec = CONFIG.redirectDelay;
+    els.countdown.textContent = sec + 's';
+    const iv = setInterval(() => {
+      sec--;
+      els.countdown.textContent = sec + 's';
+      if (sec <= 0) { clearInterval(iv); window.location.href = CONFIG.redirectUrl; }
+    }, 1000);
+  }
+
+  /* ----------------------------------------------------------
+     API helpers
+  ---------------------------------------------------------- */
+  async function fetchRecord(id) {
+    const res = await fetch(`${CONFIG.apiBase}/${id}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  async function patchRecord(id, data) {
+    const res = await fetch(`${CONFIG.apiBase}/${id}`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  /* ----------------------------------------------------------
+     Main flow
+  ---------------------------------------------------------- */
+  async function run() {
+    log('Initializing registry connection...');
+    await wait(500);
+
+    // 1. Fetch
+    log(`Fetching record ID ${CONFIG.targetId}...`);
+    let record;
+    try {
+      record = await fetchRecord(CONFIG.targetId);
+    } catch(e) {
+      log(`FETCH ERROR: ${e.message}`, 'log-err'); return;
+    }
+
+    log(`Record acquired — ${record.Nama}`, 'log-ok');
+    els.shipName.textContent = record.Nama;
+    els.regNo.textContent    = `REG NO. ${String(record.RegNo).padStart(3, '0')}`;
+
+    const oldSaldo = record.Saldo;
+    const newSaldo = oldSaldo + CONFIG.saldoIncrement;
+
+    els.saldoDisplay.textContent   = oldSaldo;
+    els.saldoFill.style.width      = Math.min(oldSaldo / CONFIG.barMax * 100, 100) + '%';
+
+    await wait(600);
+    log(`Current saldo: ${oldSaldo} → Updating to ${newSaldo}...`);
+
+    // 2. Patch
+    try {
+      await patchRecord(CONFIG.targetId, { Saldo: newSaldo });
+    } catch(e) {
+      log(`UPDATE ERROR: ${e.message}`, 'log-err'); return;
+    }
+
+    log('API acknowledged write.', 'log-ok');
+    await wait(200);
+
+    // 3. Animate
+    const rect = els.saldoDisplay.getBoundingClientRect();
+    spawnParticles(rect.left + rect.width / 2, rect.top);
+
+    els.saldoDisplay.classList.add('increasing');
+    els.saldoDelta.textContent = `+${CONFIG.saldoIncrement}`;
+    els.saldoDelta.classList.add('show');
+
+    animateCounter(els.saldoDisplay, oldSaldo, newSaldo, 1800);
+    els.saldoFill.style.width = Math.min(newSaldo / CONFIG.barMax * 100, 100) + '%';
+
+    await wait(400);
+    els.flash.classList.add('active');
+    setTimeout(() => els.flash.classList.remove('active'), 300);
+
+    await wait(1800);
+    log(`Saldo updated: ${oldSaldo} → ${newSaldo}`, 'log-ok');
+    log('Preparing handoff to external host...');
+    els.saldoDisplay.classList.remove('increasing');
+
+    await wait(500);
+
+    // 4. Redirect
+    startRedirect();
+  }
+
+  run();
+</script>
+</body>
+</html>

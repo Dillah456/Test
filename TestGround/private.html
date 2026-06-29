@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALTAIR — Private</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #171a21;
+    --card-border: #262b35;
+    --text: #e6e8ec;
+    --muted: #9aa3b2;
+    --accent: #a78bfa;
+    --accent-soft: #a78bfa18;
+    --yellow: #fbbf24;
+    --yellow-soft: #fbbf2418;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
+
+  .topbar {
+    border-bottom: 1px solid var(--card-border);
+    padding: 12px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: var(--bg); z-index: 100;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-brand h1 { font-size: 1.1em; letter-spacing: 0.12em; color: var(--accent); }
+  .access-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--yellow-soft); color: var(--yellow);
+    border: 1px solid #fbbf2430; border-radius: 20px;
+    padding: 4px 12px; font-size: 0.78em; font-weight: 600;
+  }
+  .access-pill::before { content: '🔒'; font-size: 0.9em; }
+  .topbar-nav { display: flex; gap: 6px; }
+  .topbar-nav a {
+    color: var(--muted); text-decoration: none; font-size: 0.82em;
+    padding: 5px 12px; border-radius: 6px; transition: color .15s, background .15s;
+  }
+  .topbar-nav a:hover { background: var(--accent-soft); color: var(--accent); }
+  .topbar-nav a.active { color: var(--accent); background: var(--accent-soft); }
+
+  .layout { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Notice banner */
+  .notice {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--yellow-soft); border: 1px solid #fbbf2428;
+    border-left: 3px solid var(--yellow);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 36px;
+  }
+  .notice-icon { font-size: 1.3em; flex-shrink: 0; }
+  .notice p { font-size: 0.85em; color: var(--muted); }
+  .notice p strong { color: var(--text); }
+
+  /* Section header */
+  .section-header { margin-bottom: 28px; }
+  .section-header h2 { font-size: 1.4em; font-weight: 700; }
+  .section-header p { color: var(--muted); font-size: 0.88em; margin-top: 4px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 0.78em; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
+
+  /* Maturity badge */
+  .maturity {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75em; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; float: right; margin-top: -2px;
+  }
+  .mat-stable { background: #4ade8018; color: #4ade80; border: 1px solid #4ade8030; }
+  .mat-growing { background: #60a5fa18; color: #60a5fa; border: 1px solid #60a5fa30; }
+  .mat-recon { background: var(--yellow-soft); color: var(--yellow); border: 1px solid #fbbf2430; }
+  .mat-sandbox { background: #f8717118; color: #f87171; border: 1px solid #f8717130; }
+
+  /* Core section */
+  .core-block {
+    background: var(--accent-soft); border: 1px solid #a78bfa28;
+    border-radius: 10px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .core-block h4 { font-size: 1em; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .core-block p { font-size: 0.88em; color: var(--text); }
+
+  /* Growth items */
+  .growth-item {
+    border-left: 3px solid var(--accent);
+    padding-left: 16px; margin-bottom: 16px;
+  }
+  .growth-item h4 { font-size: 0.9em; font-weight: 600; margin-bottom: 4px; }
+  .growth-item p { font-size: 0.85em; color: var(--muted); }
+
+  /* Trust map */
+  .trust-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--card-border);
+    font-size: 0.88em;
+  }
+  .trust-row:last-child { border-bottom: none; }
+  .trust-name { font-weight: 500; min-width: 100px; }
+  .trust-dots { display: flex; gap: 6px; }
+  .trust-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1px solid var(--card-border); background: transparent;
+  }
+  .trust-dot.filled { background: var(--accent); border-color: var(--accent); }
+  .trust-label { color: var(--muted); font-size: 0.8em; text-align: right; min-width: 120px; }
+
+  /* Psychological state */
+  .state-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+  .state-label { min-width: 150px; font-size: 0.85em; }
+  .state-track {
+    flex: 1; height: 6px; background: #0f1115;
+    border-radius: 3px; overflow: hidden; border: 1px solid var(--card-border);
+  }
+  .state-fill { height: 100%; border-radius: 3px; }
+  .state-tag { font-size: 0.78em; color: var(--muted); min-width: 90px; text-align: right; }
+
+  /* Timeline private */
+  .tl-item { display: flex; gap: 14px; margin-bottom: 20px; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .tl-line { flex: 1; width: 1px; background: var(--card-border); }
+  .tl-body { padding-bottom: 8px; }
+  .tl-body strong { font-size: 0.9em; display: block; }
+  .tl-body p { font-size: 0.84em; color: var(--muted); margin-top: 4px; }
+  .tl-body .tl-date { font-size: 0.75em; color: var(--accent); margin-bottom: 4px; }
+
+  /* Notes */
+  .note-block {
+    background: #ffffff05; border: 1px solid var(--card-border);
+    border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; font-size: 0.87em;
+  }
+  .note-block .note-date { font-size: 0.75em; color: var(--muted); margin-bottom: 6px; }
+
+  /* Anomaly surface */
+  .anomaly-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid var(--card-border);
+  }
+  .anomaly-item:last-child { border-bottom: none; }
+  .anomaly-icon { font-size: 1.2em; flex-shrink: 0; }
+  .anomaly-text h4 { font-size: 0.88em; font-weight: 600; margin-bottom: 2px; }
+  .anomaly-text p { font-size: 0.82em; color: var(--muted); }
+
+  .page-footer {
+    margin-top: 50px; padding-top: 24px;
+    border-top: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .page-footer span { font-size: 0.8em; color: var(--muted); }
+  .level-links { display: flex; gap: 8px; }
+  .level-link {
+    font-size: 0.8em; padding: 5px 14px; border-radius: 8px;
+    border: 1px solid var(--card-border); color: var(--muted);
+    text-decoration: none; transition: all .15s;
+  }
+  .level-link:hover { border-color: var(--accent); color: var(--accent); }
+  .level-link.current { border-color: var(--accent); color: var(--accent); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <h1>ALTAIR</h1>
+    <span class="access-pill">Private</span>
+  </div>
+  <nav class="topbar-nav">
+    <a href="#core" class="active">Core</a>
+    <a href="#trust">Trust</a>
+    <a href="#growth">Growth</a>
+    <a href="#state">Kondisi</a>
+    <a href="#notes">Notes</a>
+  </nav>
+</header>
+
+<div class="layout">
+
+  <div class="notice">
+    <span class="notice-icon">🔒</span>
+    <p><strong>Level Akses: Private</strong><br>Halaman ini ditujukan untuk orang-orang yang sudah memiliki hubungan emosional atau riwayat bersama. Berisi proses internal, perubahan cara berpikir, dan kebutuhan emosional.</p>
+  </div>
+
+  <!-- Core -->
+  <div class="section-header" id="core">
+    <h2>❤️ Core</h2>
+    <p>Kebutuhan inti dan hal-hal yang paling penting bagi identitas saat ini.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">❤️ Core Need <span class="maturity mat-recon">🟠 Rekonstruksi</span></div>
+    <div class="core-block">
+      <h4>Dipahami</h4>
+      <p>Kebutuhan agar nilai, motivasi, pengalaman, dan model internal dapat direkonstruksi secara cukup akurat oleh pihak lain — bukan hanya diterima, tetapi benar-benar dimengerti.</p>
+    </div>
+    <div class="core-block" style="background:#a78bfa08;border-color:#a78bfa18;">
+      <h4 style="color:var(--muted);">Mengapa sedang direvisi</h4>
+      <p>Menemukan bahwa apa yang selama ini disebut sebagai "dipahami" seringkali lebih dekat dengan "disetujui". Sedang memperjelas perbedaan antara keduanya dan dampaknya terhadap cara memilih relasi.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <!-- Core Values Internal -->
+    <div class="card">
+      <div class="card-title">🧭 Nilai Inti <span class="maturity mat-stable">🟢 Stable</span></div>
+      <div class="growth-item" style="border-color:#4ade80;">
+        <h4>Kejujuran Intelektual</h4>
+        <p>Komitmen untuk tidak menerima premis yang tidak dapat diverifikasi, termasuk tentang diri sendiri.</p>
+      </div>
+      <div class="growth-item">
+        <h4>Pertumbuhan</h4>
+        <p>Diprioritaskan bukan sebagai prestasi, tetapi sebagai kondisi internal yang terus bergerak.</p>
+      </div>
+      <div class="growth-item">
+        <h4>Kebebasan Berpikir</h4>
+        <p>Kebutuhan untuk tidak terkunci dalam satu kerangka konseptual.</p>
+      </div>
+    </div>
+
+    <!-- Fase Hidup -->
+    <div class="card">
+      <div class="card-title">🌊 Fase Hidup <span class="maturity mat-recon">🟠 Transisi</span></div>
+      <p style="font-size:0.88em;color:var(--muted);margin-bottom:14px;">Fase saat ini ditandai oleh pergeseran simultaan dalam beberapa area.</p>
+      <div class="anomaly-item">
+        <span class="anomaly-icon">🔄</span>
+        <div class="anomaly-text">
+          <h4>Rekonstruksi Model Trust</h4>
+          <p>Sedang meninjau ulang asumsi-asumsi tentang siapa yang dapat dipercaya dan mengapa.</p>
+        </div>
+      </div>
+      <div class="anomaly-item">
+        <span class="anomaly-icon">🧩</span>
+        <div class="anomaly-text">
+          <h4>Eksplorasi Identitas</h4>
+          <p>Beberapa label lama tidak lagi terasa akurat; proses pengujian label baru masih berlangsung.</p>
+        </div>
+      </div>
+      <div class="anomaly-item">
+        <span class="anomaly-icon">📈</span>
+        <div class="anomaly-text">
+          <h4>Perluasan Kapasitas Afektif</h4>
+          <p>Belajar menerima afirmasi sosial tanpa mengaktifkan mekanisme pertahanan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Map -->
+  <div class="card" id="trust">
+    <div class="card-title">🤝 Trust Map <span class="maturity mat-recon">🟠 Rekonstruksi</span></div>
+    <div class="trust-row">
+      <span class="trust-name">Kolega</span>
+      <div class="trust-dots">
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot"></div>
+        <div class="trust-dot"></div>
+        <div class="trust-dot"></div>
+        <div class="trust-dot"></div>
+      </div>
+      <span class="trust-label">Profesional saja</span>
+    </div>
+    <div class="trust-row">
+      <span class="trust-name">Teman</span>
+      <div class="trust-dots">
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot"></div>
+        <div class="trust-dot"></div>
+        <div class="trust-dot"></div>
+      </div>
+      <span class="trust-label">Minat & kebiasaan</span>
+    </div>
+    <div class="trust-row">
+      <span class="trust-name">Keluarga</span>
+      <div class="trust-dots">
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot"></div>
+        <div class="trust-dot"></div>
+      </div>
+      <span class="trust-label">Kebutuhan dasar</span>
+    </div>
+    <div class="trust-row">
+      <span class="trust-name">Mentor</span>
+      <div class="trust-dots">
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot"></div>
+      </div>
+      <span class="trust-label">Potensi & arah</span>
+    </div>
+    <div class="trust-row">
+      <span class="trust-name">Sahabat</span>
+      <div class="trust-dots">
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot"></div>
+      </div>
+      <span class="trust-label">Nilai & konflik</span>
+    </div>
+    <div class="trust-row">
+      <span class="trust-name">Pasangan</span>
+      <div class="trust-dots">
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+        <div class="trust-dot filled"></div>
+      </div>
+      <span class="trust-label">Pertumbuhan bersama</span>
+    </div>
+    <p style="font-size:0.78em;color:var(--muted);margin-top:14px;">Catatan: Model ini sedang aktif direvisi. Definisi kepercayaan saat ini lebih ketat dari sebelumnya.</p>
+  </div>
+
+  <!-- Growth -->
+  <div class="card" id="growth">
+    <div class="card-title">🌱 Growth Area <span class="maturity mat-growing">🟡 Growing</span></div>
+    <div class="growth-item">
+      <h4>Menerima Afirmasi Sosial</h4>
+      <p>Belajar menerima apresiasi tanpa secara otomatis mempertanyakan motif di baliknya.</p>
+    </div>
+    <div class="growth-item">
+      <h4>Toleransi terhadap Ambiguitas</h4>
+      <p>Melatih kenyamanan dengan pertanyaan yang belum memiliki jawaban definitif.</p>
+    </div>
+    <div class="growth-item">
+      <h4>Regulasi Energi Sosial</h4>
+      <p>Membangun kesadaran tentang kapan perlu recharge dan kapan siap untuk berinteraksi lebih dalam.</p>
+    </div>
+    <div class="growth-item" style="border-color:var(--yellow);">
+      <h4 style="color:var(--yellow);">Area yang Sedang Diuji</h4>
+      <p>Kemampuan meminta bantuan tanpa merasa mengurangi konsistensi internal.</p>
+    </div>
+  </div>
+
+  <!-- Psychological State -->
+  <div class="card" id="state">
+    <div class="card-title">📈 Kondisi Psikologis <span class="maturity mat-recon">🟠 Berubah</span></div>
+    <div class="state-row">
+      <span class="state-label">Energi Mental</span>
+      <div class="state-track"><div class="state-fill" style="width:72%;background:var(--accent);"></div></div>
+      <span class="state-tag">72% · Stabil</span>
+    </div>
+    <div class="state-row">
+      <span class="state-label">Stabilitas Emosional</span>
+      <div class="state-track"><div class="state-fill" style="width:65%;background:#60a5fa;"></div></div>
+      <span class="state-tag">65% · Fluktuatif</span>
+    </div>
+    <div class="state-row">
+      <span class="state-label">Kapasitas Sosial</span>
+      <div class="state-track"><div class="state-fill" style="width:55%;background:var(--yellow);"></div></div>
+      <span class="state-tag">55% · Terbatas</span>
+    </div>
+    <div class="state-row">
+      <span class="state-label">Fokus Internal</span>
+      <div class="state-track"><div class="state-fill" style="width:82%;background:#4ade80;"></div></div>
+      <span class="state-tag">82% · Tinggi</span>
+    </div>
+    <p style="font-size:0.78em;color:var(--muted);margin-top:14px;">Kapasitas sosial yang rendah bukan berarti tidak mau berinteraksi, tetapi interaksi yang tidak terencana cenderung menguras lebih dari biasanya.</p>
+  </div>
+
+  <!-- Surface Anomaly -->
+  <div class="card">
+    <div class="card-title">🧩 Anomali Permukaan</div>
+    <div class="anomaly-item">
+      <span class="anomaly-icon">🔇</span>
+      <div class="anomaly-text">
+        <h4>Diam Bukan Berarti Setuju</h4>
+        <p>Ketika tidak merespons dalam diskusi, kemungkinan besar sedang memproses, bukan mengabaikan.</p>
+      </div>
+    </div>
+    <div class="anomaly-item">
+      <span class="anomaly-icon">🌀</span>
+      <div class="anomaly-text">
+        <h4>Perlu Waktu untuk Merespons Apresiasi</h4>
+        <p>Afirmasi sosial yang tidak terduga memerlukan waktu pemrosesan sebelum dapat direspons dengan tepat.</p>
+      </div>
+    </div>
+    <div class="anomaly-item">
+      <span class="anomaly-icon">📝</span>
+      <div class="anomaly-text">
+        <h4>Lebih Ekspresif dalam Teks</h4>
+        <p>Komunikasi tertulis cenderung lebih akurat menggambarkan kondisi internal dibanding komunikasi lisan.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Internal -->
+  <div class="card" id="notes">
+    <div class="card-title">📅 Timeline Internal</div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-date">KP — 2024</div>
+        <strong>Afirmasi Sosial Setelah Kerja Praktik</strong>
+        <p>Apresiasi dari dosen dan teman-teman datang dalam jumlah yang tidak terduga. Ada rasa senang sekaligus ketidaknyamanan yang belum dapat dipahami sepenuhnya saat itu.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-date">Awal 2025</div>
+        <strong>Awal Rekonstruksi Trust</strong>
+        <p>Mulai menyadari bahwa model kepercayaan yang lama dibangun di atas asumsi yang perlu diuji ulang.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-date">Sekarang</div>
+        <strong>Fase Rekonstruksi Aktif</strong>
+        <p>Sedang mengamati pola baru dengan cara yang lebih lambat dan lebih sadar.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Notes -->
+  <div class="card">
+    <div class="card-title">📚 Catatan Personal</div>
+    <div class="note-block">
+      <div class="note-date">Tentang Dipahami</div>
+      Semakin paham bahwa "dipahami" berbeda dari "diterima". Mungkin jauh lebih sulit ditemukan, tetapi jauh lebih penting.
+    </div>
+    <div class="note-block">
+      <div class="note-date">Tentang Pertumbuhan</div>
+      Pertumbuhan tidak selalu terasa seperti kemajuan. Kadang terasa seperti pembongkaran.
+    </div>
+    <div class="note-block">
+      <div class="note-date">Tentang Trust</div>
+      Kepercayaan yang dibangun terlalu cepat bukan kepercayaan — itu ekspektasi yang belum diuji.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <span>🔒 Level Akses: Private — Keluarga, sahabat, mentor dekat</span>
+    <div class="level-links">
+      <a href="public.html" class="level-link">🌐 Public</a>
+      <a href="private.html" class="level-link current">🔒 Private</a>
+      <a href="restricted.html" class="level-link">🔐 Restricted</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
