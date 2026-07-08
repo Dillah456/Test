@@ -1,0 +1,16 @@
+[
+  {
+    "id": 3,
+    "created_at": 1779611081399,
+    "Nama": "Nagumo Hajime",
+    "Saldo": 0,
+    "RegNo": 3
+  },
+  {
+    "id": 7,
+    "created_at": 1779611081400,
+    "Nama": "HMS Javelin",
+    "Saldo": 30,
+    "RegNo": 7
+  }
+]
