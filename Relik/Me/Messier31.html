@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MESSIER 31 — Boundary Value Observatory</title>
+<style>
+  :root{
+    --void:#070707;
+    --panel:#111111;
+    --line:#2a2a2a;
+    --red:#C81E1E;
+    --red-bright:#E63946;
+    --paper:#F2F0EA;
+    --muted:#8a8a8a;
+
+    --tag-Violence:#C81E1E;
+    --tag-Despair:#7a1010;
+    --tag-SpiritualDeviation:#9c2b2b;
+    --tag-Oppression:#4a0f0f;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--void);
+    color:var(--paper);
+    font-family:"JetBrains Mono","Courier New",monospace;
+    line-height:1.5;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(200,30,30,0.035) 0px, rgba(200,30,30,0.035) 2px, transparent 2px, transparent 14px);
+  }
+
+  a{color:var(--red-bright);}
+
+  .display{
+    font-family:"Archivo Black","Arial Black",sans-serif;
+    letter-spacing:-0.02em;
+  }
+
+  header.mast{
+    border-bottom:6px solid var(--red);
+    padding:2.5rem 1.5rem 1.5rem;
+    position:relative;
+    overflow:hidden;
+  }
+  header.mast::before{
+    content:"BOUNDARY VALUE OBSERVATORY";
+    position:absolute;
+    top:0; right:1.5rem;
+    font-size:0.65rem;
+    letter-spacing:0.3em;
+    color:var(--muted);
+  }
+  .mast-title{
+    font-size:clamp(2.4rem, 8vw, 5.5rem);
+    margin:0;
+    color:var(--paper);
+    text-transform:uppercase;
+    line-height:0.95;
+  }
+  .mast-title span{color:var(--red-bright);}
+  .mast-sub{
+    max-width:640px;
+    color:var(--muted);
+    margin-top:0.75rem;
+    font-size:0.9rem;
+  }
+
+  .drift-panel{
+    margin-top:1.75rem;
+    border:2px solid var(--red);
+    background:var(--panel);
+    padding:1rem 1.25rem;
+    max-width:640px;
+  }
+  .drift-title{
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    color:var(--muted);
+    margin-bottom:0.5rem;
+  }
+  .drift-track{
+    height:14px;
+    background:#000;
+    border:1px solid var(--line);
+    position:relative;
+  }
+  .drift-bar{
+    height:100%;
+    width:0%;
+    background:var(--red);
+    transition:width 0.4s ease;
+  }
+  .drift-bar.drift-high{background:var(--red-bright);}
+  .drift-label{
+    margin-top:0.4rem;
+    font-size:0.75rem;
+    color:var(--muted);
+  }
+
+  main{
+    max-width:1100px;
+    margin:0 auto;
+    padding:2.5rem 1.5rem 5rem;
+  }
+
+  section{margin-bottom:4rem;}
+
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:1rem;
+    border-bottom:2px solid var(--line);
+    padding-bottom:0.5rem;
+    margin-bottom:1.5rem;
+  }
+  .section-head h2{
+    font-size:1.6rem;
+    margin:0;
+    text-transform:uppercase;
+    color:var(--paper);
+  }
+  .section-head .section-num{
+    font-family:"Archivo Black","Arial Black",sans-serif;
+    color:var(--red);
+    font-size:1.6rem;
+  }
+  .section-note{color:var(--muted); font-size:0.85rem; margin:-0.75rem 0 1.5rem;}
+
+  /* Category cards */
+  .cat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .cat-card{
+    background:var(--panel);
+    padding:1.25rem;
+    position:relative;
+  }
+  .cat-index{
+    font-family:"Archivo Black","Arial Black",sans-serif;
+    color:var(--red);
+    font-size:1.8rem;
+    opacity:0.5;
+  }
+  .cat-card h3{margin:0.2rem 0 0.5rem; text-transform:uppercase; font-size:1rem;}
+  .cat-desc{font-size:0.8rem; color:var(--muted); min-height:3.4em;}
+  .cat-demons{display:flex; flex-wrap:wrap; gap:0.4rem; margin:0.75rem 0;}
+  .demon-chip{
+    border:1px solid var(--line);
+    padding:0.15rem 0.5rem;
+    font-size:0.7rem;
+    display:flex;
+    gap:0.4rem;
+    align-items:center;
+  }
+  .demon-name{color:var(--paper);}
+  .demon-rel{font-size:0.6rem; letter-spacing:0.05em; color:var(--muted);}
+  .rel-sahih{color:var(--red-bright);}
+  .feeds-row{font-size:0.7rem; color:var(--muted); display:flex; gap:0.4rem; flex-wrap:wrap; align-items:center; margin-top:0.5rem;}
+  .feeds-label{text-transform:uppercase; letter-spacing:0.1em;}
+
+  .feed-tag, .tag-check span, .meta-chip.tag-Violence, .meta-chip.tag-Despair, .meta-chip.tag-SpiritualDeviation, .meta-chip.tag-Oppression{
+    padding:0.1rem 0.5rem;
+    font-size:0.65rem;
+    border:1px solid;
+    text-transform:uppercase;
+  }
+  .tag-Violence{border-color:var(--tag-Violence); color:var(--tag-Violence);}
+  .tag-Despair{border-color:var(--tag-Despair); color:#c96a6a;}
+  .tag-SpiritualDeviation{border-color:var(--tag-SpiritualDeviation); color:#d98a8a;}
+  .tag-Oppression{border-color:var(--tag-Oppression); color:#e08a8a;}
+
+  /* AntiValue cards */
+  .av-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:1rem;
+  }
+  .av-card{
+    border:2px solid var(--line);
+    border-left:6px solid var(--red);
+    background:var(--panel);
+    padding:1.1rem 1.25rem;
+  }
+  .av-card h3{margin:0 0 0.4rem; text-transform:uppercase; font-size:0.95rem; color:var(--red-bright);}
+  .av-source{font-size:0.7rem; color:var(--muted); margin-bottom:0.6rem;}
+  .av-values{margin:0; padding-left:1.1rem; font-size:0.8rem; color:var(--paper);}
+  .av-values li{margin-bottom:0.15rem;}
+
+  /* Journal form */
+  .journal-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:2rem;
+  }
+  @media (max-width:800px){ .journal-grid{grid-template-columns:1fr;} }
+
+  #journal-form{
+    border:2px solid var(--line);
+    background:var(--panel);
+    padding:1.5rem;
+  }
+  .form-mode-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:0.7rem; letter-spacing:0.15em; color:var(--muted);
+    margin-bottom:1rem; text-transform:uppercase;
+  }
+  #form-mode{color:var(--red-bright);}
+
+  label.field-label{
+    display:block;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--muted);
+    margin:1rem 0 0.3rem;
+  }
+  label.field-label:first-of-type{margin-top:0;}
+
+  input[type=text], input[type=date], textarea, select{
+    width:100%;
+    background:#000;
+    border:1px solid var(--line);
+    color:var(--paper);
+    padding:0.6rem 0.7rem;
+    font-family:inherit;
+    font-size:0.9rem;
+  }
+  textarea{min-height:120px; resize:vertical;}
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--red-bright);
+    outline-offset:1px;
+  }
+
+  #antivalue-tags{display:flex; flex-wrap:wrap; gap:0.5rem;}
+  .tag-check{
+    display:flex; align-items:center; gap:0.3rem;
+    cursor:pointer;
+  }
+  .tag-check input{width:auto;}
+
+  .form-actions{
+    display:flex; gap:0.75rem; margin-top:1.5rem;
+  }
+  button{
+    font-family:inherit;
+    cursor:pointer;
+    border:2px solid var(--red);
+    background:transparent;
+    color:var(--paper);
+    padding:0.6rem 1.2rem;
+    text-transform:uppercase;
+    font-size:0.75rem;
+    letter-spacing:0.08em;
+  }
+  button:hover{background:var(--red); color:#000;}
+  #btn-clear-form{border-color:var(--line); color:var(--muted);}
+  #btn-clear-form:hover{background:var(--line); color:var(--paper);}
+
+  /* Entry lists */
+  .list-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);
+    margin-bottom:0.75rem;
+  }
+  #incomplete-count{color:var(--red-bright); font-weight:bold;}
+
+  .entry-card{
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:1rem;
+    margin-bottom:0.75rem;
+  }
+  .entry-open{border-left:4px solid var(--red-bright);}
+  .entry-head{display:flex; justify-content:space-between; font-size:0.7rem; color:var(--muted); margin-bottom:0.4rem;}
+  .entry-status{text-transform:uppercase; letter-spacing:0.08em;}
+  .status-incomplete{color:var(--red-bright);}
+  .status-complete{color:#5a9c5a;}
+  .entry-title{margin:0 0 0.3rem; font-size:1rem;}
+  .entry-body{font-size:0.85rem; color:#cfcfcf; margin:0 0 0.6rem;}
+  .entry-meta{display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.6rem;}
+  .meta-chip{
+    font-size:0.65rem; border:1px solid var(--line); color:var(--muted);
+    padding:0.1rem 0.5rem; text-transform:uppercase;
+  }
+  .entry-actions{display:flex; gap:0.5rem;}
+  .entry-actions button{padding:0.35rem 0.8rem; font-size:0.65rem;}
+  .btn-delete{border-color:var(--line); color:var(--muted);}
+  .btn-delete:hover{background:var(--line); color:var(--paper);}
+
+  .muted{color:var(--muted); font-size:0.85rem;}
+
+  footer{
+    border-top:2px solid var(--line);
+    padding:1.5rem;
+    text-align:center;
+    font-size:0.7rem;
+    color:var(--muted);
+    letter-spacing:0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <h1 class="mast-title display">MESSIER<span>31</span></h1>
+  <p class="mast-sub">A galaxy on a collision course is still, for now, a point of light. The boundary
+    isn't crossed all at once — it drifts, entry by entry, unnoticed. This observatory logs
+    the drift before it becomes impact.</p>
+
+  <div class="drift-panel">
+    <div class="drift-title">DRIFT TOWARD BOUNDARY — LAST 14 ENTRIES</div>
+    <div class="drift-track"><div class="drift-bar" id="drift-bar"></div></div>
+    <div class="drift-label" id="drift-label">0% of last 0 entries flagged a boundary</div>
+  </div>
+</header>
+
+<main>
+
+  <section id="boundary-explainer">
+    <div class="section-head"><span class="section-num display">01</span><h2>Boundary Value</h2></div>
+    <p class="section-note">Regulus classifies the whisper before it becomes the act. Each category below
+      can, left unchecked, feed one or more Anti-Values — the hard boundary this dashboard exists to guard.</p>
+
+    <div class="cat-grid" id="category-list"></div>
+
+    <div class="section-head" style="margin-top:2.5rem;"><span class="section-num display">—</span><h2>Anti-Value</h2></div>
+    <p class="section-note">These are not opinions to debate. They are the lines the boundary engine
+      is built to hold.</p>
+    <div class="av-grid" id="antivalue-list"></div>
+  </section>
+
+  <section id="journal-panel">
+    <div class="section-head"><span class="section-num display">02</span><h2>Journal</h2></div>
+    <p class="section-note">Write plainly. Tag what pulled at you, not what you think should have. An entry
+      can stay <strong>incomplete</strong> on purpose — leave it open and continue it tomorrow.</p>
+
+    <div class="journal-grid">
+      <form id="journal-form">
+        <div class="form-mode-row">
+          <span id="form-mode">NEW ENTRY</span>
+          <span id="today-label"></span>
+        </div>
+
+        <label class="field-label" for="field-date">Date</label>
+        <input type="date" id="field-date" required>
+
+        <label class="field-label" for="field-title">Title</label>
+        <input type="text" id="field-title" placeholder="One line, what today was about">
+
+        <label class="field-label" for="field-body">Entry</label>
+        <textarea id="field-body" placeholder="What happened. What you noticed. What pulled at you."></textarea>
+
+        <label class="field-label" for="field-need">Need in play (Rigel)</label>
+        <select id="field-need"></select>
+
+        <label class="field-label" for="field-domain">Life domain (Sertan)</label>
+        <select id="field-domain"></select>
+
+        <label class="field-label" for="field-archetype">Motivational pattern (Tarf)</label>
+        <select id="field-archetype"></select>
+
+        <label class="field-label">Boundary flags (Regulus Anti-Value)</label>
+        <div id="antivalue-tags"></div>
+
+        <label class="field-label" for="field-status">Status</label>
+        <select id="field-status">
+          <option value="incomplete">Incomplete — continue tomorrow</option>
+          <option value="complete">Complete</option>
+        </select>
+
+        <div class="form-actions">
+          <button type="submit"><span id="submit-label">Save Entry</span></button>
+          <button type="button" id="btn-clear-form">Clear</button>
+        </div>
+      </form>
+
+      <div>
+        <div class="list-head">
+          <span>Open Threads</span>
+          <span><span id="incomplete-count">0</span> incomplete</span>
+        </div>
+        <div id="incomplete-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="archive-panel">
+    <div class="section-head"><span class="section-num display">03</span><h2>Archive</h2></div>
+    <p class="section-note">Completed entries. History is data — it shows you the drift you can't see day to day.</p>
+    <div id="entry-list"></div>
+  </section>
+
+</main>
+
+<footer>
+  MESSIER 31 — data persists locally in this browser only. Nothing is sent anywhere.
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
