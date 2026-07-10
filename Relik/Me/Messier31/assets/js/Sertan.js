@@ -5,6 +5,7 @@ Modulisasi Mythos
 =================
 */
 
+//Dependencies : Alya
 const Domain = {
     //House 1 
         Self:{
@@ -32,7 +33,7 @@ const Domain = {
         },
     //House 7
         Relationship:{
-            //
+            //Boreas, Spica, Formalhault, Pleiades
         },
     //House 8
         Crisis:{
@@ -56,3 +57,19 @@ const Domain = {
         }
 }
 
+
+// Deppendencies : Canopus
+const Empedocles={
+    fire:{
+
+    },
+    water:{
+
+    },
+    earth:{
+
+    },
+    air:{
+
+    }
+}
