@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rio — Quotes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f14; --surface: #131720; --surface2: #181d29;
+    --border: #262d3e; --border2: #313a52;
+    --gold: #7aabcc; --gold2: #a8d4f0; --blue: #7aa3c4; --red: #c47a7a;
+    --text: #cdd8e3; --muted: #6b7d8f; --dim: #3e4f60; --active-bg: #141c2a;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Georgia', serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+  .site-header { background: var(--surface); border-bottom: 2px solid var(--gold); padding: 28px 40px 22px; display: flex; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .site-header h1 { font-size: 2.4rem; font-weight: normal; letter-spacing: 0.04em; color: var(--gold2); line-height: 1; }
+  .site-header .sub { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 6px; }
+  .header-meta { margin-left: auto; text-align: right; font-size: 0.78rem; color: var(--muted); line-height: 1.8; }
+  .header-meta strong { display: block; color: var(--gold); font-size: 1.2rem; font-weight: normal; }
+  .lang-bar { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 10px 40px; display: flex; align-items: center; gap: 6px; }
+  .lang-bar span { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-right: 10px; }
+  .lang-btn { background: none; border: 1px solid var(--border2); color: var(--muted); padding: 5px 16px; cursor: pointer; font-family: 'Georgia', serif; font-size: 0.78rem; letter-spacing: 0.06em; border-radius: 2px; transition: all 0.15s; }
+  .lang-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: bold; }
+  #np-bar { position: sticky; top: 0; z-index: 200; background: rgba(13,15,20,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--gold); padding: 10px 40px; display: none; align-items: center; gap: 16px; }
+  #np-bar.on { display: flex; }
+  .np-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: blink 1.2s ease-in-out infinite; flex-shrink: 0; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+  #np-label { flex: 1; font-size: 0.82rem; color: var(--gold2); }
+  #np-label small { color: var(--muted); font-size: 0.72rem; margin-left: 8px; }
+  #np-stop { background: none; border: 1px solid var(--border2); color: var(--muted); padding: 4px 12px; cursor: pointer; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Georgia', serif; border-radius: 2px; transition: all 0.15s; }
+  #np-stop:hover { border-color: var(--red); color: var(--red); }
+  .page { max-width: 1080px; margin: 0 auto; padding: 36px 40px 80px; }
+  .skin-block { margin-bottom: 52px; }
+  .skin-heading { display: flex; align-items: baseline; gap: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+  .skin-heading h2 { font-size: 1.15rem; font-weight: normal; color: var(--gold2); letter-spacing: 0.03em; }
+  .skin-count { font-size: 0.68rem; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; margin-left: auto; }
+  .qt { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .qt colgroup col:nth-child(1) { width: 200px; }
+  .qt colgroup col:nth-child(2) { width: 60px; }
+  .qt colgroup col:nth-child(3) { width: auto; }
+  .qt thead th { padding: 7px 12px; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); text-align: left; font-weight: normal; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .qt tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  .qt tbody tr:hover { background: var(--active-bg); }
+  .qt tbody tr.playing { background: var(--active-bg); }
+  .qt tbody tr.playing td.ev-cell { color: var(--gold); }
+  .qt td { padding: 10px 12px; vertical-align: top; }
+  td.ev-cell { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; padding-top: 13px; transition: color 0.15s; word-break: break-word; }
+  td.play-cell { text-align: center; padding-top: 8px; display: flex; align-items: center; gap: 0; }
+  a.play-link { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border2); color: var(--muted); text-decoration: none; font-size: 10px; transition: all 0.15s; cursor: pointer; }
+  a.play-link:hover, tr.playing a.play-link { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+  a.play-link .ico-play { display: inline; }
+  a.play-link .ico-pause { display: none; }
+  tr.playing a.play-link .ico-play { display: none; }
+  tr.playing a.play-link .ico-pause { display: inline; }
+  .no-audio { display: inline-block; width: 30px; text-align: center; color: var(--border2); font-size: 12px; }
+  td.text-cell { font-size: 0.9rem; line-height: 1.65; color: var(--text); }
+  td.text-cell .lang-text { display: none; }
+  td.text-cell .lang-text.visible { display: block; }
+  td.text-cell em { color: var(--dim); font-style: italic; font-size: 0.82rem; }
+  .dl-btn { background: none; border: 1px solid var(--border2); color: var(--muted); padding: 5px 16px; cursor: pointer; font-family: 'Georgia', serif; font-size: 0.78rem; letter-spacing: 0.06em; border-radius: 2px; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+  .dl-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .dl-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+  a.dl-link { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border2); color: var(--muted); text-decoration: none; font-size: 9px; transition: all 0.15s; cursor: pointer; margin-left: 4px; }
+  a.dl-link:hover { border-color: var(--blue); color: var(--blue); }
+  a.dl-link svg { width: 10px; height: 10px; fill: currentColor; }
+  footer { border-top: 1px solid var(--border); padding: 24px 40px; font-size: 0.72rem; color: var(--dim); text-align: center; letter-spacing: 0.06em; }
+  footer a { color: var(--blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 640px) {
+    .site-header, .lang-bar, .page { padding-left: 16px; padding-right: 16px; }
+    #np-bar { padding: 10px 16px; }
+    .qt colgroup col:nth-child(1) { width: 120px; }
+    .qt colgroup col:nth-child(2) { width: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>Rio</h1>
+    <div class="sub">リオ · SRT Team · Blue Archive</div>
+  </div>
+  <div class="header-meta">
+    <strong id="total-n">—</strong>
+    audio lines
+  </div>
+  <div style="margin-left:16px; align-self:center;">
+    <button class="dl-btn" id="dl-all-btn">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>
+      Download All Audio
+    </button>
+  </div>
+</header>
+
+<div class="lang-bar">
+  <span>Transcription</span>
+  <button class="lang-btn active" data-lang="jp">日本語</button>
+  <button class="lang-btn" data-lang="en">English</button>
+</div>
+
+<div id="np-bar">
+  <div class="np-dot"></div>
+  <div id="np-label">— <small></small></div>
+  <button id="np-stop">Stop</button>
+</div>
+
+<div class="page" id="main"></div>
+
+<footer>
+  Source: <a href="https://bluearchive.wiki/wiki/Rio/audio" target="_blank">Blue Archive Wiki</a>
+  &nbsp;·&nbsp; Audio © Nexon / Yostar
+</footer>
+
+<audio id="aud"></audio>
+
+<script>
+const DATA = [
+  {
+    "section": "Normal lines",
+    "lines": [
+      {
+        "event": "Title",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/6e/Rio_Title.ogg",
+        "jp": "ブルー、アーカイブ。",
+        "en": "Blue, Archive"
+      },
+      {
+        "event": "Gachaget",
+        "url": "https://static.wikitide.net/bluearchivewiki/9/94/Rio_Gachaget.ogg",
+        "jp": "ミレニアムサイエンススクール、 セミナーの調月リオよ。 最も合理的な答えを、提示してあげる。",
+        "en": "Tsukatsuki Rio, from Millennium Science School's Seminar. I'll provide you with the most rational approach to every issue."
+      },
+      {
+        "event": "Cafe_monolog_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/35/Rio_Cafe_monolog_1.ogg",
+        "jp": "合理的な配置を 追求するなら……。",
+        "en": "To optimize the layout here..."
+      },
+      {
+        "event": "Cafe_monolog_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/7d/Rio_Cafe_monolog_2.ogg",
+        "jp": "あの置物、実用性が 欠けていると 思うのだけれど……",
+        "en": "...Are you sure that thing needs to be right there?"
+      },
+      {
+        "event": "Cafe_monolog_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/49/Rio_Cafe_monolog_3.ogg",
+        "jp": "カフェインはカプセルで 摂取すれば良いのでは ないかしら？",
+        "en": "If you need caffeine, you could always take supplements."
+      },
+      {
+        "event": "Cafe_monolog_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/d/d1/Rio_Cafe_monolog_4.ogg",
+        "jp": "最大多数の 最大幸福…… ここでも 適用できるかしら。",
+        "en": "\"The greatest good for the greatest number...\" I wonder if that applies here too..."
+      },
+      {
+        "event": "Cafe_monolog_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/14/Rio_Cafe_monolog_5.ogg",
+        "jp": "……人混みは 避けましょう。",
+        "en": "...Let's avoid any crowded places."
+      },
+      {
+        "event": "LogIn_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/57/Rio_LogIn_1.ogg",
+        "jp": "おかえりなさい、先生。 私も今到着したところよ。先生が来るタイミングを 計算していたのだけれど……結果に狂いはないようね。",
+        "en": "Welcome, Sensei.I just got here myself.Fufu. I calculated the most efficient, logical path."
+      },
+      {
+        "event": "LogIn_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/60/Rio_LogIn_2.ogg",
+        "jp": "時間通りね、先生。これは今日のスケジュールよ。 目を通しておいて頂戴。",
+        "en": "Just in time, Sensei.This is today's schedule. Please take note of it."
+      },
+      {
+        "event": "Lobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f9/Rio_Lobby_1.ogg",
+        "jp": "合理を追求することが 最大効率をもたらすと 思っているわ。決して、それだけでは ないのだろうけれど。貴方がそう 思わせてくれたもの。",
+        "en": "I thought that being rational......meant maximum efficiency.But now, I don't think that's always the case."
+      },
+      {
+        "event": "Lobby_2_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e9/Rio_Lobby_2_1.ogg",
+        "jp": "先生、夜空を見上げた ことはあるかしら？星の光は、すべて過去から 届いたものなのよ。",
+        "en": "Have you ever gazed at the stars, Sensei?The stars' light comes from the past, farther back than you can imagine."
+      },
+      {
+        "event": "Lobby_2_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/0/0e/Rio_Lobby_2_2.ogg",
+        "jp": "つまり――私たちが 星を目にしている時、「過去」と「現在」を同時に 捉えている、とも言えるわね。",
+        "en": "So when we stare at the night sky......we're experiencing past and present at the same time."
+      },
+      {
+        "event": "Lobby_2_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/c3/Rio_Lobby_2_3.ogg",
+        "jp": "……そこでも、「未来」を観測することは できないのだけれども。",
+        "en": "Although we can't......see the future in them."
+      },
+      {
+        "event": "Lobby_3_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b0/Rio_Lobby_3_1.ogg",
+        "jp": "「未来」というのは 不確定要素の塊。それを懸念すべきなのか、それとも可能性として 希望を持つべきなのか……",
+        "en": "The future is like a cloud of uncertainty.Whether to be anxious about that......or to celebrate its potential..."
+      },
+      {
+        "event": "Lobby_3_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/ea/Rio_Lobby_3_2.ogg",
+        "jp": "ずっと答えを出せずにいるの。でも……",
+        "en": "I haven't been able to answer that yet.But..."
+      },
+      {
+        "event": "Lobby_3_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/5b/Rio_Lobby_3_3.ogg",
+        "jp": "その未来に 貴方がいるのなら……違う仮説を立てられるかも しれないわね。",
+        "en": "If you're in that future...I think I can at least refine my hypothesis."
+      },
+      {
+        "event": "Lobby_4_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/29/Rio_Lobby_4_1.ogg",
+        "jp": "ミレニアムの生徒が シャーレを訪問した際は、私にスケジュールを 共有してちょうだい。",
+        "en": "If any of the Millennium students end up coming to Schale......please share their schedule with me."
+      },
+      {
+        "event": "Lobby_4_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/87/Rio_Lobby_4_2.ogg",
+        "jp": "頼んだわ。",
+        "en": "Do you promise?"
+      },
+      {
+        "event": "Lobby_5_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/8d/Rio_Lobby_5_1.ogg",
+        "jp": "今から散歩……？却下。非合理的な行動よ。それに、危険だわ。",
+        "en": "Out for a walk?No. That's an irrational act.More than that, it's dangerous."
+      },
+      {
+        "event": "Lobby_5_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/31/Rio_Lobby_5_2.ogg",
+        "jp": "私から離れないで。 これからも ずっと隣にいなさい。",
+        "en": "So let's just stay here together forever."
+      },
+      {
+        "event": "Lobby_5_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e3/Rio_Lobby_5_3.ogg",
+        "jp": "わ、私……何か不適切な ことを、言ったかしら……？",
+        "en": "...Why am I suddenly feeling embarrassed? Did I say something weird...?"
+      },
+      {
+        "event": "Season_Birthday_Player",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/85/Rio_Season_Birthday_Player.ogg",
+        "jp": "貴方という可能性が 世界に生まれ落ちた記念日ね。 …お誕生日、おめでとう先生。",
+        "en": "Happy birthday, Sensei. Today's the day you arrived in the world, all full of potential."
+      },
+      {
+        "event": "Season_Birthday",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/4a/Rio_Season_Birthday.ogg",
+        "jp": "誕生日……これまであまり、 馴染みがなかったの。でも…… こういう気持ちになるのね。……お礼をいうわ。先生。",
+        "en": "Birthday wishes... I don't usually get very many of those.So this... This is how it feels.Thank you, Sensei. I mean it."
+      },
+      {
+        "event": "Season_NewYear_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/74/Rio_Season_NewYear_1.ogg",
+        "jp": "「一年がはじまる」という 概念そのものが非合理的よ。季節が一巡しただけに 過ぎないわ。",
+        "en": "The whole concept of a \"new year\" is irrational in itself.Seasons cycle, that's all."
+      },
+      {
+        "event": "Season_NewYear_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/bc/Rio_Season_NewYear_2.ogg",
+        "jp": "……でも、社会的な規範意識を 無視できないのも、 理解はできる。",
+        "en": "But, well...since it's a social norm..."
+      },
+      {
+        "event": "Season_NewYear_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/6f/Rio_Season_NewYear_3.ogg",
+        "jp": "……新年、 明けましておめでとう、先生。",
+        "en": "Happy New Year, Sensei."
+      },
+      {
+        "event": "Season_Xmas_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/3e/Rio_Season_Xmas_1.ogg",
+        "jp": "……理解できないわ。 クリスマス？ 記念日って、一体……",
+        "en": "I...really don't understand Christmas. Just what are holidays...?"
+      },
+      {
+        "event": "Season_Xmas_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/56/Rio_Season_Xmas_2.ogg",
+        "jp": "プレゼント……？私に……？",
+        "en": "What? A present? For me?"
+      },
+      {
+        "event": "Season_Xmas_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/2c/Rio_Season_Xmas_3.ogg",
+        "jp": "その、ありがとう、先生。……全く、ロジックが 分からないのだけれども。 好意は受け取っておくわ。",
+        "en": "Um, thank you, Sensei....I don't understand the logic at all. But I'll accept your kindness."
+      },
+      {
+        "event": "Season_Halloween_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e8/Rio_Season_Halloween_1.ogg",
+        "jp": "仮装をして飴を 要求するなんて……未だに 理解できないのだけれど……",
+        "en": "A day for wearing costumes and demanding candy...I don't get the meaning of it."
+      },
+      {
+        "event": "Season_Halloween_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f3/Rio_Season_Halloween_2.ogg",
+        "jp": "先生が相手なら…… いいかしら……？",
+        "en": "But if it's you, Sensei..."
+      },
+      {
+        "event": "Season_Halloween_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/9/91/Rio_Season_Halloween_3.ogg",
+        "jp": "トリックオアトリート……ふふっ。",
+        "en": "Trick or treat.How is it? Fufu."
+      },
+      {
+        "event": "ExWeapon_Get",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/5d/Rio_ExWeapon_Get.ogg",
+        "jp": "射撃は不得手だけれど…… 自分の身程度は守ってみせるわ。 それから……先生、貴方のことも。",
+        "en": "I'm not a great shot...but it's irrational to not have a gun in Kivotos. I'll try to protect myself, at least. And you too, Sensei."
+      }
+    ]
+  },
+  {
+    "section": "Memorial lobby",
+    "lines": [
+      {
+        "event": "MemorialLobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e3/Rio_MemorialLobby_1_1.ogg",
+        "jp": "こういう事をさせるために、 貴方を呼んだわけじゃ、 ないのだけれど……自分でやるわ。 先生は座っていてちょうだい。",
+        "en": "This wasn't the reason I called you...I'll do it myself. You should sit down."
+      },
+      {
+        "event": "MemorialLobby_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/c6/Rio_MemorialLobby_2_1.ogg",
+        "jp": "あ、貴方はもう少し、 先生としての自覚を持ちなさい。こんなことで時間を 浪費するなんて非合理的よ。他にもっと重要な 仕事があるでしょう？",
+        "en": "S-Sensei, you really ought to be more aware of your position.It's irrational to waste time on this.Aren't there many more important things for you to do?"
+      },
+      {
+        "event": "MemorialLobby_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/ec/Rio_MemorialLobby_3_1.ogg",
+        "jp": "ッ……！な、なにを……私の「お世話」……！？",
+        "en": "Wh-What are you...saying...?Taking care of me...?!"
+      },
+      {
+        "event": "MemorialLobby_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/30/Rio_MemorialLobby_4_1.ogg",
+        "jp": "り……理解に苦しむわ…… でも…………貴方は、 そういう人だったわね。",
+        "en": "I...I don't understand. That's...Well...you've always been that kind of person."
+      },
+      {
+        "event": "MemorialLobby_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b6/Rio_MemorialLobby_5_1.ogg",
+        "jp": "……分かったわ。最後まで受け止めましょう。貴方がする…… 「お世話」とやらを。",
+        "en": "...Okay.I'll accept it all, then.Your...\"taking care,\" I mean."
+      }
+    ]
+  },
+  {
+    "section": "Event lines",
+    "lines": [
+      {
+        "event": "EventLogin_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/1a/Rio_EventLogin_1.ogg",
+        "jp": "適切なタイミングね。",
+        "en": "You've arrived just in time."
+      },
+      {
+        "event": "EventLogin_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/5d/Rio_EventLogin_2.ogg",
+        "jp": "そろそろ来る頃だと 思っていたわ。",
+        "en": "Right. I expected you to come around this time."
+      },
+      {
+        "event": "EventLogin_Season_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/9/94/Rio_EventLogin_Season_1.ogg",
+        "jp": "全て順調よ。 でも、安心できる 段階ではないわ。",
+        "en": "Things are going well, but not to a point where we can let our guard down."
+      },
+      {
+        "event": "EventLogin_Season_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/59/Rio_EventLogin_Season_2.ogg",
+        "jp": "近々、まとまった 報告ができそうよ。もう少し待って ちょうだい。",
+        "en": "We're almost there.I can tell you about it soon."
+      },
+      {
+        "event": "EventLogin_Season_End",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/44/Rio_EventLogin_Season_End.ogg",
+        "jp": "解決できてよかったわ。……これは本心よ。",
+        "en": "All's well that ends well....And I mean that."
+      },
+      {
+        "event": "EventLobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/77/Rio_EventLobby_1.ogg",
+        "jp": "……突然私に触れて、 どうしたのかしら？",
+        "en": "Hm? What's the matter? Poking me like that..."
+      },
+      {
+        "event": "EventLobby_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f2/Rio_EventLobby_2.ogg",
+        "jp": "言葉で 伝えてくれるかしら。",
+        "en": "It's hard to understand unless you put it into words."
+      },
+      {
+        "event": "EventLobby_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/d/d2/Rio_EventLobby_3.ogg",
+        "jp": "だから……その……",
+        "en": "Um, so... Um..."
+      },
+      {
+        "event": "EventLobby_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/3c/Rio_EventLobby_4.ogg",
+        "jp": "私に……何を、 求めているの？",
+        "en": "Is there something you need or...anything?"
+      },
+      {
+        "event": "EventMission_Login_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/16/Rio_EventMission_Login_1.ogg",
+        "jp": "リストアップは 済んでいるわ。",
+        "en": "I organized your to-do list."
+      },
+      {
+        "event": "EventMission_Login_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/4b/Rio_EventMission_Login_2.ogg",
+        "jp": "これが今日のタスクよ。",
+        "en": "Welcome, Sensei. Here's your to-do list for the day."
+      },
+      {
+        "event": "EventMission_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/53/Rio_EventMission_1.ogg",
+        "jp": "……先生の意図が 理解できないわ。無言で触れるだけでは、 伝わらないのよ。",
+        "en": "If you keep on poking me without saying anything......I won't be able to understand."
+      },
+      {
+        "event": "EventMission_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/59/Rio_EventMission_2.ogg",
+        "jp": "……もしかして、同じことをしてほしいの？",
+        "en": "By any chance, did you want me to......do the same?"
+      },
+      {
+        "event": "EventMission_Get_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e3/Rio_EventMission_Get_1.ogg",
+        "jp": "確認するわね。",
+        "en": "Got it. I'll check it off."
+      },
+      {
+        "event": "EventMission_Get_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/ad/Rio_EventMission_Get_2.ogg",
+        "jp": "リストを更新しておいたわ。",
+        "en": "I'll update the \"completed\" list."
+      },
+      {
+        "event": "MiniEventLogin_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/cd/Rio_MiniEventLogin_1.ogg",
+        "jp": "途中参加という 形になるのかしら。……これからよろしく 頼むわね、先生。",
+        "en": "I've only been with you partway...But I look forward to working with you, Sensei."
+      },
+      {
+        "event": "MiniEventLogin_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/18/Rio_MiniEventLogin_2.ogg",
+        "jp": "貴方は、時間を 厳守できる人なのね。まさに合理的な行動よ。",
+        "en": "You came at the perfect time, Sensei.What a rational choice."
+      },
+      {
+        "event": "MiniEventLogin_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/21/Rio_MiniEventLogin_3.ogg",
+        "jp": "ここがヒマリの……いえ、 私たちの基地なのね。",
+        "en": "So this is Himari's...I mean OUR base."
+      },
+      {
+        "event": "MiniEventLobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f6/Rio_MiniEventLobby_1.ogg",
+        "jp": "……まだ、 実感がわかないの。先生と……同じ作戦に 身を置いていることが。",
+        "en": "I still can't believe it.I'm carrying out the same mission as you."
+      },
+      {
+        "event": "MiniEventLobby_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/0/04/Rio_MiniEventLobby_2.ogg",
+        "jp": "……みんなには、 気兼ねなく 接してもらっているわ。嫌というわけでは、 ないのだけれど……少し戸惑っているのは、 事実よ。",
+        "en": "It sounds weird coming from me.But everyone's treating me so casually...It's not that I dislike it..."
+      },
+      {
+        "event": "MiniEventLobby_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/0/04/Rio_MiniEventLobby_3.ogg",
+        "jp": "工学の分野以外は……ごめんなさい、 それほど詳しくないの。",
+        "en": "Outside of engineering...I'm sorry. I don't think I know much about them yet."
+      },
+      {
+        "event": "MiniEventLobby_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/10/Rio_MiniEventLobby_4.ogg",
+        "jp": "……なにかしら？ ……話しかけて みたかっただけ？そういう非合理的な 行動は控えて頂戴、 先生。……不愉快とまでは、 言ってないわ。",
+        "en": "Did you call, Sensei? You were just wondering what I was up to?Try to cut back on irrational actions like that.Um... It's not that I hate it..."
+      },
+      {
+        "event": "MiniEventLobby_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/ba/Rio_MiniEventLobby_5.ogg",
+        "jp": "以前は、すべてを 掌握しなければ ならないと考えていたの。でも、今は……人間一人に 掌握できる範疇の 限界に気がつけたわ。……先生のおかげ、 かしら。",
+        "en": "I once believed that I had to know everything.Now... I realize there are still things I need to learn.How odd. Maybe this is also thanks to you, in a way."
+      },
+      {
+        "event": "MiniEventShop_Login_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/33/Rio_MiniEventShop_Login_1.ogg",
+        "jp": "ヒマリから 引き継ぎがあったわ。現在、 各地から「名も無き神」による謎の物質が 見つかっている、と。",
+        "en": "Himari briefed me on the situation.To put it simply, we've discovered mysterious substances......from the Nameless Gods' power."
+      },
+      {
+        "event": "MiniEventShop_Login_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/9/9b/Rio_MiniEventShop_Login_2.ogg",
+        "jp": "サンプルがあれば、 再補給も可能になるわ。",
+        "en": "And we need samples. We also think we can resupply with them."
+      },
+      {
+        "event": "MiniEventShop_Login_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/78/Rio_MiniEventShop_Login_3.ogg",
+        "jp": "集めたサンプルを 見せてちょうだい。",
+        "en": "You're here, Sensei. How many samples do you have?"
+      },
+      {
+        "event": "MiniEventShop_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/24/Rio_MiniEventShop_1.ogg",
+        "jp": "協力、感謝するわ。",
+        "en": "Thank you for your cooperation."
+      },
+      {
+        "event": "MiniEventShop_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b3/Rio_MiniEventShop_2.ogg",
+        "jp": "「物質」の分析中よ。そこから 副産物を生産しているの。",
+        "en": "I'm analyzing the mysterious substances. I'll have the results soon."
+      },
+      {
+        "event": "MiniEventShop_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b8/Rio_MiniEventShop_3.ogg",
+        "jp": "この装置、 かなり熱を放っているわね……エイミには少し 厳しいんじゃないかしら。",
+        "en": "Anyways, this device gives off an incredible amount of heat...Eimi would have a hard time around it."
+      },
+      {
+        "event": "MiniEventShop_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/d/dc/Rio_MiniEventShop_4.ogg",
+        "jp": "装置の構造に不満はないの。意外？ふふ、私だって、 優れたものは素直に認めるわ。ああでも、デザインと 細部にもう少し合理性を……",
+        "en": "I have no complaints regarding how this device functions.That's unexpected? Fufu. Even I know when to make concessions.It's just that...if the design was a bit more..."
+      },
+      {
+        "event": "MiniEventShop_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b0/Rio_MiniEventShop_5.ogg",
+        "jp": "……そんなことをしても、 得られるものは 何もないと思うわ。……私の表情の 変化が見られる？……貴方が変わっていると 言われる理由が、分かったわ。",
+        "en": "Nothing's going to change, even if you talk to me.Huh? You saw my expression change?...I see. So this is why people say that you can be mean sometimes..."
+      },
+      {
+        "event": "MiniEventShop_Buy_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a8/Rio_MiniEventShop_Buy_1.ogg",
+        "jp": "今回の分析結果よ。",
+        "en": "That's the result of this analysis."
+      },
+      {
+        "event": "MiniEventShop_Buy_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/c8/Rio_MiniEventShop_Buy_2.ogg",
+        "jp": "いらっしゃいませ、 どちらになさいますか？……真似してみただけよ。 今のは忘れなさい。",
+        "en": "Welcome. Which one would you like?I was just trying to imitate... Forget what just happened."
+      },
+      {
+        "event": "MiniEventShop_Buy_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b6/Rio_MiniEventShop_Buy_3.ogg",
+        "jp": "過去にあった 「物々交換」も、こうだったのかしら。",
+        "en": "They say people traded each other for items like this in the past.In a way, it feels like we've gone back in time."
+      },
+      {
+        "event": "MiniEventShop_Buy_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/c8/Rio_MiniEventShop_Buy_4.ogg",
+        "jp": "合理的な選択ね。",
+        "en": "Seems to be a rational result. Good choice."
+      },
+      {
+        "event": "MiniEventShop_Buy_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f7/Rio_MiniEventShop_Buy_5.ogg",
+        "jp": "最終選択は貴方に委ねるわ。",
+        "en": "The results are in. I'll let you decide which one to choose, Sensei."
+      },
+      {
+        "event": "MiniEventBoxShop_Login_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/36/Rio_MiniEventBoxShop_Login_1.ogg",
+        "jp": "ここでは、少し 変わった分析方法を 採用しているの。一言でいうと―― 「偶然に基づいた 抽出」よ。",
+        "en": "We used a bit of a different analysis method over here.To put it simply, it's extraction based on contingency."
+      },
+      {
+        "event": "MiniEventBoxShop_Login_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/2b/Rio_MiniEventBoxShop_Login_2.ogg",
+        "jp": "「くじ」で損を する可能性は、 確率論でも立証済み。……けれど、 今は仕方ないわね。",
+        "en": "Statistically speaking, it's highly likely for something like a lottery to end in a loss....However, I suppose we have no other choice here."
+      },
+      {
+        "event": "MiniEventBoxShop_Login_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/82/Rio_MiniEventBoxShop_Login_3.ogg",
+        "jp": "……ヒマリの嗜好は 変わらないのね。……多面的考察は 必要だもの。ええ。",
+        "en": "Seems like Himari still enjoys things like this.Well... I suppose it's good to have various approaches."
+      },
+      {
+        "event": "MiniEventBoxShop_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a0/Rio_MiniEventBoxShop_1.ogg",
+        "jp": "分析結果の予測が正確に できないというのは……セミナーの人間として、 少し遺憾ね。",
+        "en": "The fact that the analysis results cannot be predicted accurately......as a member of Seminar, I find it a bit unfortunate."
+      },
+      {
+        "event": "MiniEventBoxShop_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/6d/Rio_MiniEventBoxShop_2.ogg",
+        "jp": "もし期待通りの結果が 得られなかったとしても…私にできることはないの。 先に謝っておくわね。",
+        "en": "If the results aren't satisfactory...I'm sorry, Sensei. There's nothing I can do about that either."
+      },
+      {
+        "event": "MiniEventBoxShop_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/4f/Rio_MiniEventBoxShop_3.ogg",
+        "jp": "「神はサイコロを 振らない」……この命題は誤りだと されているのだけれども、私は――ある側面に おいては、 同意しているわ。",
+        "en": "Although it turned out to be false......when people said that the gods don't play dice.There's something I can understand about it."
+      },
+      {
+        "event": "MiniEventBoxShop_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/56/Rio_MiniEventBoxShop_4.ogg",
+        "jp": "量子力学という学問は、 理解するものではないわ。……暗記するものよ。",
+        "en": "The field of quantum mechanics isn't something you \"understand,\" so to speak.You begin with...memorizing things and go from there."
+      },
+      {
+        "event": "MiniEventBoxShop_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/80/Rio_MiniEventBoxShop_5.ogg",
+        "jp": "世界とは、人間の 認知の外にあるもの。……そうね、 この運任せの分析と一緒。",
+        "en": "The world is something that's beyond our understanding....That's correct. Just like this analysis that relies on luck."
+      },
+      {
+        "event": "MiniEventBoxShop_SPBuy_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/79/Rio_MiniEventBoxShop_SPBuy_1.ogg",
+        "jp": "……それは……！ 本当に……？",
+        "en": "Did that...really work?"
+      },
+      {
+        "event": "MiniEventBoxShop_SPBuy_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a2/Rio_MiniEventBoxShop_SPBuy_2.ogg",
+        "jp": "大数の法則、ね。",
+        "en": "I suppose it's the law of large numbers."
+      },
+      {
+        "event": "MiniEventBoxShop_SPBuy_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/b/b3/Rio_MiniEventBoxShop_SPBuy_3.ogg",
+        "jp": "当たるまで引き続ける…？理論上、間違っては ないのだけれど…",
+        "en": "If you don't hit the jackpot, keep going until you hit it...That's not wrong to say, but..."
+      },
+      {
+        "event": "MiniEventBoxShop_300",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e5/Rio_MiniEventBoxShop_300.ogg",
+        "jp": "世界の大半は正規分布の 中に存在する……成し遂げたわね、先生。 おめでとう。",
+        "en": "They say most things in the world are within normal distribution.Congrats, Sensei. Great work."
+      }
+    ]
+  },
+  {
+    "section": "Tactics and growth",
+    "lines": [
+      {
+        "event": "",
+        "url": "",
+        "jp": "",
+        "en": ""
+      }
+    ]
+  }
+];
+
+const aud = document.getElementById('aud');
+const npBar = document.getElementById('np-bar');
+const npLabel = document.getElementById('np-label');
+const npStop = document.getElementById('np-stop');
+const main = document.getElementById('main');
+
+let activeTr = null;
+let currentLang = 'jp';
+
+function stopAll() {
+  aud.pause(); aud.src = '';
+  if (activeTr) { activeTr.classList.remove('playing'); activeTr = null; }
+  npBar.classList.remove('on');
+}
+
+npStop.addEventListener('click', stopAll);
+aud.addEventListener('ended', stopAll);
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.dataset.lang;
+    document.querySelectorAll('.lang-text').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === currentLang);
+    });
+  });
+});
+
+let audioCount = 0;
+const DL_SVG = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>`;
+
+DATA.forEach(section => {
+  const withAudio = section.lines.filter(l => l.url).length;
+  audioCount += withAudio;
+
+  const block = document.createElement('div');
+  block.className = 'skin-block';
+  block.innerHTML = `
+    <div class="skin-heading">
+      <h2>${section.section}</h2>
+      <span class="skin-count">${withAudio} audio · ${section.lines.length} lines</span>
+    </div>`;
+
+  const table = document.createElement('table');
+  table.className = 'qt';
+  table.innerHTML = `
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Event</th><th>▶</th><th>Transcription</th></tr></thead>`;
+
+  const tbody = document.createElement('tbody');
+
+  section.lines.forEach(line => {
+    const tr = document.createElement('tr');
+
+    const playCell = line.url
+      ? `<td class="play-cell">
+          <a class="play-link" href="${line.url}">
+            <span class="ico-play">▶</span><span class="ico-pause">⏸</span>
+          </a>
+          <a class="dl-link" href="${line.url}" download="${line.url.split('/').pop()}" title="Download">${DL_SVG}</a>
+        </td>`
+      : `<td class="play-cell"><span class="no-audio">—</span></td>`;
+
+    tr.innerHTML = `
+      <td class="ev-cell">${line.event}</td>
+      ${playCell}
+      <td class="text-cell">
+        <span class="lang-text${currentLang==='jp' ? ' visible' : ''}" data-lang="jp">${line.jp || '<em>—</em>'}</span>
+        <span class="lang-text${currentLang==='en' ? ' visible' : ''}" data-lang="en">${line.en || '<em>—</em>'}</span>
+      </td>`;
+
+    if (line.url) {
+      const a = tr.querySelector('a.play-link');
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        if (activeTr === tr) { stopAll(); return; }
+        if (activeTr) activeTr.classList.remove('playing');
+        activeTr = tr;
+        tr.classList.add('playing');
+        aud.src = line.url;
+        aud.play();
+        npBar.classList.add('on');
+        npLabel.innerHTML = `${line.event} <small>${section.section}</small>`;
+      });
+    }
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  block.appendChild(table);
+  main.appendChild(block);
+});
+
+document.getElementById('total-n').textContent = audioCount;
+
+document.getElementById('dl-all-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('dl-all-btn');
+  const allUrls = DATA.flatMap(s => s.lines.filter(l => l.url).map(l => ({ url: l.url, name: l.url.split('/').pop() })));
+  btn.textContent = 'Starting downloads…';
+  btn.disabled = true;
+  let i = 0;
+  for (const { url, name } of allUrls) {
+    try {
+      const resp = await fetch(url);
+      const blob = await resp.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    } catch(e) { console.warn('Failed:', url, e); }
+    i++;
+    btn.textContent = `Downloading… ${i}/${allUrls.length}`;
+    await new Promise(r => setTimeout(r, 350));
+  }
+  btn.textContent = '✓ Done!';
+  setTimeout(() => { btn.disabled = false; btn.innerHTML = `${DL_SVG} Download All Audio`; }, 2000);
+});
+</script>
+</body>
+</html>

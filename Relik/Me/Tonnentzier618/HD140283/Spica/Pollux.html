@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pollux · Sync Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0d0f14;
+  --surf:    #141720;
+  --surf2:   #1a1e2e;
+  --surf3:   #1f2438;
+  --border:  #252a38;
+  --accent:  #7eb8f7;
+  --gold:    #f7c97e;
+  --green:   #7ef7b8;
+  --red:     #f77e7e;
+  --purple:  #c47ef7;
+  --muted:   #6b7494;
+  --text:    #e8ecf4;
+  --r:       10px;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+}
+
+/* grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(126,184,247,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126,184,247,.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── Header ── */
+.hd {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,15,20,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px; height: 58px;
+  display: flex; align-items: center; gap: 14px;
+}
+.hd-logo {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 17px; flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(126,184,247,.3);
+}
+.hd-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem; color: var(--accent);
+  letter-spacing: .02em;
+}
+.hd-sub {
+  font-size: .65rem; text-transform: uppercase;
+  letter-spacing: .14em; color: var(--muted);
+  background: var(--surf2); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 20px;
+}
+.hd-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.btn-nav {
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surf2); color: var(--muted);
+  font-family: 'DM Mono', monospace; font-size: .72rem;
+  cursor: pointer; transition: border-color .2s, color .2s;
+  white-space: nowrap;
+}
+.btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Wrap ── */
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ── Page head ── */
+.page-head { margin-bottom: 26px; }
+.page-head .tag { font-size: .62rem; text-transform: uppercase; letter-spacing: .16em; color: var(--green); margin-bottom: 6px; }
+.page-head h1 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--text); }
+.page-head h1 span { color: var(--accent); }
+.page-head p { font-size: .68rem; color: var(--muted); margin-top: 6px; letter-spacing: .06em; }
+
+/* ── Stats bar ── */
+.stat-bar {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 22px;
+}
+.sc {
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 16px; position: relative; overflow: hidden;
+}
+.sc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.sc.c1::before { background: var(--accent); }
+.sc.c2::before { background: var(--green); }
+.sc.c3::before { background: var(--red); }
+.sc.c4::before { background: var(--gold); }
+.sc .sl { font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 6px; }
+.sc .sv { font-family: 'DM Serif Display', serif; font-size: 1.6rem; }
+.sc.c1 .sv { color: var(--accent); }
+.sc.c2 .sv { color: var(--green); }
+.sc.c3 .sv { color: var(--red); }
+.sc.c4 .sv { color: var(--gold); }
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.btn-action {
+  padding: 9px 16px; border: 1px solid var(--border);
+  border-radius: var(--r);
+  font-family: 'DM Mono', monospace; font-size: .75rem;
+  cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; gap: 7px;
+  letter-spacing: .05em;
+}
+.btn-load    { background: rgba(126,184,247,.1); border-color: rgba(126,184,247,.3); color: var(--accent); }
+.btn-load:hover { background: rgba(126,184,247,.18); border-color: var(--accent); }
+.btn-select  { background: rgba(196,126,247,.1); border-color: rgba(196,126,247,.3); color: var(--purple); }
+.btn-select:hover { background: rgba(196,126,247,.18); border-color: var(--purple); }
+.btn-unsel   { background: rgba(247,126,126,.1); border-color: rgba(247,126,126,.3); color: var(--red); }
+.btn-unsel:hover { background: rgba(247,126,126,.18); border-color: var(--red); }
+.btn-sync    { background: rgba(126,247,184,.1); border-color: rgba(126,247,184,.3); color: var(--green); }
+.btn-sync:hover { background: rgba(126,247,184,.18); border-color: var(--green); }
+.btn-action:disabled { opacity: .38; cursor: not-allowed; pointer-events: none; }
+
+.sel-badge {
+  margin-left: auto;
+  font-size: .68rem; color: var(--muted); letter-spacing: .06em;
+}
+.sel-badge span {
+  background: rgba(126,184,247,.15); color: var(--accent);
+  border: 1px solid rgba(126,184,247,.25);
+  padding: 3px 10px; border-radius: 20px; margin-left: 6px;
+  font-size: .72rem;
+}
+
+/* ── Search ── */
+.search-row {
+  display: flex; gap: 9px; margin-bottom: 18px; align-items: center;
+}
+.sbox {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0 13px; height: 36px; flex: 1;
+  transition: border-color .2s;
+}
+.sbox:focus-within { border-color: var(--accent); }
+.sbox span { color: var(--muted); font-size: .85rem; }
+.sbox input {
+  border: none; background: transparent; outline: none;
+  color: var(--text); font-family: 'DM Mono', monospace;
+  font-size: .8rem; width: 100%;
+}
+.sbox input::placeholder { color: var(--muted); }
+
+.filter-tabs { display: flex; gap: 6px; }
+.ftab {
+  padding: 0 13px; height: 36px; border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  border: 1px solid var(--border);
+  background: var(--surf); color: var(--muted);
+  cursor: pointer; transition: all .15s;
+  text-transform: uppercase; letter-spacing: .1em;
+  white-space: nowrap;
+}
+.ftab:hover { border-color: var(--accent); color: var(--accent); }
+.ftab.active-all  { border-color: var(--accent); background: rgba(126,184,247,.1); color: var(--accent); }
+.ftab.active-yes  { border-color: var(--green);  background: rgba(126,247,184,.1); color: var(--green); }
+.ftab.active-no   { border-color: var(--red);    background: rgba(247,126,126,.1); color: var(--red); }
+
+/* ── Table ── */
+.table-wrap {
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: auto;
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--surf2);
+  font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted);
+  padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left;
+  white-space: nowrap;
+}
+thead th:first-child { width: 46px; text-align: center; }
+tbody tr { transition: background .12s; }
+tbody tr:hover td { background: var(--surf2); }
+tbody td {
+  padding: 11px 14px; border-bottom: 1px solid rgba(37,42,56,.7);
+  font-size: .78rem; color: var(--text);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody td:first-child { text-align: center; }
+
+/* checkbox */
+.row-check {
+  width: 15px; height: 15px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* status pill */
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px; font-size: .65rem;
+  letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+}
+.pill-synced { background: rgba(126,247,184,.1); color: var(--green); border: 1px solid rgba(126,247,184,.2); }
+.pill-unsynced { background: rgba(247,126,126,.1); color: var(--red); border: 1px solid rgba(247,126,126,.2); }
+.pill-pending  { background: rgba(247,201,126,.1); color: var(--gold); border: 1px solid rgba(247,201,126,.2); }
+
+/* dim synced rows */
+tr.is-synced td { opacity: .55; }
+tr.is-synced:hover td { opacity: 1; }
+
+/* id cell */
+.id-cell { color: var(--muted); font-size: .72rem; }
+
+/* empty */
+.empty-row td {
+  text-align: center; padding: 48px; color: var(--muted); font-size: .75rem;
+}
+.empty-row td .ei { font-size: 28px; display: block; margin-bottom: 8px; opacity: .4; }
+
+/* ── Spinner ── */
+.spinner {
+  display: inline-block; width: 11px; height: 11px;
+  border: 2px solid rgba(126,184,247,.2); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin .55s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Log ── */
+.log-wrap { margin-top: 24px; }
+.log-title {
+  font-size: .62rem; text-transform: uppercase; letter-spacing: .14em;
+  color: var(--muted); margin-bottom: 10px;
+}
+#log {
+  background: var(--surf); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 16px;
+  max-height: 220px; overflow: auto;
+  font-size: .74rem; line-height: 1.9;
+}
+#log:empty::before { content: '— belum ada aktivitas —'; color: var(--muted); }
+.log-ok   { color: var(--green); }
+.log-err  { color: var(--red); }
+.log-warn { color: var(--gold); }
+.log-info { color: var(--accent); }
+.log-dim  { color: var(--muted); }
+
+/* ── Progress bar ── */
+.progress-wrap { margin-top: 14px; display: none; }
+.progress-wrap.show { display: block; }
+.progress-label {
+  font-size: .65rem; color: var(--muted); margin-bottom: 6px;
+  display: flex; justify-content: space-between;
+}
+.progress-bar-bg {
+  background: var(--surf2); border-radius: 20px; height: 6px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 20px;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  transition: width .3s ease;
+}
+
+/* ── Responsive ── */
+@media(max-width:900px) { .stat-bar { grid-template-columns: 1fr 1fr; } }
+@media(max-width:580px) {
+  .hd { padding: 0 14px; }
+  .wrap { padding: 14px 10px 40px; }
+  .stat-bar { grid-template-columns: 1fr 1fr; }
+  .hd-sub { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="hd">
+  <div class="hd-logo">🔄</div>
+  <div class="hd-title">Pollux</div>
+  <div class="hd-sub">Sync Dashboard</div>
+  <div class="hd-right">
+    <button class="btn-nav" onclick="location.href='menu.php'">⬅ Menu</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- Page head -->
+  <div class="page-head">
+    <div class="tag">▸ Sinkronisasi Data</div>
+    <h1>FormalHault <span>Sync</span></h1>
+    <p>Muat data dari Name_List · Cek status sinkronisasi · Kirim ke FormalHault API</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-bar">
+    <div class="sc c1"><div class="sl">Total Name List</div><div class="sv" id="statTotal">—</div></div>
+    <div class="sc c2"><div class="sl">Sudah Tersinkron</div><div class="sv" id="statSynced">—</div></div>
+    <div class="sc c3"><div class="sl">Belum Tersinkron</div><div class="sv" id="statUnsynced">—</div></div>
+    <div class="sc c4"><div class="sl">Dipilih</div><div class="sv" id="statSelected">0</div></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button class="btn-action btn-load" onclick="loadData()">
+      <span id="loadIcon">⬇</span> Load Data
+    </button>
+    <button class="btn-action btn-select" onclick="selectAll()">
+      ◻ Pilih Semua
+    </button>
+    <button class="btn-action btn-unsel" onclick="unselectAll()">
+      ✕ Hapus Pilihan
+    </button>
+    <button class="btn-action btn-sync" id="btnSync" onclick="syncSelected()">
+      <span id="syncIcon">⇅</span> Mulai Sinkronisasi
+    </button>
+  </div>
+
+  <!-- Search + filter -->
+  <div class="search-row">
+    <div class="sbox">
+      <span>⌕</span>
+      <input type="text" id="searchInput" placeholder="Cari nama..." oninput="renderTable()">
+    </div>
+    <div class="filter-tabs">
+      <button class="ftab active-all" id="ftab-all" onclick="setFilter('all', this)">Semua</button>
+      <button class="ftab" id="ftab-no"  onclick="setFilter('no',  this)">Belum Sync</button>
+      <button class="ftab" id="ftab-yes" onclick="setFilter('yes', this)">Sudah Sync</button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" id="checkAll" class="row-check" onchange="toggleAll(this)" title="Pilih semua">
+          </th>
+          <th>ID</th>
+          <th>Nama</th>
+          <th>Reg No</th>
+          <th>Created At</th>
+          <th>Status Sync</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr class="empty-row">
+          <td colspan="6"><span class="ei">📋</span>Klik "Load Data" untuk memuat daftar nama.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span id="progressLabel">Menyinkronisasi...</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div class="log-wrap">
+    <div class="log-title">▸ Activity Log</div>
+    <div id="log"></div>
+  </div>
+
+</div>
+
+<script>
+const NAME_API   = "https://x8ki-letl-twmt.n7.xano.io/api:ZBg3zfDx/name_list";
+const FORMAL_API = "https://x8ki-letl-twmt.n7.xano.io/api:X6h8irt0/formalhault";
+
+const tableBody   = document.getElementById("tableBody");
+const logEl       = document.getElementById("log");
+const statTotal   = document.getElementById("statTotal");
+const statSynced  = document.getElementById("statSynced");
+const statUnsynced= document.getElementById("statUnsynced");
+const statSelected= document.getElementById("statSelected");
+
+let allData      = [];   // from Name_List API
+let formalNames  = new Set(); // Nama values already in FormalHault
+let currentFilter = 'all';
+
+/* ── Logging ── */
+function addLog(text, type = "info") {
+    const d = document.createElement("div");
+    d.className = {info:"log-info", ok:"log-ok", err:"log-err", warn:"log-warn", dim:"log-dim"}[type] || "";
+    d.textContent = text;
+    logEl.appendChild(d);
+    logEl.scrollTop = logEl.scrollHeight;
+}
+
+/* ── Stats ── */
+function updateStats() {
+    const total    = allData.length;
+    const synced   = allData.filter(r => formalNames.has(r.Nama)).length;
+    const unsynced = total - synced;
+    const selected = document.querySelectorAll(".row-check:checked").length;
+
+    statTotal.textContent    = total   || "—";
+    statSynced.textContent   = total ? synced   : "—";
+    statUnsynced.textContent = total ? unsynced : "—";
+    statSelected.textContent = selected;
+}
+
+function updateSelectedCount() { updateStats(); }
+
+/* ── Filter ── */
+function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll(".ftab").forEach(b => b.className = "ftab");
+    btn.classList.add(f === 'all' ? 'active-all' : f === 'yes' ? 'active-yes' : 'active-no');
+    renderTable();
+}
+
+/* ── Render ── */
+function fmtDate(ts) {
+    if (!ts) return "—";
+    const d = new Date(typeof ts === "number" && ts > 1e10 ? ts : ts * 1000);
+    return d.toLocaleDateString("id-ID", {day:"2-digit",month:"short",year:"numeric"}) +
+           " " + d.toLocaleTimeString("id-ID", {hour:"2-digit",minute:"2-digit"});
+}
+
+function renderTable() {
+    const q = document.getElementById("searchInput").value.toLowerCase();
+
+    let rows = allData.filter(r => {
+        const synced = formalNames.has(r.Nama);
+        if (currentFilter === "yes" && !synced) return false;
+        if (currentFilter === "no"  &&  synced) return false;
+        if (q && !r.Nama.toLowerCase().includes(q)) return false;
+        return true;
+    });
+
+    if (!rows.length) {
+        tableBody.innerHTML = `<tr class="empty-row"><td colspan="6"><span class="ei">🔍</span>Tidak ada data yang cocok.</td></tr>`;
+        return;
+    }
+
+    tableBody.innerHTML = rows.map(r => {
+        const synced = formalNames.has(r.Nama);
+        const pill   = synced
+            ? `<span class="pill pill-synced">✔ Tersinkron</span>`
+            : `<span class="pill pill-unsynced">✖ Belum Sync</span>`;
+        const cls    = synced ? " is-synced" : "";
+        return `<tr class="${cls}">
+          <td><input type="checkbox" class="row-check" data-id="${r.id}"
+              ${synced ? "disabled title='Sudah tersinkron'" : ""}
+              onchange="updateSelectedCount()"></td>
+          <td class="id-cell">#${r.id}</td>
+          <td><strong>${r.Nama}</strong></td>
+          <td class="id-cell">${r.RegNo ?? r.id}</td>
+          <td class="id-cell">${fmtDate(r.created_at)}</td>
+          <td>${pill}</td>
+        </tr>`;
+    }).join("");
+
+    updateStats();
+}
+
+/* ── Toggle all visible ── */
+function toggleAll(master) {
+    document.querySelectorAll(".row-check:not(:disabled)").forEach(c => c.checked = master.checked);
+    updateStats();
+}
+
+function selectAll() {
+    document.querySelectorAll(".row-check:not(:disabled)").forEach(c => c.checked = true);
+    document.getElementById("checkAll").checked = true;
+    updateStats();
+}
+
+function unselectAll() {
+    document.querySelectorAll(".row-check").forEach(c => c.checked = false);
+    document.getElementById("checkAll").checked = false;
+    updateStats();
+}
+
+/* ── Load ── */
+async function loadData() {
+    tableBody.innerHTML = `<tr class="empty-row"><td colspan="6"><span class="spinner"></span> Memuat data...</td></tr>`;
+    logEl.innerHTML = "";
+    document.getElementById("loadIcon").outerHTML = '<span id="loadIcon" class="spinner"></span>';
+
+    try {
+        addLog("Mengambil Name_List dari API...", "dim");
+        addLog("Mengambil data FormalHault untuk cek status...", "dim");
+
+        const [nameRes, formalRes] = await Promise.all([
+            fetch(NAME_API),
+            fetch(FORMAL_API)
+        ]);
+
+        allData = await nameRes.json();
+        const formalData = await formalRes.json();
+
+        formalNames = new Set(
+            Array.isArray(formalData) ? formalData.map(r => r.Nama) : []
+        );
+
+        const synced = allData.filter(r => formalNames.has(r.Nama)).length;
+        addLog(`Name_List: ${allData.length} data ditemukan.`, "info");
+        addLog(`FormalHault: ${formalNames.size} nama sudah terdaftar.`, "ok");
+        addLog(`${synced} tersinkron · ${allData.length - synced} belum tersinkron.`, "warn");
+
+        renderTable();
+
+    } catch(e) {
+        addLog("Gagal memuat data: " + e.message, "err");
+        tableBody.innerHTML = `<tr class="empty-row"><td colspan="6"><span class="ei">⚠️</span>Gagal memuat data. Periksa koneksi.</td></tr>`;
+    } finally {
+        // Restore load icon
+        const li = document.getElementById("loadIcon");
+        if (li) li.outerHTML = '<span id="loadIcon">⬇</span>';
+    }
+}
+
+/* ── Sync ── */
+async function syncSelected() {
+    const checked = [...document.querySelectorAll(".row-check:checked")];
+    if (!checked.length) { addLog("Tidak ada data dipilih.", "warn"); return; }
+
+    const btn = document.getElementById("btnSync");
+    btn.disabled = true;
+    document.getElementById("syncIcon").outerHTML = '<span id="syncIcon" class="spinner"></span>';
+
+    const progressWrap = document.getElementById("progressWrap");
+    const progressFill = document.getElementById("progressFill");
+    const progressLabel= document.getElementById("progressLabel");
+    const progressPct  = document.getElementById("progressPct");
+    progressWrap.classList.add("show");
+
+    addLog(`─── Mulai sinkronisasi ${checked.length} item ───`, "dim");
+
+    let ok = 0, fail = 0;
+
+    for (let i = 0; i < checked.length; i++) {
+        const id   = parseInt(checked[i].dataset.id);
+        const item = allData.find(x => x.id === id);
+        if (!item) continue;
+
+        const pct = Math.round(((i + 1) / checked.length) * 100);
+        progressFill.style.width = pct + "%";
+        progressLabel.textContent = `Menyinkronisasi: ${item.Nama}`;
+        progressPct.textContent   = pct + "%";
+
+        const payload = { Nama: item.Nama, Saldo: 0, RegNo: item.id.toString() };
+
+        try {
+            const res = await fetch(FORMAL_API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            ok++;
+            formalNames.add(item.Nama);
+            addLog(`✔ ${item.Nama} berhasil disinkronisasi`, "ok");
+        } catch(e) {
+            fail++;
+            addLog(`✖ ${item.Nama} gagal — ${e.message}`, "err");
+        }
+    }
+
+    addLog(`─── Selesai: ${ok} berhasil · ${fail} gagal ───`, "dim");
+    progressLabel.textContent = "Sinkronisasi selesai";
+
+    renderTable();
+    unselectAll();
+
+    btn.disabled = false;
+    document.getElementById("syncIcon").outerHTML = '<span id="syncIcon">⇅</span>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hina — Quotes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #131720;
+    --surface2: #181d29;
+    --border: #262d3e;
+    --border2: #313a52;
+    --gold: #7aabcc;
+    --gold2: #a8d4f0;
+    --blue: #7aa3c4;
+    --red: #c47a7a;
+    --text: #cdd8e3;
+    --muted: #6b7d8f;
+    --dim: #3e4f60;
+    --active-bg: #141c2a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .site-header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--gold);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .site-header h1 {
+    font-size: 2.4rem;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    color: var(--gold2);
+    line-height: 1;
+  }
+
+  .site-header .sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .header-meta {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .header-meta strong {
+    display: block;
+    color: var(--gold);
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
+
+  .lang-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-bar span {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-right: 10px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .lang-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: bold; }
+
+  #np-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gold);
+    padding: 10px 40px;
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #np-bar.on { display: flex; }
+
+  .np-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: blink 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  #np-label {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--gold2);
+  }
+
+  #np-label small { color: var(--muted); font-size: 0.72rem; margin-left: 8px; }
+
+  #np-stop {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Georgia', serif;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  #np-stop:hover { border-color: var(--red); color: var(--red); }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+  }
+
+  .skin-block {
+    margin-bottom: 52px;
+  }
+
+  .skin-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .skin-heading h2 {
+    font-size: 1.15rem;
+    font-weight: normal;
+    color: var(--gold2);
+    letter-spacing: 0.03em;
+  }
+
+  .skin-count {
+    font-size: 0.68rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .qt {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .qt colgroup col:nth-child(1) { width: 180px; }
+  .qt colgroup col:nth-child(2) { width: 60px; }
+  .qt colgroup col:nth-child(3) { width: auto; }
+
+  .qt thead th {
+    padding: 7px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: left;
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .qt tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+
+  .qt tbody tr:hover { background: var(--active-bg); }
+  .qt tbody tr.playing { background: var(--active-bg); }
+  .qt tbody tr.playing td.ev-cell { color: var(--gold); }
+
+  .qt td {
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+
+  td.ev-cell {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 13px;
+    transition: color 0.15s;
+    word-break: break-word;
+  }
+
+  td.play-cell {
+    text-align: center;
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  a.play-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 10px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  a.play-link:hover,
+  tr.playing a.play-link {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+  }
+
+  a.play-link .ico-play { display: inline; }
+  a.play-link .ico-pause { display: none; }
+  tr.playing a.play-link .ico-play { display: none; }
+  tr.playing a.play-link .ico-pause { display: inline; }
+
+  .no-audio {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    color: var(--border2);
+    font-size: 12px;
+  }
+
+  td.text-cell {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  td.text-cell .lang-text { display: none; }
+  td.text-cell .lang-text.visible { display: block; }
+
+  td.text-cell .lang-text em {
+    color: var(--dim);
+    font-style: italic;
+    font-size: 0.82rem;
+  }
+
+  .dl-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dl-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .dl-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+  a.dl-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 9px;
+    transition: all 0.15s;
+    cursor: pointer;
+    margin-left: 4px;
+    flex-shrink: 0;
+  }
+  a.dl-link:hover { border-color: var(--blue); color: var(--blue); }
+  a.dl-link svg { width: 10px; height: 10px; fill: currentColor; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    font-size: 0.72rem;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+
+  footer a { color: var(--blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .site-header, .lang-bar, .page { padding-left: 16px; padding-right: 16px; }
+    #np-bar { padding: 10px 16px; }
+    .qt colgroup col:nth-child(1) { width: 110px; }
+    .qt colgroup col:nth-child(2) { width: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>Hina</h1>
+    <div class="sub">空崎 ヒナ · Gehenna Academy Prefect Team · Head Prefect</div>
+  </div>
+  <div class="header-meta">
+    <strong id="total-n">—</strong>
+    audio lines
+  </div>
+  <div style="margin-left:16px; align-self:center;">
+    <button class="dl-btn" id="dl-all-btn" title="Download all audio files">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>
+      Download All Audio
+    </button>
+  </div>
+</header>
+
+<div class="lang-bar">
+  <span>Language</span>
+  <button class="lang-btn active" data-lang="en">English</button>
+  <button class="lang-btn" data-lang="cn">中文</button>
+  <button class="lang-btn" data-lang="jp">日本語</button>
+</div>
+
+<div id="np-bar">
+  <div class="np-dot"></div>
+  <div id="np-label">— <small></small></div>
+  <button id="np-stop">Stop</button>
+</div>
+
+<div class="page" id="main"></div>
+
+<footer>
+  Source: <a href="https://bluearchive.wiki/wiki/Hina/audio" target="_blank">Blue Archive Wiki</a>
+  &nbsp;·&nbsp; Audio © Nexon / NAT Games
+</footer>
+
+<audio id="aud"></audio>
+
+<script>
+const DATA = [
+  {
+    "skin": "Normal Lines",
+    "lines": [
+      {"event": "Title", "url": "https://static.wikitide.net/bluearchivewiki/a/ad/Hina_Title.ogg", "en": "Blue Archive", "cn": "", "jp": "ブルーアーカイブ"},
+      {"event": "Gachaget", "url": "https://static.wikitide.net/bluearchivewiki/5/5a/Hina_Gachaget.ogg", "en": "Nice to meet you. I'm the head prefect, Hina, though I sincerely hope that went without saying.", "cn": "", "jp": "風紀委員長のヒナ。私の名前は知ってると思うけど…。よろしく。"},
+      {"event": "Cafe Act 1", "url": "https://static.wikitide.net/bluearchivewiki/f/f3/Hina_Cafe_Act_1.ogg", "en": "Cute stuff...", "cn": "", "jp": "カワイイ物…"},
+      {"event": "Cafe Act 2", "url": "https://static.wikitide.net/bluearchivewiki/a/a1/Hina_Cafe_Act_2.ogg", "en": "If only I could take a nap...", "cn": "", "jp": "昼寝したいけど…"},
+      {"event": "Cafe Act 3", "url": "https://static.wikitide.net/bluearchivewiki/5/5c/Hina_Cafe_Act_3.ogg", "en": "Thankfully, there are no pressing concerns.", "cn": "", "jp": "大きな問題はなさそうだね。幸い。"},
+      {"event": "Cafe Act 4", "url": "https://static.wikitide.net/bluearchivewiki/e/ed/Hina_Cafe_Act_4.ogg", "en": "You don't mind if I take it easy, do you?", "cn": "", "jp": "ゆっくりしててもいいよね？"},
+      {"event": "Cafe Act 5", "url": "https://static.wikitide.net/bluearchivewiki/a/a3/Hina_Cafe_Act_5.ogg", "en": "This is a little embarrassing...", "cn": "", "jp": "ちょっと恥ずかしいな…。"},
+      {"event": "Login 1", "url": "https://static.wikitide.net/bluearchivewiki/3/37/Hina_LogIn_1.ogg", "en": "Ah, I've been waiting for you, Sensei.", "cn": "", "jp": "ああ、待ってたよ。先生。"},
+      {"event": "Lobby 1", "url": "https://static.wikitide.net/bluearchivewiki/9/97/Hina_Lobby_1.ogg", "en": "There's no need to treat me any differently.", "cn": "", "jp": "別に特別扱いを必要はない。"},
+      {"event": "Lobby 2", "url": "https://static.wikitide.net/bluearchivewiki/1/11/Hina_Lobby_2.ogg", "en": "As long as I'm here, I'm like every other club member.", "cn": "", "jp": "ここではただの一人の部員にすぎないから。"},
+      {"event": "Lobby 3", "url": "https://static.wikitide.net/bluearchivewiki/1/1d/Hina_Lobby_3.ogg", "en": "Hey... C-Can you not pet me like that?", "cn": "", "jp": "あの…そ、そんなに撫でないでくれる？"},
+      {"event": "Lobby 4", "url": "https://static.wikitide.net/bluearchivewiki/7/7a/Hina_Lobby_4.ogg", "en": "I'm the head prefect. Someone might see us...", "cn": "", "jp": "これでも一応風紀委員長だしだ、誰かに見られるかもしれないし…。"},
+      {"event": "Lobby 5", "url": "https://static.wikitide.net/bluearchivewiki/f/f7/Hina_Lobby_5.ogg", "en": "What do you mean it's okay if we're seen?! Wh-What has gotten into you?!", "cn": "", "jp": "見られても関係ない？！な、なにを言ってるの？！"},
+      {"event": "Lobby 6", "url": "https://static.wikitide.net/bluearchivewiki/b/b6/Hina_Lobby_6.ogg", "en": "No cutting corners! Do your job properly!", "cn": "", "jp": "適当に済ませようとしないで！仕事はきちんとやって！"},
+      {"event": "Lobby 7", "url": "https://static.wikitide.net/bluearchivewiki/3/38/Hina_Lobby_7.ogg", "en": "I will aid you to the best of my ability. Call on me if need be.", "cn": "", "jp": "先生が望むことは全力で手伝うから。必要な時は言って。"},
+      {"event": "Lobby 8", "url": "https://static.wikitide.net/bluearchivewiki/3/30/Hina_Lobby_8.ogg", "en": "(I wish I could have some fun... Maybe whine a little too...)", "cn": "", "jp": "（甘えたい。じゃれ合いたい。泣き言だって言いたい…）"},
+      {"event": "Lobby 9", "url": "https://static.wikitide.net/bluearchivewiki/5/5d/Hina_Lobby_9.ogg", "en": "(But it'd probably be odd coming from me...)", "cn": "", "jp": "（でも私がやったら気持ち悪いだけ…）"},
+      {"event": "Lobby 10", "url": "https://static.wikitide.net/bluearchivewiki/e/e0/Hina_Lobby_10.ogg", "en": "Wh-What's on my mind? N-Nothing! Nothing at all!", "cn": "", "jp": "なに？！な、なにを考えてるかって？べ、別になにも！！"}
+    ]
+  },
+  {
+    "skin": "Memorial Lobby",
+    "lines": [
+      {"event": "Memorial Lobby 1", "url": "https://static.wikitide.net/bluearchivewiki/9/94/Hina_MemorialLobby_1_1.ogg", "en": "I get so embarrassed when...you stare at me like that.", "cn": "", "jp": "そんなにじっと見られたら…いくら私でも恥ずかしい。"},
+      {"event": "Memorial Lobby 2", "url": "https://static.wikitide.net/bluearchivewiki/7/7a/Hina_MemorialLobby_2_1.ogg", "en": "I don't get it. I feel so at ease when we're together.", "cn": "", "jp": "不思議だね。先生と一緒にいるとなんだか安心する。"},
+      {"event": "Memorial Lobby 3", "url": "https://static.wikitide.net/bluearchivewiki/a/aa/Hina_MemorialLobby_3_1.ogg", "en": "The truth is...seeing you smile makes me happy.", "cn": "", "jp": "実は…先生のそういう顔が好き。"},
+      {"event": "Memorial Lobby 4", "url": "https://static.wikitide.net/bluearchivewiki/3/38/Hina_MemorialLobby_4_1.ogg", "en": "*sigh* I feel like I could drift away.", "cn": "", "jp": "はあ…。何も考えたくない。"}
+    ]
+  },
+  {
+    "skin": "Event Lines",
+    "lines": [
+      {"event": "Event Mission Login 1", "url": "https://static.wikitide.net/bluearchivewiki/4/41/Hina_EventMission_Login_1.ogg", "en": "Ah, Sensei. There's a whole pile of tasks to be done. Would you mind helping me out?", "cn": "", "jp": "あ、先生。ちょうど解決してほしい仕事が溜まってたの。少し手伝ってくれるかしら？"},
+      {"event": "Event Mission Login 2", "url": "https://static.wikitide.net/bluearchivewiki/d/d7/Hina_EventMission_Login_2.ogg", "en": "Welcome, Sensei. The party aside, there's something else I must do as part of the Prefect Team.", "cn": "", "jp": "いらっしゃい、先生。パーティーとは別に、風紀委員としてやるべきことがあるの。"},
+      {"event": "Event Mission 1-1", "url": "https://static.wikitide.net/bluearchivewiki/c/c2/Hina_EventMission_1_1.ogg", "en": "Seems the work is never done, no matter how much you finish.", "cn": "", "jp": "仕事って、いつまでたっても終わらないものね。"},
+      {"event": "Event Mission 1-2", "url": "https://static.wikitide.net/bluearchivewiki/6/60/Hina_EventMission_1_2.ogg", "en": "Hm? \"You feel that in your bones?\" Heehee. So you work a lot, as well...", "cn": "", "jp": "ん、本当に、心から共感する？ふふっ、先生も大変なんだね……"},
+      {"event": "Event Mission 2", "url": "https://static.wikitide.net/bluearchivewiki/4/4e/Hina_EventMission_2.ogg", "en": "I have no plans to stop working. I am Gehenna's head prefect, after all.", "cn": "", "jp": "仕事の手を抜くつもりはないよ。私は、ゲヘナの風紀委員長だから。"},
+      {"event": "Event Mission Get 1", "url": "https://static.wikitide.net/bluearchivewiki/4/4f/Hina_EventMission_Get_1.ogg", "en": "Ah, thank you. This is a small gift for your help. Please, take it.", "cn": "", "jp": "あ、ありがとう。これは手伝ってくれたお礼。受け取って。"},
+      {"event": "Event Mission Get 2", "url": "https://static.wikitide.net/bluearchivewiki/f/f7/Hina_EventMission_Get_2.ogg", "en": "Perfect. As expected of you, Sensei. I think I can rest easy now... This is a small gift for your help. Here.", "cn": "", "jp": "さすが先生。完璧だった。おかげで安心できそう……これは手伝ってくれたお礼。はい。"}
+    ]
+  },
+  {
+    "skin": "Tactics & Growth",
+    "lines": [
+      {"event": "Formation In 1", "url": "https://static.wikitide.net/bluearchivewiki/b/bf/Hina_Formation_In_1.ogg", "en": "Sigh... I guess I have no choice.", "cn": "", "jp": "はぁ。しょうがない。"},
+      {"event": "Formation In 2", "url": "https://static.wikitide.net/bluearchivewiki/9/90/Hina_Formation_In_2.ogg", "en": "I'm ready.", "cn": "", "jp": "準備はできてる。"},
+      {"event": "Formation Select", "url": "https://static.wikitide.net/bluearchivewiki/d/de/Hina_Formation_Select.ogg", "en": "OK.", "cn": "", "jp": "いいわ。"},
+      {"event": "Tactic Defeat 1", "url": "https://static.wikitide.net/bluearchivewiki/d/d1/Hina_Tactic_Defeat_1.ogg", "en": "Did I let my guard down?", "cn": "", "jp": "油断したの？"},
+      {"event": "Tactic Defeat 2", "url": "https://static.wikitide.net/bluearchivewiki/1/17/Hina_Tactic_Defeat_2.ogg", "en": "I made an uncharacteristic mistake... I'm sorry, Sensei.", "cn": "", "jp": "私らしくないミスを…。ごめん、先生。"},
+      {"event": "Tactic In 1", "url": "https://static.wikitide.net/bluearchivewiki/3/36/Hina_Tactic_In_1.ogg", "en": "What a pain. Well, someone has to do it.", "cn": "", "jp": "めんどくさいけど…まあ、やらなきゃいけない事だから。"},
+      {"event": "Tactic In 2", "url": "https://static.wikitide.net/bluearchivewiki/4/46/Hina_Tactic_In_2.ogg", "en": "I'll follow Sensei's instructions.", "cn": "", "jp": "先生の指示に従う。"},
+      {"event": "Tactic Victory 1", "url": "https://static.wikitide.net/bluearchivewiki/3/3e/Hina_Tactic_Victory_1.ogg", "en": "This type of mission is no big deal.", "cn": "", "jp": "これくらいの任務、別に何ともない。"},
+      {"event": "Tactic Victory 2", "url": "https://static.wikitide.net/bluearchivewiki/b/bf/Hina_Tactic_Victory_2.ogg", "en": "It was an easy job, but thank you for your hard work, Sensei.", "cn": "", "jp": "簡単な仕事だったけど、まぁお疲れ様、先生。"},
+      {"event": "Battle Buffed 1", "url": "https://static.wikitide.net/bluearchivewiki/9/9b/Hina_Battle_Buffed_1.ogg", "en": "Support acknowledged.", "cn": "", "jp": "支援を確認した。"},
+      {"event": "Battle Buff Self 1", "url": "https://static.wikitide.net/bluearchivewiki/a/aa/Hina_Battle_BuffSelf_1.ogg", "en": "Prepare yourself.", "cn": "", "jp": "覚悟して。"},
+      {"event": "Battle Damage 1", "url": "https://static.wikitide.net/bluearchivewiki/8/80/Hina_Battle_Damage_1.ogg", "en": "Seriously...", "cn": "", "jp": "まったく…。"},
+      {"event": "Battle Damage 2", "url": "https://static.wikitide.net/bluearchivewiki/3/3c/Hina_Battle_Damage_2.ogg", "en": "This can't be good.", "cn": "", "jp": "良くないなぁ。"},
+      {"event": "Battle Defense 1", "url": "https://static.wikitide.net/bluearchivewiki/8/82/Hina_Battle_Defense_1.ogg", "en": "Pointless.", "cn": "", "jp": "無駄。"},
+      {"event": "Battle In 1", "url": "https://static.wikitide.net/bluearchivewiki/4/4e/Hina_Battle_In_1.ogg", "en": "Entering the battle. I'll infiltrate as quickly as possible.", "cn": "", "jp": "戦闘突入。極力早く侵入する。"},
+      {"event": "Battle In 2", "url": "https://static.wikitide.net/bluearchivewiki/4/46/Hina_Battle_In_2.ogg", "en": "Alright, let's go.", "cn": "", "jp": "さあ、行こう。"},
+      {"event": "Battle Move 1", "url": "https://static.wikitide.net/bluearchivewiki/e/e8/Hina_Battle_Move_1.ogg", "en": "Sigh... what a pain.", "cn": "", "jp": "はあ、めんどくさい……"},
+      {"event": "Battle Move 2", "url": "https://static.wikitide.net/bluearchivewiki/5/58/Hina_Battle_Move_2.ogg", "en": "Seriously... there's no end to it.", "cn": "", "jp": "もう、やってもやっても終わらない……"},
+      {"event": "Battle Recovery 1", "url": "https://static.wikitide.net/bluearchivewiki/1/15/Hina_Battle_Recovery_1.ogg", "en": "Good, I'm back on my feet.", "cn": "", "jp": "よし、回復した。"},
+      {"event": "Battle Retire", "url": "https://static.wikitide.net/bluearchivewiki/e/e9/Hina_Battle_Retire.ogg", "en": "Seriously... where did it go wrong?", "cn": "", "jp": "全く…どこで間違えたのか。"},
+      {"event": "Battle Supply", "url": "https://static.wikitide.net/bluearchivewiki/2/2a/Hina_Battle_Supply.ogg", "en": "Supplies acknowledged.", "cn": "", "jp": "補給確認。"},
+      {"event": "Battle Tactical Action 1", "url": "https://static.wikitide.net/bluearchivewiki/4/4e/Hina_Battle_TacticalAction_1.ogg", "en": "Moving.", "cn": "", "jp": "移動する。"},
+      {"event": "Battle TSA 1", "url": "https://static.wikitide.net/bluearchivewiki/2/2e/Hina_Battle_TSA_1.ogg", "en": "Disciplinary Committee's tank No. 6. Now is the time to test its power.", "cn": "", "jp": "風紀委員会の6号戦車。この威力を今こそ試す時。"},
+      {"event": "Battle TSA 2", "url": "https://static.wikitide.net/bluearchivewiki/7/79/Hina_Battle_TSA_2.ogg", "en": "With the help of this the battle has turned to our favor. Give up already.", "cn": "", "jp": "これで戦況はこっちに傾いた。もう諦めて。"},
+      {"event": "Battle Victory 1", "url": "https://static.wikitide.net/bluearchivewiki/6/63/Hina_Battle_Victory_1.ogg", "en": "This is just the expected result.", "cn": "", "jp": "えぇ、当然の結果ってわけ。"},
+      {"event": "Battle Victory 2", "url": "https://static.wikitide.net/bluearchivewiki/a/a3/Hina_Battle_Victory_2.ogg", "en": "Victory. What should I do next?", "cn": "", "jp": "勝利よ。次は何をしたらいい？"},
+      {"event": "Common Skill", "url": "https://static.wikitide.net/bluearchivewiki/d/d9/Hina_CommonSkill.ogg", "en": "Let's go.", "cn": "", "jp": "行こう。"},
+      {"event": "Ex Skill 1", "url": "https://static.wikitide.net/bluearchivewiki/f/fc/Hina_ExSkill_1.ogg", "en": "We'll do this by force.", "cn": "", "jp": "実力行使で行く。"},
+      {"event": "Ex Skill 2", "url": "https://static.wikitide.net/bluearchivewiki/d/d9/Hina_ExSkill_2.ogg", "en": "It's this thing's turn.", "cn": "", "jp": "こいつの出番。"},
+      {"event": "Ex Skill 3", "url": "https://static.wikitide.net/bluearchivewiki/e/e6/Hina_ExSkill_3.ogg", "en": "Target confirmed.", "cn": "", "jp": "ターゲットは確認した。"},
+      {"event": "Ex Skill Level 1", "url": "https://static.wikitide.net/bluearchivewiki/a/ac/Hina_ExSkill_Level_1.ogg", "en": "Let's see how long you can last.", "cn": "", "jp": "どれくらい耐えられるか見ものね？"},
+      {"event": "Ex Skill Level 2", "url": "https://static.wikitide.net/bluearchivewiki/f/f9/Hina_ExSkill_Level_2.ogg", "en": "You cannot escape.", "cn": "", "jp": "逃げることはできない。"},
+      {"event": "Ex Skill Level 3", "url": "https://static.wikitide.net/bluearchivewiki/1/14/Hina_ExSkill_Level_3.ogg", "en": "I won't let you get away.", "cn": "", "jp": "逃さない。"},
+      {"event": "Growup 1", "url": "https://static.wikitide.net/bluearchivewiki/4/42/Hina_Growup_1.ogg", "en": "I got stronger.", "cn": "", "jp": "より強くなった…"},
+      {"event": "Growup 2", "url": "https://static.wikitide.net/bluearchivewiki/5/55/Hina_Growup_2.ogg", "en": "I can still grow stronger.", "cn": "", "jp": "まだ成長できるんだ…"},
+      {"event": "Growup 3", "url": "https://static.wikitide.net/bluearchivewiki/1/15/Hina_Growup_3.ogg", "en": "I'll use this power for Sensei.", "cn": "", "jp": "この力は先生のために使おう。"},
+      {"event": "Growup 4", "url": "https://static.wikitide.net/bluearchivewiki/6/6f/Hina_Growup_4.ogg", "en": "Thank you for your concern.", "cn": "", "jp": "気にしてくれてありがとう。"},
+      {"event": "Relationship Up 1", "url": "https://static.wikitide.net/bluearchivewiki/6/6e/Hina_Relationship_Up_1.ogg", "en": "You would take me?", "cn": "", "jp": "こんな私でもいいの…？"},
+      {"event": "Relationship Up 2", "url": "https://static.wikitide.net/bluearchivewiki/1/18/Hina_Relationship_Up_2.ogg", "en": "Thank you for being with me, Sensei.", "cn": "", "jp": "一緒にいてくれて…ありがとう。先生。"},
+      {"event": "Relationship Up 3", "url": "https://static.wikitide.net/bluearchivewiki/1/18/Hina_Relationship_Up_3.ogg", "en": "I don't really know what I should do in this type of situation... Sorry.", "cn": "", "jp": "こんな時はどうすればいいのかよく分からなくて…ごめん。"},
+      {"event": "Relationship Up 4", "url": "https://static.wikitide.net/bluearchivewiki/c/c3/Hina_Relationship_Up_4.ogg", "en": "This warmth... Am I sensing Sensei's warmth?", "cn": "", "jp": "この温もり…先生の温かさが伝わってきてるのかな。"}
+    ]
+  }
+];
+
+const aud = document.getElementById('aud');
+const npBar = document.getElementById('np-bar');
+const npLabel = document.getElementById('np-label');
+const npStop = document.getElementById('np-stop');
+const main = document.getElementById('main');
+
+let activeTr = null;
+let currentLang = 'en';
+
+function stopAll() {
+  aud.pause();
+  aud.src = '';
+  if (activeTr) { activeTr.classList.remove('playing'); activeTr = null; }
+  npBar.classList.remove('on');
+}
+
+npStop.addEventListener('click', stopAll);
+aud.addEventListener('ended', stopAll);
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.dataset.lang;
+    document.querySelectorAll('.lang-text').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === currentLang);
+    });
+  });
+});
+
+let audioCount = 0;
+const DL_SVG = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>`;
+
+DATA.forEach(skin => {
+  const block = document.createElement('div');
+  block.className = 'skin-block';
+
+  const withAudio = skin.lines.filter(l => l.url).length;
+  if (withAudio > 0) audioCount += withAudio;
+
+  block.innerHTML = `
+    <div class="skin-heading">
+      <h2>${skin.skin}</h2>
+      <span class="skin-count">${withAudio} audio · ${skin.lines.length} lines</span>
+    </div>`;
+
+  const table = document.createElement('table');
+  table.className = 'qt';
+  table.innerHTML = `
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Event</th><th>▶</th><th>Transcription</th></tr></thead>`;
+
+  const tbody = document.createElement('tbody');
+
+  skin.lines.forEach(line => {
+    const tr = document.createElement('tr');
+
+    const playCell = line.url
+      ? `<td class="play-cell">
+          <a class="play-link" href="${line.url}" data-event="${line.event}" data-skin="${skin.skin}">
+            <span class="ico-play">▶</span>
+            <span class="ico-pause">⏸</span>
+          </a>
+          <a class="dl-link" href="${line.url}" download="${line.url.split('/').pop()}" title="Download ${line.url.split('/').pop()}">${DL_SVG}</a>
+        </td>`
+      : `<td class="play-cell"><span class="no-audio">—</span></td>`;
+
+    const enText = line.en || '';
+    const cnText = line.cn || '';
+    const jpText = line.jp || '';
+
+    tr.innerHTML = `
+      <td class="ev-cell">${line.event}</td>
+      ${playCell}
+      <td class="text-cell">
+        <span class="lang-text${currentLang==='en' ? ' visible' : ''}" data-lang="en">${enText || '<em>—</em>'}</span>
+        <span class="lang-text${currentLang==='cn' ? ' visible' : ''}" data-lang="cn">${cnText || '<em>—</em>'}</span>
+        <span class="lang-text${currentLang==='jp' ? ' visible' : ''}" data-lang="jp">${jpText || '<em>—</em>'}</span>
+      </td>`;
+
+    if (line.url) {
+      const a = tr.querySelector('a.play-link');
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        if (activeTr === tr) { stopAll(); return; }
+        if (activeTr) activeTr.classList.remove('playing');
+        activeTr = tr;
+        tr.classList.add('playing');
+        aud.src = line.url;
+        aud.play();
+        npBar.classList.add('on');
+        npLabel.innerHTML = `${line.event} <small>${skin.skin}</small>`;
+      });
+    }
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  block.appendChild(table);
+  main.appendChild(block);
+});
+
+document.getElementById('total-n').textContent = audioCount;
+
+// Download All
+document.getElementById('dl-all-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('dl-all-btn');
+  const allUrls = DATA.flatMap(skin => skin.lines.filter(l => l.url).map(l => ({ url: l.url, name: l.url.split('/').pop() })));
+  btn.textContent = 'Starting downloads…';
+  btn.disabled = true;
+  let i = 0;
+  for (const { url, name } of allUrls) {
+    try {
+      const resp = await fetch(url);
+      const blob = await resp.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    } catch(e) { console.warn('Failed:', url, e); }
+    i++;
+    btn.textContent = `Downloading… ${i}/${allUrls.length}`;
+    await new Promise(r => setTimeout(r, 350));
+  }
+  btn.textContent = '✓ Done!';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = `${DL_SVG} Download All Audio`;
+  }, 2000);
+});
+</script>
+</body>
+</html>

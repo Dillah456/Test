@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miyo Sakurai — Quotes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #131720;
+    --surface2: #181d29;
+    --border: #262d3e;
+    --border2: #313a52;
+    --gold: #7aabcc;
+    --gold2: #a8d4f0;
+    --blue: #7aa3c4;
+    --red: #c47a7a;
+    --text: #cdd8e3;
+    --muted: #6b7d8f;
+    --dim: #3e4f60;
+    --active-bg: #141c2a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .site-header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--gold);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .site-header h1 {
+    font-size: 2.4rem;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    color: var(--gold2);
+    line-height: 1;
+  }
+
+  .site-header .sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .header-meta {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .header-meta strong {
+    display: block;
+    color: var(--gold);
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
+
+  .lang-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-bar span {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-right: 10px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .lang-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: bold; }
+
+  #np-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gold);
+    padding: 10px 40px;
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #np-bar.on { display: flex; }
+
+  .np-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: blink 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  #np-label { flex: 1; font-size: 0.82rem; color: var(--gold2); }
+  #np-label small { color: var(--muted); font-size: 0.72rem; margin-left: 8px; }
+
+  #np-stop {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Georgia', serif;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  #np-stop:hover { border-color: var(--red); color: var(--red); }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+  }
+
+  .skin-block { margin-bottom: 52px; }
+
+  .skin-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .skin-heading h2 {
+    font-size: 1.15rem;
+    font-weight: normal;
+    color: var(--gold2);
+    letter-spacing: 0.03em;
+  }
+
+  .skin-count {
+    font-size: 0.68rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .qt { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .qt colgroup col:nth-child(1) { width: 200px; }
+  .qt colgroup col:nth-child(2) { width: 60px; }
+  .qt colgroup col:nth-child(3) { width: auto; }
+
+  .qt thead th {
+    padding: 7px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: left;
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .qt tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+  .qt tbody tr:hover { background: var(--active-bg); }
+  .qt tbody tr.playing { background: var(--active-bg); }
+  .qt tbody tr.playing td.ev-cell { color: var(--gold); }
+  .qt td { padding: 10px 12px; vertical-align: top; }
+
+  td.ev-cell {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 13px;
+    transition: color 0.15s;
+    word-break: break-word;
+  }
+
+  td.play-cell { text-align: center; padding-top: 8px; }
+
+  a.play-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 10px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  a.play-link:hover, tr.playing a.play-link { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+  a.play-link .ico-play { display: inline; }
+  a.play-link .ico-pause { display: none; }
+  tr.playing a.play-link .ico-play { display: none; }
+  tr.playing a.play-link .ico-pause { display: inline; }
+
+  .no-audio { display: inline-block; width: 30px; text-align: center; color: var(--border2); font-size: 12px; }
+
+  td.text-cell { font-size: 0.9rem; line-height: 1.65; color: var(--text); }
+  td.text-cell .lang-text { display: none; }
+  td.text-cell .lang-text.visible { display: block; }
+  td.text-cell .lang-text em { color: var(--dim); font-style: italic; font-size: 0.82rem; }
+
+  .dl-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dl-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .dl-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+  a.dl-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 9px;
+    transition: all 0.15s;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  a.dl-link:hover { border-color: var(--blue); color: var(--blue); }
+  a.dl-link svg { width: 10px; height: 10px; fill: currentColor; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    font-size: 0.72rem;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+  footer a { color: var(--blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .site-header, .lang-bar, .page { padding-left: 16px; padding-right: 16px; }
+    #np-bar { padding: 10px 16px; }
+    .qt colgroup col:nth-child(1) { width: 120px; }
+    .qt colgroup col:nth-child(2) { width: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>Miyo Sakurai</h1>
+    <div class="sub">桜井ミヨ · Wildhunt Art Academy · Blue Archive</div>
+  </div>
+  <div class="header-meta">
+    <strong id="total-n">—</strong>
+    audio lines
+  </div>
+  <div style="margin-left:16px; align-self:center;">
+    <button class="dl-btn" id="dl-all-btn">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>
+      Download All Audio
+    </button>
+  </div>
+</header>
+
+<div class="lang-bar">
+  <span>Transcription</span>
+  <button class="lang-btn active" data-lang="jp">日本語</button>
+  <button class="lang-btn" data-lang="en">English</button>
+</div>
+
+<div id="np-bar">
+  <div class="np-dot"></div>
+  <div id="np-label">— <small></small></div>
+  <button id="np-stop">Stop</button>
+</div>
+
+<div class="page" id="main"></div>
+
+<footer>
+  Source: <a href="https://bluearchive.wiki/wiki/Miyo/audio" target="_blank">Blue Archive Wiki</a>
+  &nbsp;·&nbsp; Audio © Nexon / Yostar
+</footer>
+
+<audio id="aud"></audio>
+
+<script>
+const DATA = [
+  {
+    "section": "Normal lines",
+    "lines": [
+      {
+        "event": "Title",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/50/Miyo_Title.ogg",
+        "jp": "ブルー、アーカイ……ブ？",
+        "en": "Blue...archive?"
+      },
+      {
+        "event": "Gachaget",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/85/Miyo_Gachaget.ogg",
+        "jp": "わ、ワイルドハント芸術学院、桜井ミヨと申します。 ど、どうして私が呼ばれたのか分かりませんが…… よろしくお願いします。",
+        "en": "I-I'm Sakurai Miyo from Wildhunt Art Academy. N-Not sure why I'm here...but I look forward to working with you."
+      },
+      {
+        "event": "Cafe_monolog_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f0/Miyo_Cafe_monolog_1.ogg",
+        "jp": "（ゆっくり 原稿ができそうな 場所……ないかな）",
+        "en": "(I wonder if there's somewhere I can sit down and write...)"
+      },
+      {
+        "event": "Cafe_monolog_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/61/Miyo_Cafe_monolog_2.ogg",
+        "jp": "タイプライターを 使ったら迷惑になって しまうでしょうか……。",
+        "en": "Too many people would be able to hear me if I use my typewriter..."
+      },
+      {
+        "event": "Cafe_monolog_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/6a/Miyo_Cafe_monolog_3.ogg",
+        "jp": "皆さん、のびのびと…… ワイルドハントとは 大違いです。",
+        "en": "Everyone seems to be free... Unlike at Wildhunt."
+      },
+      {
+        "event": "Cafe_monolog_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a8/Miyo_Cafe_monolog_4.ogg",
+        "jp": "（先生…… どんなコーヒーが お好きなのでしょう？）",
+        "en": "(I wonder...what story lies behind Sensei's coffee preference.)"
+      },
+      {
+        "event": "Cafe_monolog_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/ac/Miyo_Cafe_monolog_5.ogg",
+        "jp": "ええと、あそこから進入して、脱出は……って、ここではそんなの探さなくてもいいのに……。",
+        "en": "Entrance here, an escape route over there... Why am I analyzing all this?"
+      },
+      {
+        "event": "LogIn_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/4c/Miyo_LogIn_1.ogg",
+        "jp": "あ、先生…… すみません、本に夢中で……。",
+        "en": "Ah, you're here. I was reading and didn't see you coming."
+      },
+      {
+        "event": "LogIn_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/1e/Miyo_LogIn_2.ogg",
+        "jp": "えっ、書いているものですか？ ……か、完結してからの お楽しみです！",
+        "en": "What am I writing lately? Well, uh, I'll show you when I finish...!"
+      },
+      {
+        "event": "Lobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/8c/Miyo_Lobby_1.ogg",
+        "jp": "あの、何か困っていることは ありませんか？合法であれば、なんでも……。",
+        "en": "Um, is there anything I can help you with?As long as it's not a crime, I'll do anything..."
+      },
+      {
+        "event": "Lobby_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/3/30/Miyo_Lobby_2.ogg",
+        "jp": "気にせず執筆に 集中していいんですか？ それが作家の仕事だから……？",
+        "en": "I can just sit back and write? Th-That's what a writer should do...?"
+      },
+      {
+        "event": "Lobby_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/69/Miyo_Lobby_3.ogg",
+        "jp": "先生を見ながら、 お話を書きたいです……理由がなきゃ……だめですか？",
+        "en": "Can I look at you while I write, Sensei?Why? D-Do I need a reason to want to look at you?"
+      },
+      {
+        "event": "Lobby_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/7a/Miyo_Lobby_4.ogg",
+        "jp": "小説を書いていると、 日常の何もかもが 伏線に見えてしまうんです。私がここへ来たのも……。",
+        "en": "When I write a novel, everything that happens around me feels like foreshadowing....What would me coming here be foreshadowing?"
+      },
+      {
+        "event": "Lobby_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/8e/Miyo_Lobby_5.ogg",
+        "jp": "今日は、先生がワイルドハントに いらっしゃらないので…… 来ちゃいました。",
+        "en": "Since you didn't come to Wildhunt today...I came here."
+      },
+      {
+        "event": "Season_Birthday_Player",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/f7/Miyo_Season_Birthday_Player.ogg",
+        "jp": "こうして私の物語に 登場してくれて…… ありがとうございます、先生。",
+        "en": "You came here for my story... Thank you, Sensei."
+      },
+      {
+        "event": "Season_Birthday",
+        "url": "https://static.wikitide.net/bluearchivewiki/9/96/Miyo_Season_Birthday.ogg",
+        "jp": "ほしいもの、ですか？ うーん……２時間ほど、お話させて いただいてもいいでしょうか？",
+        "en": "What present do I want? Hm...Shall we take it slow and talk about it for two hours or so?"
+      },
+      {
+        "event": "Season_NewYear",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/ca/Miyo_Season_NewYear.ogg",
+        "jp": "今日が、 今年の一ページ目ですね。 よければ、私と一緒に 読み進めませんか？",
+        "en": "It's the first page of the new year. Shall we read the preface together?"
+      },
+      {
+        "event": "Season_Xmas",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e7/Miyo_Season_Xmas.ogg",
+        "jp": "メリークリスマスです。 先生のほしいもの…… 調達してきますよ。",
+        "en": "Merry Christmas, Sensei. If there's anything you need, I'll get it for you today..."
+      },
+      {
+        "event": "Season_Halloween",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a3/Miyo_Season_Halloween.ogg",
+        "jp": "キャンディーです。 あ～んしてください。断ると……イタズラ、 しちゃいますよ？",
+        "en": "It's candy. Say ahh....I'll play a trick on you if you refuse, okay?"
+      },
+      {
+        "event": "ExWeapon_Get",
+        "url": "https://static.wikitide.net/bluearchivewiki/7/71/Miyo_ExWeapon_Get.ogg",
+        "jp": "もし叶うなら、 この瞬間を本にしたいです。 私たちの思い出を…… いつでも読み返せるように。",
+        "en": "If anything can be a book...I'll consider this my book. One that carries our story... Our book."
+      }
+    ]
+  },
+  {
+    "section": "Memorial lobby",
+    "lines": [
+      {
+        "event": "MemorialLobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/29/Miyo_MemorialLobby_1_1.ogg",
+        "jp": "……こんなところで、 何をされているんですか？ずっと先生を 探していたのに……。",
+        "en": "...What are you doing in a place like this?I've been looking for you for so long..."
+      },
+      {
+        "event": "MemorialLobby_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/9/9f/Miyo_MemorialLobby_2_1.ogg",
+        "jp": "さっきから 少し苦しそうですが……。もしかして、 あまり体調が 良くないのですか……？",
+        "en": "And you've been groaning to yourself...Could it be that you're not feeling well...?"
+      },
+      {
+        "event": "MemorialLobby_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/58/Miyo_MemorialLobby_3_1.ogg",
+        "jp": "なるほど、悪夢……。きっと、罰が当たったんですよ。",
+        "en": "Hmm, a nightmare.I'm sure this is your punishment."
+      },
+      {
+        "event": "MemorialLobby_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/4e/Miyo_MemorialLobby_4_1.ogg",
+        "jp": "最近、よくワイルドハントに いらしてるのに……。一度も、 私に連絡しなかったから。",
+        "en": "You've been coming to Wildhunt so often...Yet you've never once called me."
+      },
+      {
+        "event": "MemorialLobby_5",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/6b/Miyo_MemorialLobby_5_1.ogg",
+        "jp": "……ふふ、冗談ですよ。でも、こうやって先生に お会いできて…… 私、嬉しいです。",
+        "en": "...Fufu, I'm joking.But still, meeting you like this...makes me happy, Sensei."
+      }
+    ]
+  },
+  {
+    "section": "Event lines",
+    "lines": [
+      {
+        "event": "EventLogin_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/6/6d/Miyo_EventLogin_1.ogg",
+        "jp": "いらっしゃいませ、先生。 ちょうどプロットを 書き終えたところです。",
+        "en": "Welcome, Sensei. I just finished writing the plot."
+      },
+      {
+        "event": "EventLogin_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/fc/Miyo_EventLogin_2.ogg",
+        "jp": "先生にお会いできて、 すごく安心しました。",
+        "en": "Seeing you makes me feel at ease."
+      },
+      {
+        "event": "EventLogin_Season_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/88/Miyo_EventLogin_Season_1.ogg",
+        "jp": "ワイルドハントに 入学した時は、まさかこんな事をする 羽目になるなんて想像も していませんでした。",
+        "en": "When I first enrolled in Wildhunt......I never imagined I'd be doing something like this."
+      },
+      {
+        "event": "EventLogin_Season_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/ef/Miyo_EventLogin_Season_2.ogg",
+        "jp": "事態が複雑に なってきましたね……。……諦めるわけには。物語は完結させて こそ、です。",
+        "en": "Things have gotten complicated....But I still can't give up.The story must be finished."
+      },
+      {
+        "event": "EventLogin_Season_End",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e5/Miyo_EventLogin_Season_End.ogg",
+        "jp": "無事に終わって 良かったです。……はぁ。こんな依頼、 もうたくさんです。",
+        "en": "Fortunately, everything ended well....But still, I don't think I'll be accepting a commission like this again. Ugh..."
+      },
+      {
+        "event": "EventLobby_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/2/22/Miyo_EventLobby_1.ogg",
+        "jp": "あっ……タイピング音、 うるさかったですか？",
+        "en": "Hm? Is my typewriter too loud...?"
+      },
+      {
+        "event": "EventLobby_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/47/Miyo_EventLobby_2.ogg",
+        "jp": "どうしてこんなことに 巻き込まれて しまったんでしょう……。",
+        "en": "I wonder how I got involved in all this..."
+      },
+      {
+        "event": "EventLobby_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/f/fa/Miyo_EventLobby_3.ogg",
+        "jp": "そ、そんなに じっと見つめて……ふふっ。嬉しいです。",
+        "en": "If you keep staring at me like that...It's nice, fufu."
+      },
+      {
+        "event": "EventLobby_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/0/0b/Miyo_EventLobby_4.ogg",
+        "jp": "お仕事のあとは、 ぜひ私たちの寮へ遊びに 来てくださいね。",
+        "en": "You should come visit our dormitory when you're done with work."
+      },
+      {
+        "event": "CardShop_Login_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/8/82/Miyo_CardShop_Login_1.ogg",
+        "jp": "ようこそ、先生。 こちらですよ。",
+        "en": "Welcome, Sensei. Please come this way."
+      },
+      {
+        "event": "CardShop_Login_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/af/Miyo_CardShop_Login_2.ogg",
+        "jp": "お手をどうぞ。 ……一緒にカードを 引きませんか？",
+        "en": "Give me your hand, Sensei. Let's pull a card together."
+      },
+      {
+        "event": "CardShop_End",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a4/Miyo_CardShop_End.ogg",
+        "jp": "物語の結末まで…… 悔いのないよう、 見届けていってください。",
+        "en": "Endings are important. Let's go watch the finale of this place without any regret."
+      },
+      {
+        "event": "CardShop_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/5/57/Miyo_CardShop_1.ogg",
+        "jp": "何か問題でも ありましたか？",
+        "en": "Hm? Is there something wrong with the card?"
+      },
+      {
+        "event": "CardShop_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/c/c6/Miyo_CardShop_2.ogg",
+        "jp": "お目当てのカードは ありますか？",
+        "en": "Is there a card you're looking for?"
+      },
+      {
+        "event": "Cardpickup_1",
+        "url": "https://static.wikitide.net/bluearchivewiki/1/1a/Miyo_Cardpickup_1.ogg",
+        "jp": "すごいです！ 私もこの目で見るのは 初めてのカードですよ！",
+        "en": "This is...! I've also only seen this card in books...!"
+      },
+      {
+        "event": "Cardpickup_2",
+        "url": "https://static.wikitide.net/bluearchivewiki/4/42/Miyo_Cardpickup_2.ogg",
+        "jp": "運がいいですね、先生！ この流れに乗って、 次も……！",
+        "en": "You have good luck, Sensei! Let's keep this pace going...!"
+      },
+      {
+        "event": "Cardpickup_3",
+        "url": "https://static.wikitide.net/bluearchivewiki/e/e5/Miyo_Cardpickup_3.ogg",
+        "jp": "普通には、 普通の美学と いうものがあります。",
+        "en": "Ordinariness is an aesthetic of its own."
+      },
+      {
+        "event": "Cardpickup_4",
+        "url": "https://static.wikitide.net/bluearchivewiki/a/a8/Miyo_Cardpickup_4.ogg",
+        "jp": "気を落とさないで ください、先生。不運は、 次の幸運の前兆ですよ。",
+        "en": "Don't get discouraged, Sensei. Misfortune can hint at future fortune."
+      }
+    ]
+  },
+  {
+    "section": "Tactics and growth",
+    "lines": [
+      {
+        "event": "",
+        "url": "",
+        "jp": "",
+        "en": ""
+      }
+    ]
+  }
+];
+
+const aud = document.getElementById('aud');
+const npBar = document.getElementById('np-bar');
+const npLabel = document.getElementById('np-label');
+const npStop = document.getElementById('np-stop');
+const main = document.getElementById('main');
+
+let activeTr = null;
+let currentLang = 'jp';
+
+function stopAll() {
+  aud.pause(); aud.src = '';
+  if (activeTr) { activeTr.classList.remove('playing'); activeTr = null; }
+  npBar.classList.remove('on');
+}
+
+npStop.addEventListener('click', stopAll);
+aud.addEventListener('ended', stopAll);
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.dataset.lang;
+    document.querySelectorAll('.lang-text').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === currentLang);
+    });
+  });
+});
+
+let audioCount = 0;
+const DL_SVG = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>`;
+
+DATA.forEach(section => {
+  const withAudio = section.lines.filter(l => l.url).length;
+  audioCount += withAudio;
+
+  const block = document.createElement('div');
+  block.className = 'skin-block';
+  block.innerHTML = `
+    <div class="skin-heading">
+      <h2>${section.section}</h2>
+      <span class="skin-count">${withAudio} audio · ${section.lines.length} lines</span>
+    </div>`;
+
+  const table = document.createElement('table');
+  table.className = 'qt';
+  table.innerHTML = `
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Event</th><th>▶</th><th>Transcription</th></tr></thead>`;
+
+  const tbody = document.createElement('tbody');
+
+  section.lines.forEach(line => {
+    const tr = document.createElement('tr');
+
+    const playCell = line.url
+      ? `<td class="play-cell">
+          <a class="play-link" href="${line.url}">
+            <span class="ico-play">▶</span><span class="ico-pause">⏸</span>
+          </a>
+          <a class="dl-link" href="${line.url}" download="${line.url.split('/').pop()}" title="Download">${DL_SVG}</a>
+        </td>`
+      : `<td class="play-cell"><span class="no-audio">—</span></td>`;
+
+    tr.innerHTML = `
+      <td class="ev-cell">${line.event}</td>
+      ${playCell}
+      <td class="text-cell">
+        <span class="lang-text${currentLang==='jp'?' visible':''}" data-lang="jp">${line.jp || '<em>—</em>'}</span>
+        <span class="lang-text${currentLang==='en'?' visible':''}" data-lang="en">${line.en || '<em>—</em>'}</span>
+      </td>`;
+
+    if (line.url) {
+      const a = tr.querySelector('a.play-link');
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        if (activeTr === tr) { stopAll(); return; }
+        if (activeTr) activeTr.classList.remove('playing');
+        activeTr = tr;
+        tr.classList.add('playing');
+        aud.src = line.url;
+        aud.play();
+        npBar.classList.add('on');
+        npLabel.innerHTML = `${line.event} <small>${section.section}</small>`;
+      });
+    }
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  block.appendChild(table);
+  main.appendChild(block);
+});
+
+document.getElementById('total-n').textContent = audioCount;
+
+document.getElementById('dl-all-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('dl-all-btn');
+  const allUrls = DATA.flatMap(s => s.lines.filter(l => l.url).map(l => ({ url: l.url, name: l.url.split('/').pop() })));
+  btn.textContent = 'Starting downloads…';
+  btn.disabled = true;
+  let i = 0;
+  for (const { url, name } of allUrls) {
+    try {
+      const resp = await fetch(url);
+      const blob = await resp.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    } catch(e) { console.warn('Failed:', url, e); }
+    i++;
+    btn.textContent = `Downloading… ${i}/${allUrls.length}`;
+    await new Promise(r => setTimeout(r, 350));
+  }
+  btn.textContent = '✓ Done!';
+  setTimeout(() => { btn.disabled = false; btn.innerHTML = `${DL_SVG} Download All Audio`; }, 2000);
+});
+</script>
+</body>
+</html>

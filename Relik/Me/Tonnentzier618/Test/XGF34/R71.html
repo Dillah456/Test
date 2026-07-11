@@ -1,0 +1,83 @@
+<body>
+    <style>
+        /* Container for the form and image */
+        .container {
+            display: flex;
+            align-items: flex-start; /* Align items at the top */
+            gap: 20px; /* Space between the form and the image */
+        }
+
+        /* Form Styling */
+        form {
+            width: 50%; /* Adjust form width */
+            font-family: Arial, sans-serif; /* Optional font style */
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px; /* Space between labels */
+        }
+
+        form input[type="text"] {
+            width: 100%; /* Full width for inputs */
+            padding: 5px;
+            margin-bottom: 10px; /* Space below inputs */
+            box-sizing: border-box; /* Ensure padding doesn't affect total width */
+        }
+
+        form input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3; /* Change color on hover */
+        }
+        form input[type="button"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form input[type="button"]:hover {
+            background-color: #0056b3; /* Change color on hover */
+        }
+       
+        /* Image Styling */
+        img {
+            width: 300px; /* Fixed image width */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+    <div class="container">
+        <form action="R71.php" method="get">
+            <label>Nama</label><br>
+            <input type="text" name="Nama" value=""><br>
+            <label>Umur</label><br>
+            <input type="number" name="Umur" value=""><br>
+            <label>Tinggi</label><br>
+            <input type="number" name="Tinggi" value=""><br>
+            <label>Berat badan</label><br>
+            <input type="number" name="Berat" value=""><br>
+            <label>Afiliasi</label><br>
+            <input type="text" name="Afiliasi" value=""><br>
+            <label>Profesi</label><br>
+            <input type="text" name="Profesi" value=""><br>
+            <label for="Jenis">Jenis Entitas</label><br>
+            <label>
+                <input type="radio" name="Jenis" value="2">Nyata
+            </label>
+            <label>
+                <input type="radio" name="Jenis" value="1" >Fiksi
+            </label>    
+            <input type="submit" value="Post !">
+            <input type="button" value="QEC" onclick="window.location.href='Mimosa.php'">
+        </form>
+        <img src="illust_86200817_20230725_203740.jpg" width="300" height="800">
+    </div>
+</body>

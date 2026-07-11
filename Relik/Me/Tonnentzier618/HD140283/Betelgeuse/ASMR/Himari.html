@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RJ01144236 Player (Himari)</title>
+
+<style>
+body{
+    background:#0f1115;
+    color:#e4e6eb;
+    font-family:Segoe UI, Arial, sans-serif;
+}
+
+h3{
+    color:#ffffff;
+    border-left:4px solid #4da3ff;
+    padding-left:12px;
+    margin-top:30px;
+}
+
+audio{
+    width:100%;
+    max-width:500px;
+    margin:10px 0;
+    border-radius:8px;
+    padding:5px;
+}
+
+button{
+    margin:5px;
+    padding:8px 12px;
+    background:#1a1d24;
+    color:#fff;
+    border:1px solid #4da3ff;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#4da3ff;
+}
+
+table{
+    width:100%;
+    max-width:900px;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:#151922;
+}
+
+th, td{
+    border:1px solid #2a2f3a;
+    padding:10px;
+}
+
+th{
+    background:#1f2633;
+    color:#4da3ff;
+}
+
+tr:hover{
+    background:#1a1d24;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div>
+    <h3>Himari - Track Player</h3>
+
+    <audio id="player" controls>
+        <source src="RJ01144236.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Skip -->
+    <div>
+        <button onclick="skipTime(-10)">⏪ -10s</button>
+        <button onclick="skipTime(10)">⏩ +10s</button>
+    </div>
+
+    <!-- Quick Jump -->
+    <div>
+        <button onclick="jumpTime('00:00')">Title</button>
+        <button onclick="jumpTime('00:08')">Track 1</button>
+        <button onclick="jumpTime('23:31')">Track 2</button>
+        <button onclick="jumpTime('35:12')">Track 3</button>
+        <button onclick="jumpTime('45:14')">Track 4</button>
+        <button onclick="jumpTime('56:11')">Track 5</button>
+    </div>
+
+    <h3>Track List</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Japanese</th>
+                <th>Translation</th>
+                <th>Duration</th>
+                <th>Start</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr onclick="jumpTime('00:00')">
+                <td>01</td>
+                <td>『タイトルコール』</td>
+                <td>Title Call</td>
+                <td>00:08</td>
+                <td>00:00</td>
+            </tr>
+            <tr onclick="jumpTime('00:08')">
+                <td>02</td>
+                <td>『実は今、退屈でして』</td>
+                <td>Actually, I'm a bit bored right now</td>
+                <td>23:23</td>
+                <td>00:08</td>
+            </tr>
+            <tr onclick="jumpTime('23:31')">
+                <td>03</td>
+                <td>『こっ、この状況は……!?』</td>
+                <td>Th-this situation is...!? </td>
+                <td>11:41</td>
+                <td>23:31</td>
+            </tr>
+            <tr onclick="jumpTime('35:12')">
+                <td>04</td>
+                <td>『足を洗っていただくなんて……』</td>
+                <td>Having you wash my feet...</td>
+                <td>10:02</td>
+                <td>35:12</td>
+            </tr>
+            <tr onclick="jumpTime('45:14')">
+                <td>05</td>
+                <td>『フットバスを試してみたいのです』</td>
+                <td>I want to try a foot bath</td>
+                <td>10:57</td>
+                <td>45:14</td>
+            </tr>
+            <tr onclick="jumpTime('56:11')">
+                <td>06</td>
+                <td>『マッサージなどいかがでしょう』</td>
+                <td>How about a massage?</td>
+                <td>10:10</td>
+                <td>56:11</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+function jumpTime(timeString){
+    const audio = document.getElementById("player");
+    const parts = timeString.split(":");
+    const seconds = (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+
+    audio.currentTime = seconds;
+    audio.play();
+}
+
+function skipTime(offset){
+    const audio = document.getElementById("player");
+
+    let newTime = audio.currentTime + offset;
+
+    if(newTime < 0) newTime = 0;
+    if(newTime > audio.duration) newTime = audio.duration;
+
+    audio.currentTime = newTime;
+}
+</script>
+
+</body>
+</html>

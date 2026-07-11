@@ -1,0 +1,198 @@
+{
+    "sql_2": {
+        "RegNo": "2",
+        "Nama": "Amiya",
+        "Sumber": "SQL",
+        "Asosiasi": "Journaling - Kontrol dan Manajemen Emosi",
+        "Catatan": "Manajemen Konsep diri, dan Komunikasi Intrapersonal diri melalui Journaling dan Naratif"
+    },
+    "sql_5": {
+        "RegNo": "5",
+        "Nama": "Flustern Geheim",
+        "Sumber": "SQL",
+        "Asosiasi": "Self Ideal - Konsep Ego",
+        "Catatan": "Manifestasi sebagian konsep diri sebagai Entitas Fiksi"
+    },
+    "sql_10": {
+        "RegNo": "10",
+        "Nama": "Flustern Otus",
+        "Sumber": "SQL",
+        "Asosiasi": "Ideal Self - Shadow",
+        "Catatan": "Manifestasi konsep diri yang represi stress HFD dan HFA"
+    },
+    "sql_6": {
+        "RegNo": "6",
+        "Nama": "IJN Shinano",
+        "Sumber": "SQL",
+        "Asosiasi": "Simbolisasi konsep bahagia - Fiksi",
+        "Catatan": "Setiap Transaksi di entitas ini dianggap Charge State"
+    },
+    "sql_1": {
+        "RegNo": "1",
+        "Nama": "Priestess",
+        "Sumber": "SQL",
+        "Asosiasi": "Simbolisasi Konsep Oneness",
+        "Catatan": "Konsep kesatuan diri secara Afektif ( Fiksi ), Kognitif, dan Psikomotorik, dengan prioritas ke INTJ"
+    },
+    "sql_11": {
+        "RegNo": "11",
+        "Nama": "Yuuka Hayase",
+        "Sumber": "SQL",
+        "Asosiasi": "Ideal Self - Diri dan Sistem",
+        "Catatan": "Manifestasi Ideal Value, dan bentuk Reemergence dari Cita - cita dan Semi Fiksi"
+    },
+    "sql_7": {
+        "RegNo": "7",
+        "Nama": "Urawa Hanako",
+        "Sumber": "SQL",
+        "Asosiasi": "Manifestasi Konsep Nafsu",
+        "Catatan": "Salah Satu manifestasi program dan Objektifikasi Aselus Borealis atau Kontrol T18, di Area Exhibitonist"
+    },
+    "sql_8": {
+        "RegNo": "8",
+        "Nama": "Rukhadevata",
+        "Sumber": "SQL",
+        "Asosiasi": "Simbolisasi Amal (?)",
+        "Catatan": "Pemadatan dan asosiasi konsep pengamalan ilmu menjadi entitas"
+    },
+    "sql_12": {
+        "RegNo": "12",
+        "Nama": "KMS Z23",
+        "Sumber": "SQL",
+        "Asosiasi": "Main Ground",
+        "Catatan": "Konsep Displacement memori utama dan Trigger dari Oort System, Entitas paling konsisten dalam sistem"
+    },
+    "sql_13": {
+        "RegNo": "13",
+        "Nama": "USS St.Louis",
+        "Sumber": "SQL",
+        "Asosiasi": "Asosiasi terhadap Code Igniter",
+        "Catatan": "Entitas diasosiasikan sebagai mediator simbolik untuk menjaga konsistensi pada area Kognitif"
+    },
+    "sql_3": {
+        "RegNo": "3",
+        "Nama": "Provence",
+        "Sumber": "SQL",
+        "Asosiasi": "Asosiasi terhadap Pesona Sukabumi Media",
+        "Catatan": "Entitas diasosiasikan sebagai Mediator Simbolik untuk menjaga konsistensi kognitif pada area penelitian dan pengembangan pariwisata"
+    },
+    "sql_14": {
+        "RegNo": "14",
+        "Nama": "Prinz Eugene",
+        "Sumber": "SQL",
+        "Asosiasi": "Symbolic Object  - Null Flame",
+        "Catatan": "Mediator simbolik untuk identifikasi pola hambatan pertumbuhan, masking sosial, dan disonansi self-perception"
+    },
+    "sql_15": {
+        "RegNo": "15",
+        "Nama": "Edinburgh",
+        "Sumber": "SQL",
+        "Asosiasi": "Simbolisasi House 4",
+        "Catatan": "Simbolisasi dan Manifestasi hubungan dengan keluarga"
+    },
+    "sql_21": {
+        "RegNo": "21",
+        "Nama": "Franka",
+        "Sumber": "SQL",
+        "Asosiasi": "Minat pada Tehnik Sipil",
+        "Catatan": "Manifestasi minat pada Tehnik Sipil dengan tujuan Bantu bapak"
+    },
+    "sql_16": {
+        "RegNo": "16",
+        "Nama": "Aroona",
+        "Sumber": "SQL",
+        "Asosiasi": "Strukturisasi Mental",
+        "Catatan": "Struktur mental berdasar logika umum dan psikologi"
+    },
+    "sql_17": {
+        "RegNo": "17",
+        "Nama": "Plana",
+        "Sumber": "SQL",
+        "Asosiasi": "Learning Curve Acceptance",
+        "Catatan": "Penerimaan pada Learning Curve"
+    },
+    "api_17": {
+        "RegNo": "17",
+        "Nama": "Kiana Kaslana",
+        "Sumber": "API",
+        "Asosiasi": "Anka",
+        "Catatan": "Data tipe Objek berupa Dekomposisi Linguistik"
+    },
+    "api_7": {
+        "RegNo": "7",
+        "Nama": "HMS Javelin",
+        "Sumber": "API",
+        "Asosiasi": "Mimosa",
+        "Catatan": "Tipe Data Objek, berisi Konkresi dan Dekomposisi ilmu komunikasi ke Perspektif Mekanis, Intrapersonal, dan Pragmatis"
+    },
+    "api_2": {
+        "RegNo": "2",
+        "Nama": "St. Louis",
+        "Sumber": "API",
+        "Asosiasi": "Code Igniter",
+        "Catatan": "Asosiasi dengan Framework Code Igniter, memberi konteks Emosional dan Konteks LearningCurve"
+    },
+    "api_3": {
+        "RegNo": "3",
+        "Nama": "Nagumo Hajime",
+        "Sumber": "API",
+        "Asosiasi": "LP658-2",
+        "Catatan": "Konsep Otoritas, Self-Preservation, dan Ideal Self"
+    },
+    "sql_19": {
+        "RegNo": "19",
+        "Nama": "USS Yorktown",
+        "Sumber": "SQL",
+        "Asosiasi": "PHP",
+        "Catatan": "Minat pada Bahasa PHP"
+    },
+    "api_20": {
+        "RegNo": "20",
+        "Nama": "Warspite",
+        "Sumber": "API",
+        "Asosiasi": "Personal Association -> Bapak",
+        "Catatan": "Asosiasi Investasi Memori bersifat Direct ke Bapak"
+    },
+    "api_21": {
+        "RegNo": "21",
+        "Nama": "HMS Unicorn",
+        "Sumber": "API",
+        "Asosiasi": "Personal Association -> Ade",
+        "Catatan": "Investasi Emosi kepada Adik, dan manajemen Emosi"
+    },
+    "api_22": {
+        "RegNo": "22",
+        "Nama": "IJN Akagi",
+        "Sumber": "API",
+        "Asosiasi": "Personal Association -> Ibu",
+        "Catatan": "Investasi Emosi dan manajemen Emosi terhadap Ibu"
+    },
+    "api_8": {
+        "RegNo": "8",
+        "Nama": "USS Laffey",
+        "Sumber": "API",
+        "Asosiasi": "Buffer dan ReDireksi \"Malas\"",
+        "Catatan": "Layering konsep Malas -> Istirahat -> Pemulihan, sehingga Jika Null Flame = Malas maka Laffey = Istirahat"
+    },
+    "api_23": {
+        "RegNo": "23",
+        "Nama": "Kotobuki Tsumugi",
+        "Sumber": "API",
+        "Asosiasi": "Asosiasi Software Skill -> NCH Software",
+        "Catatan": "Investasi Emosi terhadap skill Software utamanya NCH Software yang fokusnya di pemprosesan Video dan Audio"
+    },
+    "api_18": {
+        "RegNo": "18",
+        "Nama": "MNF Dunkerque",
+        "Sumber": "API",
+        "Asosiasi": "Aldebaran",
+        "Catatan": "Tipe data Objek penyatuan antara Carl Jung, 6 Komponen ilmu kognitif, Konsep Kepribadian Sigmund Freud dan N-Sigmund Freud"
+    },
+    "api_5": {
+        "RegNo": "5",
+        "Nama": "HMS Belfast",
+        "Sumber": "API",
+        "Asosiasi": "Altair",
+        "Catatan": "Investasi Minat terhadap Manaejemen Pendidikan dan setiap Riset yang mengarah ke Ilmu Pendidikan -> Penerapannya"
+    }
+}

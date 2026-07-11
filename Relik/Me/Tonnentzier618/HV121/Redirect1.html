@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirect Timer</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      color: #e5e7eb;
+    }
+
+    .card {
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 24px 28px;
+      border-radius: 14px;
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: .95rem;
+      color: #94a3b8;
+      margin-bottom: 18px;
+    }
+
+    .timer {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #38bdf8;
+    }
+
+    button {
+      display: none;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #38bdf8;
+      color: #020617;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Menyiapkan Halaman</h2>
+    <p>Silakan tunggu sebentar sebelum melanjutkan</p>
+
+    <div class="timer" id="timer">5</div>
+
+    <button id="goBtn">Lanjutkan</button>
+  </div>
+
+  <script>
+    /* =========================
+       KONDISI VARIABEL A
+       ========================= */
+    
+    const urls = [
+        "https://c.oort678.my.id/Test/XGF34/Mimosa.php",
+        "https://c.oort678.my.id/Test/XGF34/formalhault.php",
+        "https://c.oort678.my.id/Test/XGF34/Diphda.php",
+        "https://oort678.my.id/About",
+        "https://sites.google.com/view/oort-altair/halaman-muka",
+        "https://sites.google.com/view/akibahito/les-go?authuser=0",
+        "https://sites.google.com/view/temporal-mercury/replicia",
+        "https://c.oort678.my.id/",
+        "https://c.oort678.my.id/HD140283/Betelgeuse/",
+        "https://c.oort678.my.id/HD140283/Spica/Spica-Optimist.php",
+        "https://c.oort678.my.id/HD140283/Spica/Spica-Pesimist.php",
+        "https://urakawahanako.github.io/Lilith/",
+        "https://witty-willow-eb5.notion.site/Oort-3685466ed1ca80ef8882f248a78874c7",
+        "https://lms.ummi.ac.id/main/student_login"
+    ];
+    
+    let targetUrl = urls[Math.floor(Math.random() * urls.length)];
+
+
+    /* =========================
+       TIMER 5 DETIK
+       ========================= */
+    let timeLeft = 5;
+    const timerEl = document.getElementById("timer");
+    const btn = document.getElementById("goBtn");
+
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        timerEl.style.display = "none";
+        btn.style.display = "block";
+      }
+    }, 1000);
+
+    /* =========================
+       BUTTON ACTION
+       ========================= */
+    btn.addEventListener("click", () => {
+      window.location.href = targetUrl;
+      // atau pakai replace:
+      // window.location.replace(targetUrl);
+    });
+  </script>
+
+</body>
+</html>

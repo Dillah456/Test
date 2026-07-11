@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amiya — Quotes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #131720;
+    --surface2: #181d29;
+    --border: #262d3e;
+    --border2: #313a52;
+    --gold: #7aabcc;
+    --gold2: #a8d4f0;
+    --blue: #7aa3c4;
+    --red: #c47a7a;
+    --text: #cdd8e3;
+    --muted: #6b7d8f;
+    --dim: #3e4f60;
+    --active-bg: #141c2a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .site-header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--gold);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .site-header h1 {
+    font-size: 2.4rem;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    color: var(--gold2);
+    line-height: 1;
+  }
+
+  .site-header .sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .header-meta {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .header-meta strong {
+    display: block;
+    color: var(--gold);
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
+
+  .lang-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-bar span {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-right: 10px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .lang-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: bold; }
+
+  #np-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gold);
+    padding: 10px 40px;
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #np-bar.on { display: flex; }
+
+  .np-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: blink 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  #np-label {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--gold2);
+  }
+
+  #np-label small { color: var(--muted); font-size: 0.72rem; margin-left: 8px; }
+
+  #np-stop {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Georgia', serif;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  #np-stop:hover { border-color: var(--red); color: var(--red); }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+  }
+
+  .skin-block { margin-bottom: 52px; }
+
+  .skin-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .skin-heading h2 {
+    font-size: 1.15rem;
+    font-weight: normal;
+    color: var(--gold2);
+    letter-spacing: 0.03em;
+  }
+
+  .skin-count {
+    font-size: 0.68rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .qt {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .qt colgroup col:nth-child(1) { width: 200px; }
+  .qt colgroup col:nth-child(2) { width: 110px; }
+  .qt colgroup col:nth-child(3) { width: auto; }
+
+  .qt thead th {
+    padding: 7px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: left;
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .qt tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+
+  .qt tbody tr:hover { background: var(--active-bg); }
+  .qt tbody tr.playing { background: var(--active-bg); }
+  .qt tbody tr.playing td.ev-cell { color: var(--gold); }
+
+  .qt td {
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+
+  td.ev-cell {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 13px;
+    transition: color 0.15s;
+    word-break: break-word;
+  }
+
+  td.play-cell {
+    padding-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .lang-group {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .lang-label {
+    font-size: 0.58rem;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .lang-group.active-lang .lang-label { color: var(--gold); }
+
+  a.play-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 9px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  a.play-link:hover { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+  tr.playing a.play-link.active { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+
+  a.play-link .ico-play { display: inline; }
+  a.play-link .ico-pause { display: none; }
+  a.play-link.playing .ico-play { display: none; }
+  a.play-link.playing .ico-pause { display: inline; }
+
+  .no-audio {
+    display: inline-block;
+    width: 28px;
+    text-align: center;
+    color: var(--border2);
+    font-size: 12px;
+  }
+
+  td.text-cell {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .dl-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dl-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .dl-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+  a.dl-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 8px;
+    transition: all 0.15s;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  a.dl-link:hover { border-color: var(--blue); color: var(--blue); }
+  a.dl-link svg { width: 9px; height: 9px; fill: currentColor; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    font-size: 0.72rem;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+
+  footer a { color: var(--blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .site-header, .lang-bar, .page { padding-left: 16px; padding-right: 16px; }
+    #np-bar { padding: 10px 16px; }
+    .qt colgroup col:nth-child(1) { width: 110px; }
+    .qt colgroup col:nth-child(2) { width: 90px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>Amiya</h1>
+    <div class="sub">アーミヤ · Rhodes Island · Caster / Guard / Medic</div>
+  </div>
+  <div class="header-meta">
+    <strong id="total-n">—</strong>
+    audio lines
+  </div>
+  <div style="margin-left:16px; align-self:center;">
+    <button class="dl-btn" id="dl-all-btn" title="Download all audio files">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>
+      Download All Audio
+    </button>
+  </div>
+</header>
+
+<div class="lang-bar">
+  <span>Voice Language</span>
+  <button class="lang-btn active" data-lang="JP">JP</button>
+  <button class="lang-btn" data-lang="CN">CN</button>
+  <button class="lang-btn" data-lang="EN">EN</button>
+  <button class="lang-btn" data-lang="KR">KR</button>
+</div>
+
+<div id="np-bar">
+  <div class="np-dot"></div>
+  <div id="np-label">— <small></small></div>
+  <button id="np-stop">Stop</button>
+</div>
+
+<div class="page" id="main"></div>
+
+<footer>
+  Source: <a href="https://arknights.wiki.gg/wiki/Amiya/Dialogue" target="_blank">Arknights Terra Wiki</a>
+  &nbsp;·&nbsp; Audio © HyperGryph / Yostar
+</footer>
+
+<audio id="aud"></audio>
+
+<script>
+const DATA = [
+  {
+    "event": "Appointed as Assistant",
+    "text": "You work so hard, Doctor.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-001.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-001-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-001-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-001-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk 1",
+    "text": "Dr. Kal'tsit told me you have to be 100% focused on your work to maximize efficiency. So... yes, that's what I'm gonna do!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-002.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-002-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-002-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-002-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk 2",
+    "text": "Rhodes Island has achieved cruising speed, Doctor. Would you mind sorting out the navigation log for me?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-003.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-003-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-003-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-003-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk 3",
+    "text": "I still have a lot to learn as leader of Rhodes Island. I hope you'll be there to guide me on our path to the future.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-004.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-004-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-004-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-004-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk after Promotion 1",
+    "text": "Maybe it's just wishful thinking, but I hope Rhodes Island can be like a second home to everyone.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-005.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-005-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-005-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-005-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk after Promotion 2",
+    "text": "Making it this far has cost us so much. Sometimes, I can't help but ask myself... is it really worth it?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-006.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-006-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-006-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-006-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk after Trust Increase 1",
+    "text": "Sometimes I remember where I came from... It was cold, and the air smelled of rusted copper. Rhodes Island is a cozy place in comparison. I'll do everything I can to protect our home.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-007.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-007-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-007-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-007-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk after Trust Increase 2",
+    "text": "Hehe... Dr. [Doctor], let me tell you something: I picked up the violin again.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-008.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-008-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-008-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-008-KR.ogg"
+    }
+  },
+  {
+    "event": "Talk after Trust Increase 3",
+    "text": "We've still got a long, long way to go, Doctor. This might be a journey without an end, but as long as you're with me, we'll be okay.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-009.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-009-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-009-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-009-KR.ogg"
+    }
+  },
+  {
+    "event": "Idle",
+    "text": "There's still lots of work that needs to be done, Doctor. We can't afford to have you resting.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-010.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-010-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-010-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-010-KR.ogg"
+    }
+  },
+  {
+    "event": "Onboard",
+    "text": "I'm so glad you're back, Doctor. Now we can walk this path together, me with you, and you with me.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-011.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-011-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-011-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-011-KR.ogg"
+    }
+  },
+  {
+    "event": "Watching Battle Record",
+    "text": "I see... thank you, Doctor! I've learned so much from you.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-012.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-012-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-012-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-012-KR.ogg"
+    }
+  },
+  {
+    "event": "Promotion 1",
+    "text": "I'm so excited to fight by your side again, Doctor!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-013.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-013-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-013-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-013-KR.ogg"
+    }
+  },
+  {
+    "event": "Promotion 2",
+    "text": "What I saw that day... the despair stuck in my throat, hopelessly trying to scream... I want to bury it all deep inside my mind and never let it out...",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-014.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-014-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-014-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-014-KR.ogg"
+    }
+  },
+  {
+    "event": "Added to Squad",
+    "text": "Got it.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-015.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-015-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-015-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-015-KR.ogg"
+    }
+  },
+  {
+    "event": "Appointed as Squad Leader",
+    "text": "I won't let you down.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-016.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-016-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-016-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-016-KR.ogg"
+    }
+  },
+  {
+    "event": "Depart",
+    "text": "Operation commencing!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-017.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-017-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-017-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-017-KR.ogg"
+    }
+  },
+  {
+    "event": "Begin Operation",
+    "text": "Incoming! Get ready, everyone!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-018.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-018-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-018-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-018-KR.ogg"
+    }
+  },
+  {
+    "event": "Selecting Operator 1",
+    "text": "Here.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-019.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-019-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-019-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-019-KR.ogg"
+    }
+  },
+  {
+    "event": "Selecting Operator 2",
+    "text": "I'm right here, Doctor.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-020.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-020-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-020-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-020-KR.ogg"
+    }
+  },
+  {
+    "event": "Deployment 1",
+    "text": "Got it!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-021.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-021-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-021-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-021-KR.ogg"
+    }
+  },
+  {
+    "event": "Deployment 2",
+    "text": "Roger.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-022.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-022-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-022-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-022-KR.ogg"
+    }
+  },
+  {
+    "event": "In Battle 1",
+    "text": "I know what you're thinking.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-023.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-023-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-023-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-023-KR.ogg"
+    }
+  },
+  {
+    "event": "In Battle 2",
+    "text": "Everyone believes in me...",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-024.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-024-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-024-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-024-KR.ogg"
+    }
+  },
+  {
+    "event": "In Battle 3",
+    "text": "Are you afraid of me?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-025.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-025-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-025-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-025-KR.ogg"
+    }
+  },
+  {
+    "event": "In Battle 4",
+    "text": "I hear... someone crying?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-026.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-026-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-026-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-026-KR.ogg"
+    }
+  },
+  {
+    "event": "4-star Result",
+    "text": "No matter how difficult the mission, we can handle it as long as you're here, Doctor. I've never doubted you.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-027.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-027-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-027-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-027-KR.ogg"
+    }
+  },
+  {
+    "event": "3-star Result",
+    "text": "We may have achieved a perfect victory, but we still can't let our guard down.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-028.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-028-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-028-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-028-KR.ogg"
+    }
+  },
+  {
+    "event": "Sub 3-star Result",
+    "text": "Well done, Doctor! You must be exhausted. Be sure to rest when you need it.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-029.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-029-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-029-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-029-KR.ogg"
+    }
+  },
+  {
+    "event": "Operation Failure",
+    "text": "I'm fine... Get it together, everyone!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-030.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-030-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-030-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-030-KR.ogg"
+    }
+  },
+  {
+    "event": "Assigned to Facility",
+    "text": "You want something to drink, Doctor?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-031.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-031-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-031-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-031-KR.ogg"
+    }
+  },
+  {
+    "event": "Tap",
+    "text": "Huh? Doctor?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-032.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-032-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-032-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-032-KR.ogg"
+    }
+  },
+  {
+    "event": "Trust Tap",
+    "text": "Ehehe...",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-033.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-033-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-033-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-033-KR.ogg"
+    }
+  },
+  {
+    "event": "Greeting",
+    "text": "Welcome home, Doctor!",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-034.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-034-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-034-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-034-KR.ogg"
+    }
+  },
+  {
+    "event": "Title",
+    "text": "Arknights.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-035.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-035-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-035-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-035-KR.ogg"
+    }
+  },
+  {
+    "event": "Anniversary Celebration",
+    "text": "I remember the names of those who've left us, and I can still feel the lingering fear, rage, and pain of battle. But if I'm to give a speech in front of everyone, I want to tell a story of hope instead. Doctor, I'm a little nervous... Could you hold my hand, please?",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-036.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-036-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-036-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-036-KR.ogg"
+    }
+  },
+  {
+    "event": "New Year Wishes",
+    "text": "Happy New Year, Doctor! Please make sure you get lots of rest today... Y-You've already worked for the better part of the day? Did I get here too late? Sorry...Blaze just asked me to get my height measured... Oh, you're just joking? Thank goodness.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-037.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-037-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-037-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-037-KR.ogg"
+    }
+  },
+  {
+    "event": "Birthday",
+    "text": "Doctor, if you can remember even some of your past... That would make me really happy. Right, I'm still not very good at the violin, but... since you're the only one here to listen, there's a song I'd like to practice. A sort of nostalgic song.",
+    "urls": {
+      "JP": "https://arknights.wiki.gg/images/Amiya-038.ogg",
+      "CN": "https://arknights.wiki.gg/images/Amiya-038-CN.ogg",
+      "EN": "https://arknights.wiki.gg/images/Amiya-038-EN.ogg",
+      "KR": "https://arknights.wiki.gg/images/Amiya-038-KR.ogg"
+    }
+  }
+];
+
+const LANGS = ['JP', 'CN', 'EN', 'KR'];
+let currentLang = 'JP';
+let activeLink = null;
+
+const aud = document.getElementById('aud');
+const npBar = document.getElementById('np-bar');
+const npLabel = document.getElementById('np-label');
+const npStop = document.getElementById('np-stop');
+const main = document.getElementById('main');
+
+function stopAll() {
+  aud.pause();
+  aud.src = '';
+  if (activeLink) { activeLink.classList.remove('playing'); activeLink = null; }
+  npBar.classList.remove('on');
+}
+
+npStop.addEventListener('click', stopAll);
+aud.addEventListener('ended', stopAll);
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.dataset.lang;
+    // Highlight active lang group
+    document.querySelectorAll('.lang-group').forEach(g => {
+      g.classList.toggle('active-lang', g.dataset.lang === currentLang);
+    });
+  });
+});
+
+const DL_SVG = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>`;
+
+// Group lines into sections
+const sections = [
+  { name: 'General', events: ['Appointed as Assistant','Talk 1','Talk 2','Talk 3','Talk after Promotion 1','Talk after Promotion 2','Talk after Trust Increase 1','Talk after Trust Increase 2','Talk after Trust Increase 3','Idle','Onboard','Watching Battle Record','Promotion 1','Promotion 2'] },
+  { name: 'Deployment', events: ['Added to Squad','Appointed as Squad Leader','Depart','Begin Operation','Selecting Operator 1','Selecting Operator 2','Deployment 1','Deployment 2','In Battle 1','In Battle 2','In Battle 3','In Battle 4','4-star Result','3-star Result','Sub 3-star Result','Operation Failure'] },
+  { name: 'Base & Interaction', events: ['Assigned to Facility','Tap','Trust Tap','Greeting','Title'] },
+  { name: 'Special', events: ['Anniversary Celebration','New Year Wishes','Birthday'] },
+];
+
+let audioCount = 0;
+
+sections.forEach(section => {
+  const sectionLines = DATA.filter(l => section.events.includes(l.event));
+  if (!sectionLines.length) return;
+
+  const withAudio = sectionLines.filter(l => l.urls && Object.keys(l.urls).length > 0).length;
+  audioCount += withAudio;
+
+  const block = document.createElement('div');
+  block.className = 'skin-block';
+  block.innerHTML = `
+    <div class="skin-heading">
+      <h2>${section.name}</h2>
+      <span class="skin-count">${withAudio} audio · ${sectionLines.length} lines</span>
+    </div>`;
+
+  const table = document.createElement('table');
+  table.className = 'qt';
+  table.innerHTML = `
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Event</th><th>▶ Voice</th><th>Transcription (EN)</th></tr></thead>`;
+
+  const tbody = document.createElement('tbody');
+
+  sectionLines.forEach(line => {
+    const tr = document.createElement('tr');
+
+    // Build play cell with JP/CN/EN/KR buttons
+    let playHtml = '<td class="play-cell">';
+    LANGS.forEach(lang => {
+      const url = line.urls && line.urls[lang];
+      const isActive = lang === currentLang;
+      if (url) {
+        playHtml += `<div class="lang-group${isActive ? ' active-lang' : ''}" data-lang="${lang}">
+          <span class="lang-label">${lang}</span>
+          <a class="play-link" href="${url}" data-lang="${lang}" data-event="${line.event}">
+            <span class="ico-play">▶</span><span class="ico-pause">⏸</span>
+          </a>
+        </div>`;
+      } else {
+        playHtml += `<div class="lang-group${isActive ? ' active-lang' : ''}" data-lang="${lang}">
+          <span class="lang-label">${lang}</span>
+          <span class="no-audio">—</span>
+        </div>`;
+      }
+    });
+    playHtml += '</td>';
+
+    tr.innerHTML = `
+      <td class="ev-cell">${line.event}</td>
+      ${playHtml}
+      <td class="text-cell">${line.text || '<em style="color:var(--dim)">—</em>'}</td>`;
+
+    // Attach play events
+    tr.querySelectorAll('a.play-link').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const url = a.href;
+        if (activeLink === a) { stopAll(); return; }
+        if (activeLink) activeLink.classList.remove('playing');
+        activeLink = a;
+        a.classList.add('playing');
+        aud.src = url;
+        aud.play();
+        npBar.classList.add('on');
+        npLabel.innerHTML = `${line.event} <small>${a.dataset.lang}</small>`;
+      });
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  block.appendChild(table);
+  main.appendChild(block);
+});
+
+document.getElementById('total-n').textContent = audioCount;
+
+// Download All (current lang)
+document.getElementById('dl-all-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('dl-all-btn');
+  const allUrls = DATA
+    .filter(l => l.urls && l.urls[currentLang])
+    .map(l => ({ url: l.urls[currentLang], name: l.urls[currentLang].split('/').pop() }));
+  btn.textContent = `Downloading ${currentLang}…`;
+  btn.disabled = true;
+  let i = 0;
+  for (const { url, name } of allUrls) {
+    try {
+      const resp = await fetch(url);
+      const blob = await resp.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    } catch(e) { console.warn('Failed:', url, e); }
+    i++;
+    btn.textContent = `Downloading… ${i}/${allUrls.length}`;
+    await new Promise(r => setTimeout(r, 350));
+  }
+  btn.textContent = '✓ Done!';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = `${DL_SVG} Download All Audio`;
+  }, 2000);
+});
+</script>
+</body>
+</html>

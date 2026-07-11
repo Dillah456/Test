@@ -1,0 +1,82 @@
+[
+    {
+        "Item_Name": "Rose Quartz",
+        "Quantity": 0,
+        "HPP": 50,
+        "Jenis": "Mineral",
+        "Keterangan": "Kristal merah muda lembut yang dipercaya mampu menenangkan emosi dan memperkuat ikatan antar individu.",
+        "Id": 1
+    },
+    {
+        "Item_Name": "Pyroexene",
+        "Quantity": 47,
+        "HPP": 25,
+        "Jenis": "Material",
+        "Keterangan": "Null Flame",
+        "Id": 2
+    },
+    {
+        "Item_Name": "Originium",
+        "Quantity": 98,
+        "HPP": 50,
+        "Jenis": "Material",
+        "Keterangan": "Anggapan material emosional dari kondensasi Adrenal",
+        "Id": 3
+    },
+    {
+        "Item_Name": "Hikoboshi",
+        "Quantity": 1,
+        "HPP": 120,
+        "Jenis": "Relic",
+        "Keterangan": "Pedang yang terkena alkalisasi originium, Sedikit tumpul tapi keras, ketajamannya didapat dari getaran Originium",
+        "Id": 4
+    },
+    {
+        "Item_Name": "Boreas CRD-R(5A32V)-QSA-CL160",
+        "Quantity": 2,
+        "HPP": 5,
+        "Jenis": "Mekanik",
+        "Keterangan": "Modul Eksekutor dari Seri boreas dengan tenaga 160watt, dapat digunakan untuk konversi impuls.",
+        "Id": 5
+    },
+    {
+        "Item_Name": "Boreas BBD-STU(2A)-BSA-THR",
+        "Quantity": 2,
+        "HPP": 60,
+        "Jenis": "Mekanik",
+        "Keterangan": "Modul Boreas seri BBD, berupa Impuls builder.",
+        "Id": 6
+    },
+    {
+        "Item_Name": "Altair SGD-D(5A12V4Ohm)-BSA-LC60Watt",
+        "Quantity": 3,
+        "HPP": 25,
+        "Jenis": "Mekanik",
+        "Keterangan": "Modul Altair, tipe Generator dan Sumber motivasi dengan output 60Watt",
+        "Id": 7
+    },
+    {
+        "Item_Name": "Luna BBD45v",
+        "Quantity": 10,
+        "HPP": 10,
+        "Jenis": "Mekanik",
+        "Keterangan": "Baterai untuk sistem luna",
+        "Id": 8
+    },
+    {
+        "Item_Name": "Streaming Anime - 24Eps",
+        "Quantity": 1,
+        "HPP": 30,
+        "Jenis": "Entertainment",
+        "Keterangan": "30k RP di dunia nyata untuk menamatkan 2 Season anime, kira kira ini semacam pengingat saja !",
+        "Id": 9
+    },
+    {
+        "Item_Name": "Doom Scroll Allowance",
+        "Quantity": 2,
+        "HPP": 30,
+        "Jenis": "Plan",
+        "Keterangan": "30k Rp paket data Doom Scrolling di Axis dan Telkomsel",
+        "Id": 10
+    }
+]

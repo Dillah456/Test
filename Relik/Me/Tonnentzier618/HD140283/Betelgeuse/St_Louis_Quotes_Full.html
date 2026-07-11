@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>St. Louis — Quotes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #131720;
+    --surface2: #181d29;
+    --border: #262d3e;
+    --border2: #313a52;
+    --gold: #7aabcc;
+    --gold2: #a8d4f0;
+    --blue: #7aa3c4;
+    --red: #c47a7a;
+    --text: #cdd8e3;
+    --muted: #6b7d8f;
+    --dim: #3e4f60;
+    --active-bg: #141c2a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--gold);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .site-header h1 {
+    font-size: 2.4rem;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    color: var(--gold2);
+    line-height: 1;
+  }
+
+  .site-header .sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .header-meta {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .header-meta strong {
+    display: block;
+    color: var(--gold);
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
+
+  /* ── LANG SWITCHER ── */
+  .lang-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-bar span {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-right: 10px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .lang-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: bold; }
+
+  /* ── NOW PLAYING ── */
+  #np-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gold);
+    padding: 10px 40px;
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #np-bar.on { display: flex; }
+
+  .np-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: blink 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  #np-label {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--gold2);
+  }
+
+  #np-label small { color: var(--muted); font-size: 0.72rem; margin-left: 8px; }
+
+  #np-stop {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Georgia', serif;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  #np-stop:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── MAIN LAYOUT ── */
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+  }
+
+  /* ── SKIN SECTION ── */
+  .skin-block {
+    margin-bottom: 52px;
+  }
+
+  .skin-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .skin-heading h2 {
+    font-size: 1.15rem;
+    font-weight: normal;
+    color: var(--gold2);
+    letter-spacing: 0.03em;
+  }
+
+  .skin-count {
+    font-size: 0.68rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  /* ── TABLE ── */
+  .qt {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .qt colgroup col:nth-child(1) { width: 180px; }
+  .qt colgroup col:nth-child(2) { width: 60px; }
+  .qt colgroup col:nth-child(3) { width: auto; }
+
+  .qt thead th {
+    padding: 7px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: left;
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .qt tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+
+  .qt tbody tr:hover { background: var(--active-bg); }
+  .qt tbody tr.playing { background: var(--active-bg); }
+  .qt tbody tr.playing td.ev-cell { color: var(--gold); }
+
+  .qt td {
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+
+  td.ev-cell {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 13px;
+    transition: color 0.15s;
+    word-break: break-word;
+  }
+
+  td.play-cell {
+    text-align: center;
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  a.play-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 10px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  a.play-link:hover,
+  tr.playing a.play-link {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+  }
+
+  a.play-link .ico-play { display: inline; }
+  a.play-link .ico-pause { display: none; }
+  tr.playing a.play-link .ico-play { display: none; }
+  tr.playing a.play-link .ico-pause { display: inline; }
+
+  .no-audio {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    color: var(--border2);
+    font-size: 12px;
+  }
+
+  td.text-cell {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  td.text-cell .lang-text { display: none; }
+  td.text-cell .lang-text.visible { display: block; }
+
+  td.text-cell .lang-text em {
+    color: var(--dim);
+    font-style: italic;
+    font-size: 0.82rem;
+  }
+
+  /* ── DOWNLOAD BUTTON ── */
+  .dl-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    padding: 5px 16px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dl-btn:hover { border-color: var(--gold); color: var(--gold2); }
+  .dl-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+  a.dl-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 9px;
+    transition: all 0.15s;
+    cursor: pointer;
+    margin-left: 4px;
+    flex-shrink: 0;
+  }
+  a.dl-link:hover { border-color: var(--blue); color: var(--blue); }
+  a.dl-link svg { width: 10px; height: 10px; fill: currentColor; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    font-size: 0.72rem;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+
+  footer a { color: var(--blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .site-header, .lang-bar, .page { padding-left: 16px; padding-right: 16px; }
+    #np-bar { padding: 10px 16px; }
+    .qt colgroup col:nth-child(1) { width: 110px; }
+    .qt colgroup col:nth-child(2) { width: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>St. Louis</h1>
+    <div class="sub">セントルイス · Lucky Lou · Azur Lane</div>
+  </div>
+  <div class="header-meta">
+    <strong id="total-n">—</strong>
+    audio lines
+  </div>
+  <div style="margin-left:16px; align-self:center;">
+    <button class="dl-btn" id="dl-all-btn" title="Download all audio files">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>
+      Download All Audio
+    </button>
+  </div>
+</header>
+
+<div class="lang-bar">
+  <span>Language</span>
+  <button class="lang-btn active" data-lang="en">English</button>
+  <button class="lang-btn" data-lang="cn">中文</button>
+  <button class="lang-btn" data-lang="jp">日本語</button>
+</div>
+
+<div id="np-bar">
+  <div class="np-dot"></div>
+  <div id="np-label">— <small></small></div>
+  <button id="np-stop">Stop</button>
+</div>
+
+<div class="page" id="main"></div>
+
+<footer>
+  Source: <a href="https://azurlane.koumakan.jp/wiki/St._Louis/Quotes" target="_blank">Azur Lane Wiki</a>
+  &nbsp;·&nbsp; Audio © Yostar / Manjuu / Yongshi
+</footer>
+
+<audio id="aud"></audio>
+
+<script>
+const DATA = [{"skin": "Default Skin", "lines": [{"event": "Ship Description", "url": "", "en": "Brooklyn-class Light Cruiser – St. Louis, Hull Number CL-49!", "cn": "布鲁克林级轻巡洋舰—圣路易斯，舷号CL-49", "jp": "ブルックリン級巡洋艦・セントルイス(CL-49)"}, {"event": "Self Introduction", "url": "https://azurlane.netojuu.com/images/5/55/St._Louis_SelfIntroJP.ogg", "en": "I'm St. Louis, Helena's big sister. I got my nickname, Lucky Lou, from getting through the attack on Pearl Harbor unscathed. After that, however, my missions didn't go all that well. I guess luck really does come and go after all...", "cn": "嘿嘿，我是圣路易斯，嗯，海伦娜是我可爱的妹妹哟。因为在珍珠港中毫发无伤得到了“Lucky Lou”的绰号，不过那之后的反击搜寻并不顺利，果然幸运是不会在一个人身上长久停驻的啊……", "jp": "うふふ、私はセントルイス、ヘレナの姉よ。かの真珠湾での戦いを無傷で乗り越えたお陰でLucky Louのニックネームを貰ったけど、その後の作戦行動はあまり上手く行かなかったわ。運ってやっぱり流れるものなのよ……"}, {"event": "Acquisition", "url": "https://azurlane.netojuu.com/images/3/3d/St._Louis_IntroJP.ogg", "en": "Hello, I'm St. Louis, but I'm called Lucky Lou. Hey, Commander, don't you think it's your lucky day, finding me like this?[", "cn": "hello~指挥官，我是被称为Lucky Lou的圣路易斯~。看到我后有没有觉得自己今天的运气变好了一点呢？", "jp": "ハロー、私はLucky Lou（ラッキー・ルー）と呼ばれたセントルイスよ。私を見つけて、今日はラッキーだって思わないかな？指揮官くん♪"}, {"event": "Login", "url": "https://azurlane.netojuu.com/images/9/97/St._Louis_LogJP.ogg", "en": "Luck never stays with one person for too long, Commander. We should make the best use of it while we still have it.", "cn": "指挥官，好运是不会长久眷顾一人的……所以，趁着运势尚佳，去大干一场吧！", "jp": "指揮官くん、運ってのは流れるものなのよ？流れが来ているうち、思いっきりやっちゃって"}, {"event": "Details", "url": "https://azurlane.netojuu.com/images/0/09/St._Louis_DetailsJP.ogg", "en": "Unlike those Sakura Empire ships, I don't bring any misfortune to my allies. Probably… I hope…", "cn": "我可不像重樱的那几艘船一样，会为队友招来厄运……大概……", "jp": "重桜のあの子たちのような、味方に悪運をもたらす船じゃないわよ？……多分……ねぇ…"}, {"event": "Secretary (Idle) 1", "url": "https://azurlane.netojuu.com/images/6/6c/St._Louis_SecIdle1JP.ogg", "en": "What are you looking at, Commander?", "cn": "嘻嘻~指挥官，你在看什么呢？", "jp": "うふふ、指揮官くん、何を見てるの？"}, {"event": "Secretary (Idle) 2", "url": "https://azurlane.netojuu.com/images/e/ed/St._Louis_SecIdle2JP.ogg", "en": "Helena, your SG radar can't detect underwater threats.", "cn": "海伦娜，SG雷达可监听不了水下", "jp": "ヘレナ、SGは水面下のことじゃわからないわ"}, {"event": "Secretary (Idle) 3", "url": "https://azurlane.netojuu.com/images/d/d2/St._Louis_SecIdle3JP.ogg", "en": "Arizona, even if you'll never forget what happened that day, you shouldn't let it wear you down so much.", "cn": "亚利桑那，即使无法忘记过去的悲伤，也不要太过沉浸其中比较好唷", "jp": "アリゾナ、あの時のことを忘れられなくても、あまり引きずらないほうがいいわ"}, {"event": "Secretary (Touch)", "url": "https://azurlane.netojuu.com/images/8/8e/St._Louis_Sec1JP.ogg", "en": "You get good luck if you touch me? I've never heard of that before.", "cn": "碰触我运气就会变好？好像没有这种传闻呢", "jp": "私を触ると運が良くなるって？そんな話、聞いたこと無いけど？"}, {"event": "Secretary (Special Touch)", "url": "https://azurlane.netojuu.com/images/7/71/St._Louis_Sec2JP.ogg", "en": "This isn't something you should do outside, Co-man-der~", "cn": "有些事情，在外面是不可以做的哟，指·挥·官", "jp": "こういうの、外でするものじゃないわよ。指揮官くん♡"}, {"event": "Task", "url": "https://azurlane.netojuu.com/images/a/aa/St._Louis_TaskJP.ogg", "en": "Hey, Commander, you should prepare yourself for a real surprise.", "cn": "嘿嘿，指挥官，请做好与惊喜邂逅的准备哟", "jp": "うふふ、指揮官くん、サプライズに逢う準備をしてちょうだい"}, {"event": "Task Complete", "url": "https://azurlane.netojuu.com/images/3/3f/St._Louis_TaskCJP.ogg", "en": "Hehe... You're so spoiled, Commander... Okay, before you go and collect those rewards, you can stay here for a while and rest if you want.", "cn": "嘻嘻，指挥官真是爱撒娇呢……那么，就稍微让你枕一会好了~", "jp": "うふふ、指揮官くんは甘えん坊ね……任務報酬を受け取る前に、少しだけここで横になってもいいわよ"}, {"event": "Mail", "url": "https://azurlane.netojuu.com/images/e/e2/St._Louis_MailJP.ogg", "en": "New mail? It must be good news!", "cn": "新的邮件？一定是捷报吧！", "jp": "新しいメール？勝利のお知らせに決まっているわ"}, {"event": "Return From Mission", "url": "https://azurlane.netojuu.com/images/8/86/St._Louis_MissionFinJP.ogg", "en": "Always remember: \"the feud chair is unpredictable\"… Hmm, I heard that from someone, but who…?", "cn": "如果这次徒劳而返，那么下次定能有所斩获，咦……这是谁对我说的来着？", "jp": "全てのことは「サイオウホース」…うん……教えてくれたのは誰だっけ…"}, {"event": "Commission", "url": "https://azurlane.netojuu.com/images/6/60/St._Louis_CommissionJP.ogg", "en": "Hmm... Okay, I'll go greet the returning commission team with these clothes.", "cn": "嗯……OK，就穿这套衣服前往港口吧", "jp": "うん……OK、出迎えはこの格好でいいわ"}, {"event": "Strengthening", "url": "https://azurlane.netojuu.com/images/b/b2/St._Louis_StrJP.ogg", "en": "Luck comes and goes. You can't depend on in it forever.", "cn": "还是不能过分依赖“幸运”这类不会久驻的东西呢……", "jp": "運は流れるものよ？頼り過ぎは良くないわ"}, {"event": "Start Mission", "url": "https://azurlane.netojuu.com/images/f/f5/St._Louis_MissionStartJP.ogg", "en": "Did you hear that? That was the sound of the Winds of Fortune!", "cn": "听到了吗？幸运的风声！", "jp": "幸運の風が聞こえた？"}, {"event": "MVP", "url": "https://azurlane.netojuu.com/images/f/f9/St._Louis_MVPJP.ogg", "en": "Hehe~ That wasn't all thanks to luck.", "cn": "嘻嘻，这可不是纯靠幸运得到的哟~", "jp": "うふふ、幸運だけじゃないわよ"}, {"event": "Defeat", "url": "https://azurlane.netojuu.com/images/2/20/St._Louis_DefeatJP.ogg", "en": "Today is not my lucky day…", "cn": "看来今天不宜战斗呢……", "jp": "今日は戦闘に適さないようね……"}, {"event": "Skill Activation", "url": "https://azurlane.netojuu.com/images/d/df/St._Louis_SkillActivationJP.ogg", "en": "Lucky Lou!", "cn": "Lucky Lou！", "jp": "ラッキールー♪"}, {"event": "Low HP", "url": "https://azurlane.netojuu.com/images/8/89/St._Louis_LowHPJP.ogg", "en": "Hehe... my luck is second to none![", "cn": "嘿嘿，论运气我可不会输！", "jp": "うふふ、運ならどの娘にも負けないわ！"}, {"event": "Affinity (Disappointed)", "url": "https://azurlane.netojuu.com/images/4/48/St._Louis_Affinity0JP.ogg", "en": "At least spare Helena...", "cn": "指挥官，至少请不要对海伦娜……", "jp": "指揮官くん、せめてヘレナには……"}, {"event": "Affinity (Stranger)", "url": "https://azurlane.netojuu.com/images/5/55/St._Louis_Affinity1JP.ogg", "en": "Things might have gone differently at Kolombangara, had Helena been there...", "cn": "如果海伦娜在的话，科隆班加拉可能就是另一种模样了……", "jp": "ヘレナがいたら、コロンバンガラでの戦いは違う結末になったかもしれないわね……"}, {"event": "Affinity (Friendly)", "url": "https://azurlane.netojuu.com/images/7/79/St._Louis_Affinity2JP.ogg", "en": "Want me to help you clean your office, Commander? ... You don't!?", "cn": "指挥官，我来帮你整理下卧室吧~咦，不可以！？", "jp": "指揮官くん、部屋の掃除を手伝ってあげよっか？…ダメ！？"}, {"event": "Affinity (Like)", "url": "https://azurlane.netojuu.com/images/b/b6/St._Louis_Affinity3JP.ogg", "en": "Hehe~ I know about all the secret things you have hidden in your room, Commander~!", "cn": "嘻嘻~指挥官藏在卧室里的秘密，我窥·见了哟~", "jp": "うふふ、指揮官くんが部屋に隠しているヒミツ、ぜーんぶわ・か・る・わ～"}, {"event": "Affinity (Love)", "url": "https://azurlane.netojuu.com/images/0/0e/St._Louis_Affinity4JP.ogg", "en": "Whew… Cleaning is always such a pain… Hey, why don't we go on a date somewhere, Commander?", "cn": "唔……整天整理家务也很无聊呢，指挥官，我们去哪里约会吧~", "jp": "ふぅ……後片付けはいっつも面倒ね…指揮官くん、どこかでデートしない？"}, {"event": "Pledge", "url": "https://azurlane.netojuu.com/images/3/3b/St._Louis_PledgeJP.ogg", "en": "Oh dear, why are you giving me a present all of a sudden... Ah, I see, it's one of these... Okay, could I ask you to put it on my finger for me, Commander?", "cn": "咦，怎么突然要送我礼物？嘿嘿，原来是这个啊……那么，指挥官，能帮我戴上吗~", "jp": "あら、どうしたの？急にプレゼントなんて…うふふ、なるほど、これね……じゃあ、指揮官くん、これ、つけてくれるかしら？"}, {"event": "Additional Voice Line 1", "url": "https://azurlane.netojuu.com/images/1/1a/St._Louis_Extra1JP.ogg", "en": "(Sortie with Helena) Helena, don't focus purely on victory or defeat this time!", "cn": "(Sortie with Helena) 海伦娜，这次可不要为了胜利拼上一切——", "jp": "(Sortie with Helena) ヘレナ、今度は勝敗ばかり見ちゃダメよ"}, {"event": "Additional Voice Line 2", "url": "https://azurlane.netojuu.com/images/1/18/St._Louis_Extra2JP.ogg", "en": "(Sortie with Enterprise) I suppose you could call us the Lucky Unit!", "cn": "(Sortie with Enterprise) Lucky组合！", "jp": "(Sortie with Enterprise) ラッキーユニットってことかしら♪"}, {"event": "Gift Description Valentine's 2019", "url": "", "en": "It's Valentine's Day, Commander♪ Here, this is my specially made lucky chocolate. And don't tell Helena, okay? Ahahaha♪", "cn": "啊啦，我是第一个？嘿嘿，难道说今天是我的幸运日吗？给你情人节巧克力，快点吃吧，指挥官♡", "jp": "あら、私が一番なの？うふふ、今日はラッキーデーなのかしら？バレンタインチョコ、早く食べてちょうだい、指揮官くん♡"}, {"event": "Gift Description Valentine's 2020", "url": "", "en": "Tell me, Commander: you were really anticipating my Valentine's chocolate, weren't you? Ahah, don't act so shy about it. I was also looking forward to giving you it in the first place~", "cn": "", "jp": ""}, {"event": "Gift Description Valentine's 2021", "url": "", "en": "Commander, happy Valentine's Day~ Since everyone is giving out chocolate today, I naturally have some for you as well. Of course, I also have a little extra something for you, so that you can look forward to our next Valentine~ Hehe♡", "cn": "", "jp": ""}, {"event": "Gift Description Valentine's 2022", "url": "", "en": "Hey, Commander, let's change plans and go on a romantic vacation today. Sound good? Heh, I'm just teasing you. We can't leave Honolulu behind like that. That said... If you'd like a short but sweet Valentine's moment in private with me, I could do that... Hehehe♡", "cn": "指挥官，今天换个花样，我们两人来一场类似「爱之奔逃」如何？只是个玩笑啦。还有火奴鲁鲁酱她们在呢…不过如果指挥官想，短暂的来个「特别的情人节」的话…呵呵呵♡", "jp": "指揮官くん、今日は趣向を変えて、二人で「愛の逃避行」みたいなのをやらない？ただの冗談よ。ホノルルちゃんたちもいるし…でも指揮官くんがもし、少しの間だけ「特別なバレンタイン」にしちゃおう、というのなら…ふふふ♡"}, {"event": "Gift Description Valentine's 2023", "url": "", "en": "Commander, how do you feel about getting a house as a gift to go with your chocolates? After all, sweets and dates only last so long, but you can always come back to a home. Wouldn't that be dreamy?", "cn": "指挥官，你觉得和巧克力一起，送一间房间作为礼物如何？和点心还有约会不同，从今往后都可以回到同一个房间，不觉得非常幸福吗？", "jp": "指揮官くん、チョコレートと一緒にお部屋のプレゼントってどう思う？お菓子やデート違って、これからずっと、一緒のお部屋に戻ることができるって、すごく幸せなことだと思わない？"}, {"event": "Gift Description Valentine's 2024", "url": "", "en": "Before you accept the chocolate, how about you guess what else I've prepared for you this Valentine's? Spending so many years with you, I get to thinking about how I can leave an impression... Heheh, look forward to it. And... let's do this again next year, okay?♡", "cn": "呵呵，在收下这块情人节巧克力之前，要先猜猜我今年为指挥官准备了什么吗？已经度过了这么多个情人节，我觉得要准备一些让你意想不到的东西，才能让你留下深刻的印象，希望你能从现在就开始期待，明年情人节也要和我一起过呢♡", "jp": "指揮官くん、バレンタインチョコを受け取る前に、私がほかにどんなことを用意したか…当ててみて？バレンタインもこうして毎年お祝いしていると、どうやったら意外さで指揮官くんの印象に残るようにできるか…ふふ、今から楽しみにしてちょうだい？それと…来年も一緒にいてくれる？♡"}, {"event": "Gift Description Valentine's 2025", "url": "", "en": "Having you all to myself on Valentine's Day despite your popularity – ahh, it's so exciting. Since we only have 24 hours, I want to fill this entire day with wonderful arrangements. On another note, have you figured out my surprise yet? Heehee. Follow me. You're about to have an unforgettable day♡", "cn": "虽然仅限情人节当天，但能独占指挥官这件事，还真是让人心动不已啊~不如说，正因为有着24小时的限制，就让人更想用特别的安排塞满这个特别的日子了——指挥官好像也已经对我准备的惊喜有所察觉了？那就跟我来吧，绝对会让你度过印·象·深·刻的一天哦♡", "jp": "バレンタインなのに指揮官くんを独り占めできるなんて、本当にドキドキしちゃう、たった24時間しかないからこそ、素敵な予定で埋め尽くしたくなるわ――ねぇ指揮官くん、私の用意したサプライズ、もう気づいてるかしら。ふふ、私についてきてちょうだい。絶対「忘れられない」一日にしてあげるわ♡"}]}, {"skin": "Blue and White Pottery", "lines": [{"event": "Ship Description", "url": "", "en": "What do you think of this foreign dress, Commander? *Giggle* ...Perhaps it's rekindled something within you?", "cn": "", "jp": ""}, {"event": "Acquisition", "url": "https://azurlane.netojuu.com/images/9/9c/St._Louis_IntroSkin1JP.ogg", "en": "What do you think of this foreign dress, Commander? *Giggle* ...Perhaps it's rekindled something within you?", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 1", "url": "https://azurlane.netojuu.com/images/7/7b/St._Louis_SecIdle1Skin1JP.ogg", "en": "How I wish I could bring this chair with me on sorties... Helena, could you help upgrade my rigging?", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 2", "url": "https://azurlane.netojuu.com/images/1/18/St._Louis_SecIdle2Skin1JP.ogg", "en": "I am Lucky Lou. I may not look like it, but I actually have experience with fortune-telling.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 3", "url": "https://azurlane.netojuu.com/images/6/6e/St._Louis_SecIdle3Skin1JP.ogg", "en": "Brr... It's actually a bit cold... Commander, could you come a little closer and... share your body heat with me?", "cn": "", "jp": ""}, {"event": "Secretary (Special Touch)", "url": "https://azurlane.netojuu.com/images/2/29/St._Louis_Sec2Skin1JP.ogg", "en": "Oh, do you mean I've put it on wrong? Have I really...?", "cn": "", "jp": ""}]}, {"skin": "Spirits in the Snow", "lines": [{"event": "Ship Description", "url": "", "en": "The Sakura Empire's clothes are just so refined. Ahaha... Aren't you cold standing out there, Commander? Sit down with me and have a drink.", "cn": "", "jp": ""}, {"event": "Acquisition", "url": "https://azurlane.netojuu.com/images/a/a1/St._Louis_IntroSkin2JP.ogg", "en": "The Sakura Empire's clothes are just so refined. Ahaha... Aren't you cold standing out there, Commander? Sit down with me and have a drink.", "cn": "", "jp": ""}, {"event": "Login", "url": "https://azurlane.netojuu.com/images/2/20/St._Louis_LogSkin2JP.ogg", "en": "You should drink a little something to warm yourself up before getting to work.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 1", "url": "https://azurlane.netojuu.com/images/3/39/St._Louis_SecIdle1Skin2JP.ogg", "en": "A \"hatsumode,\" huh... Do you have any wishes to make, Commander? It so happens I don't, so you can have my wish.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 2", "url": "https://azurlane.netojuu.com/images/e/ed/St._Louis_SecIdle2Skin2JP.ogg", "en": "Not to say the Eagle Union's new year celebrations are lonesome, but the Sakura Empire's and Dragon Empery definitely celebrate New Year's with more festivity. And I like festivities.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 3", "url": "https://azurlane.netojuu.com/images/d/d2/St._Louis_SecIdle3Skin2JP.ogg", "en": "Oh, Commander, if you're hoping to get me drunk... well, it depends on how much you yourself can drink. Ahahah~", "cn": "", "jp": ""}, {"event": "Secretary (Touch)", "url": "https://azurlane.netojuu.com/images/5/59/St._Louis_Sec1Skin2JP.ogg", "en": "Are we heading out? Ahah, then let me get out my umbrella. Hey, come closer, otherwise you'll get snow on your clothes.", "cn": "", "jp": ""}, {"event": "Return From Mission", "url": "https://azurlane.netojuu.com/images/6/60/St._Louis_MissionFinSkin2JP.ogg", "en": "Welcome back. I've put on the heater for you. Oh, me? I'd like to stay here and enjoy the snow a little longer.", "cn": "", "jp": ""}, {"event": "Affinity (Love)", "url": "https://azurlane.netojuu.com/images/9/9e/St._Louis_Affinity4Skin2JP.ogg", "en": "Hmm... seems it'll keep snowing for a while. Why don't you stay for the night, Commander? ...Oh? I was thinking we could share some drinks, but perhaps you had something else in mind? Ahahah♡", "cn": "", "jp": ""}]}, {"skin": "Luxurious Wheels", "lines": [{"event": "Ship Description", "url": "", "en": "Oh my, what a good little commander you've been, waiting here all this time for me. Hop in~ Did you think you would be driving? Hehe, you shouldn't underestimate me~", "cn": "", "jp": ""}, {"event": "Acquisition", "url": "https://azurlane.netojuu.com/images/8/86/St._Louis_IntroSkin3JP.ogg", "en": "Oh my, what a good little commander you've been, waiting here all this time for me. Hop in~ Did you think you would be driving? Hehe, you shouldn't underestimate me~", "cn": "", "jp": ""}, {"event": "Login", "url": "https://azurlane.netojuu.com/images/1/11/St._Louis_LogSkin3JP.ogg", "en": "The view here is lovely~ Let's pull over for a moment to take in the winds of good luck.", "cn": "", "jp": ""}, {"event": "Details", "url": "https://azurlane.netojuu.com/images/9/94/St._Louis_DetailsSkin3JP.ogg", "en": "Hehehe, you thought I'd drive in these high heels? It's certainly not impossible, but I'd rather use the other pair of shoes I have inside.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 1", "url": "https://azurlane.netojuu.com/images/8/83/St._Louis_SecIdle1Skin3JP.ogg", "en": "Oh dear, was that... Jamaica? Hehehe... Fasten your seatbelt, Commander. This'll be a bit of a wild ride.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 2", "url": "https://azurlane.netojuu.com/images/8/8e/St._Louis_SecIdle2Skin3JP.ogg", "en": "You want to use my car? You can, of course, but promise me one thing in return: take Honolulu on a nice trip.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 3", "url": "https://azurlane.netojuu.com/images/d/d1/St._Louis_SecIdle3Skin3JP.ogg", "en": "Whew... Finally we've arrived at the party. Now, Commander, wait here for thirty minutes while I reapply my makeup. Relax, I'm just joking! Hehehe~", "cn": "", "jp": ""}, {"event": "Secretary (Touch)", "url": "https://azurlane.netojuu.com/images/8/87/St._Louis_Sec1Skin3JP.ogg", "en": "Let's see here... Ah, thanks, Commander. Hehehe, you're getting quite good at this.", "cn": "", "jp": ""}, {"event": "Task", "url": "https://azurlane.netojuu.com/images/f/fe/St._Louis_TaskSkin3JP.ogg", "en": "You have an urgent mission? I'll wait another five minutes for you, then.", "cn": "", "jp": ""}, {"event": "Task Complete", "url": "https://azurlane.netojuu.com/images/6/60/St._Louis_TaskCSkin3JP.ogg", "en": "Oh, you went and claimed those mission rewards? You could've taken your time if you wanted. Hehehe~", "cn": "", "jp": ""}, {"event": "Mail", "url": "https://azurlane.netojuu.com/images/9/95/St._Louis_MailSkin3JP.ogg", "en": "Helena messaged me, saying the party's starting soon. Check your mail, then let's hurry on back to the venue.", "cn": "", "jp": ""}, {"event": "Return From Mission", "url": "https://azurlane.netojuu.com/images/2/28/St._Louis_MissionFinSkin3JP.ogg", "en": "Do you have everything, Commander? We're not driving back if you forgot to bring something.", "cn": "", "jp": ""}, {"event": "Affinity (Love)", "url": "https://azurlane.netojuu.com/images/3/36/St._Louis_Affinity4Skin3JP.ogg", "en": "As much as I like parties, I like being alone with you even more, Commander... Maybe we could sneak out and go for a drive together? But probably not~ Hehehe~", "cn": "", "jp": ""}]}, {"skin": "An Afternoon on the Lido Deck", "lines": [{"event": "Ship Description", "url": "", "en": "Commander, I've been waiting for you. Lazing about and enjoying the sights here does sound nice, but... Heheh, it just isn't the same without you by my side♪", "cn": "", "jp": ""}, {"event": "Acquisition", "url": "https://azurlane.netojuu.com/images/d/d6/St._Louis_IntroSkin4JP.ogg", "en": "Commander, I've been waiting for you. Lazing about and enjoying the sights here does sound nice, but... Heheh, it just isn't the same without you by my side♪", "cn": "", "jp": ""}, {"event": "Login", "url": "https://azurlane.netojuu.com/images/e/e9/St._Louis_LogSkin4JP.ogg", "en": "Welcome back. Heheh, I think my sunscreen is starting to wear off. Commander, it's time for you to make up for making me wait♪", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 1", "url": "https://azurlane.netojuu.com/images/4/49/St._Louis_SecIdle1Skin4JP.ogg", "en": "I've been waiting for you so long that I'm all hot and flushed now. Hm? A cold drink is nowhere near enough. Heheheh... You'll have to think of other methods.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 2", "url": "https://azurlane.netojuu.com/images/8/82/St._Louis_SecIdle2Skin4JP.ogg", "en": "...Mmh, this swimsuit's a little tight. Geez... Commander, can't you help me out a little? Yeah, that's the spot.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 3", "url": "https://azurlane.netojuu.com/images/a/af/St._Louis_SecIdle3Skin4JP.ogg", "en": "Wanna lie down on my floatie with me, Commander? We can probably fit together. Or do you wanna snuggle in closer?♪", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 4", "url": "https://azurlane.netojuu.com/images/c/cf/St._Louis_SecIdle4Skin4JP.ogg", "en": "Going on this cruise with you was a great idea. Watching the sea together is refreshing.", "cn": "", "jp": ""}, {"event": "Secretary (Idle) 5", "url": "https://azurlane.netojuu.com/images/8/8e/St._Louis_SecIdle5Skin4JP.ogg", "en": "Do you think traveling with Lucky Lou herself might bring you good luck? Heheh, I know eeeven better ways for you to... get lucky♥", "cn": "", "jp": ""}, {"event": "Secretary (Touch)", "url": "https://azurlane.netojuu.com/images/1/1f/St._Louis_Sec1Skin4JP.ogg", "en": "You'll put my sunscreen on for me? Okay. Then I'm all yours, Commander. Heehee.", "cn": "", "jp": ""}, {"event": "Secretary (Special Touch)", "url": "https://azurlane.netojuu.com/images/f/f3/St._Louis_Sec2Skin4JP.ogg", "en": "Geez, you're impatient, Commander... You can't bear to wait anymore, can you?♥", "cn": "", "jp": ""}, {"event": "Secretary (Headpat)", "url": "https://azurlane.netojuu.com/images/f/fe/St._Louis_HeadpatSkin4JP.ogg", "en": "Heehee. Is that enough to satisfy you, Commander?", "cn": "", "jp": ""}, {"event": "Task", "url": "https://azurlane.netojuu.com/images/5/52/St._Louis_TaskSkin4JP.ogg", "en": "I wanted you all to myself for a little longer, but it looks like you still have missions left.", "cn": "", "jp": ""}, {"event": "Task Complete", "url": "https://azurlane.netojuu.com/images/b/bb/St._Louis_TaskCSkin4JP.ogg", "en": "Mission complete! As a reward, I'll put your sunscreen on for you. Mind if I touch you, Commander?♪", "cn": "", "jp": ""}, {"event": "Mail", "url": "https://azurlane.netojuu.com/images/8/83/St._Louis_MailSkin4JP.ogg", "en": "You've got mail. Wanna check it after we relax a little longer?", "cn": "", "jp": ""}, {"event": "Return From Mission", "url": "https://azurlane.netojuu.com/images/0/06/St._Louis_MissionFinSkin4JP.ogg", "en": "Welcome back, Commander. Want a drink? Unfortunately, I only have one straw...", "cn": "", "jp": ""}, {"event": "Commission", "url": "https://azurlane.netojuu.com/images/8/87/St._Louis_CommissionSkin4JP.ogg", "en": "You want to go greet the commission team? Oh, fine... I'll help you change clothes♥", "cn": "", "jp": ""}, {"event": "Start Mission", "url": "https://azurlane.netojuu.com/images/6/64/St._Louis_MissionStartSkin4JP.ogg", "en": "Shall we go on a Lucky Cruise Trip~?", "cn": "", "jp": ""}, {"event": "MVP", "url": "https://azurlane.netojuu.com/images/4/4e/St._Louis_MVPSkin4JP.ogg", "en": "Now I can go back to enjoying my voyage with the Commander.", "cn": "", "jp": ""}, {"event": "Affinity (Love)", "url": "https://azurlane.netojuu.com/images/0/04/St._Louis_Affinity4Skin4JP.ogg", "en": "Your fingers heat up my skin even more than the sun itself. I wish I could stay in your arms and listen to the waves with you forever... Heehee.", "cn": "", "jp": ""}]}]
+;
+
+const aud = document.getElementById('aud');
+const npBar = document.getElementById('np-bar');
+const npLabel = document.getElementById('np-label');
+const npStop = document.getElementById('np-stop');
+const main = document.getElementById('main');
+
+let activeTr = null;
+let currentLang = 'en';
+
+function stopAll() {
+  aud.pause();
+  aud.src = '';
+  if (activeTr) { activeTr.classList.remove('playing'); activeTr = null; }
+  npBar.classList.remove('on');
+}
+
+npStop.addEventListener('click', stopAll);
+aud.addEventListener('ended', stopAll);
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.dataset.lang;
+    document.querySelectorAll('.lang-text').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === currentLang);
+    });
+  });
+});
+
+let audioCount = 0;
+
+const DL_SVG = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12l-5-5h3V1h4v6h3L8 12zm-6 2h12v1H2v-1z"/></svg>`;
+
+DATA.forEach(skin => {
+  const block = document.createElement('div');
+  block.className = 'skin-block';
+
+  const withAudio = skin.lines.filter(l => l.url).length;
+  if (withAudio > 0) audioCount += withAudio;
+
+  block.innerHTML = `
+    <div class="skin-heading">
+      <h2>${skin.skin}</h2>
+      <span class="skin-count">${withAudio} audio · ${skin.lines.length} lines</span>
+    </div>`;
+
+  const table = document.createElement('table');
+  table.className = 'qt';
+  table.innerHTML = `
+    <colgroup><col><col><col></colgroup>
+    <thead><tr><th>Event</th><th>▶</th><th>Transcription</th></tr></thead>`;
+
+  const tbody = document.createElement('tbody');
+
+  skin.lines.forEach(line => {
+    const tr = document.createElement('tr');
+
+    const playCell = line.url
+      ? `<td class="play-cell">
+          <a class="play-link" href="${line.url}" data-event="${line.event}" data-skin="${skin.skin}">
+            <span class="ico-play">&#9654;</span>
+            <span class="ico-pause">&#9646;&#9646;</span>
+          </a>
+          <a class="dl-link" href="${line.url}" download="${line.url.split('/').pop()}" title="Download ${line.url.split('/').pop()}">${DL_SVG}</a>
+        </td>`
+      : `<td class="play-cell"><span class="no-audio">—</span></td>`;
+
+    const enText = line.en || '';
+    const cnText = line.cn || '';
+    const jpText = line.jp || '';
+
+    tr.innerHTML = `
+      <td class="ev-cell">${line.event}</td>
+      ${playCell}
+      <td class="text-cell">
+        <span class="lang-text${currentLang==='en' ? ' visible' : ''}" data-lang="en">${enText || '<em>—</em>'}</span>
+        <span class="lang-text${currentLang==='cn' ? ' visible' : ''}" data-lang="cn">${cnText || '<em>—</em>'}</span>
+        <span class="lang-text${currentLang==='jp' ? ' visible' : ''}" data-lang="jp">${jpText || '<em>—</em>'}</span>
+      </td>`;
+
+    if (line.url) {
+      const a = tr.querySelector('a.play-link');
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        if (activeTr === tr) { stopAll(); return; }
+        if (activeTr) activeTr.classList.remove('playing');
+        activeTr = tr;
+        tr.classList.add('playing');
+        aud.src = line.url;
+        aud.play();
+        npBar.classList.add('on');
+        npLabel.innerHTML = `${line.event} <small>${skin.skin}</small>`;
+      });
+    }
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  block.appendChild(table);
+  main.appendChild(block);
+});
+
+document.getElementById('total-n').textContent = audioCount;
+
+// ── DOWNLOAD ALL ──
+document.getElementById('dl-all-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('dl-all-btn');
+  const allUrls = DATA.flatMap(skin => skin.lines.filter(l => l.url).map(l => ({ url: l.url, name: l.url.split('/').pop() })));
+  btn.textContent = 'Starting downloads…';
+  btn.disabled = true;
+  let i = 0;
+  for (const { url, name } of allUrls) {
+    try {
+      const resp = await fetch(url);
+      const blob = await resp.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    } catch(e) { console.warn('Failed:', url, e); }
+    i++;
+    btn.textContent = `Downloading… ${i}/${allUrls.length}`;
+    await new Promise(r => setTimeout(r, 350));
+  }
+  btn.textContent = '✓ Done!';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = `${DL_SVG} Download All Audio`;
+  }, 2000);
+});
+</script>
+</body>
+</html>

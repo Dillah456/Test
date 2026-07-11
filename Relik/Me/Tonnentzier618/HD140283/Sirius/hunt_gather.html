@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hunt — Gather</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;700&display=swap');
+
+  :root {
+    --bg: #080e1a;
+    --surface: #0f1e35;
+    --border: #1e3a5a;
+    --accent: #00cfff;
+    --accent2: #ff5e5b;
+    --text: #cde4f5;
+    --muted: #4a7a9b;
+    --state-color: #34d399;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 20px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.1em;
+    color: var(--state-color);
+    text-shadow: 0 0 24px #34d39955;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+  }
+
+  .filter-bar input,
+  .filter-bar select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .filter-bar input:focus,
+  .filter-bar select:focus {
+    border-color: var(--state-color);
+    box-shadow: 0 0 0 2px #34d39922;
+  }
+
+  .filter-bar button {
+    background: var(--state-color);
+    color: #080e1a;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-bar button:hover {
+    background: #6ee7b7;
+    box-shadow: 0 0 14px #34d39966;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .stats-bar span { color: var(--state-color); font-weight: 600; }
+
+  #loading {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 32px;
+    letter-spacing: 0.05em;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    font-size: 0.82rem;
+  }
+
+  th {
+    background: #0a1828;
+    color: var(--state-color);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 12px 14px;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    color: var(--text);
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  tr:hover td { background: #0a2035; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  a:hover { color: #fff; text-decoration: underline; }
+
+  .btn-claim {
+    background: transparent;
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 5px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .btn-claim:hover {
+    background: var(--accent2);
+    color: #fff;
+    box-shadow: 0 0 10px #ff5e5b55;
+  }
+  .btn-claim:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .badge-district {
+    display: inline-block;
+    background: #00cfff18;
+    color: var(--accent);
+    border: 1px solid #00cfff44;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.76rem;
+  }
+
+  .badge-state {
+    display: inline-block;
+    background: #34d39918;
+    color: var(--state-color);
+    border: 1px solid #34d39944;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.76rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>🌿 GATHER</h1>
+<p class="subtitle">State: Gather Only</p>
+
+<div class="filter-bar">
+  <input type="text" id="filterName" placeholder="🔍 Filter Name...">
+  <select id="filterDistrict">
+    <option value="">All Districts</option>
+  </select>
+  <button onclick="loadData()">Apply</button>
+</div>
+
+<div class="stats-bar" id="stats" style="display:none;">
+  Menampilkan <span id="countResult">0</span> data &nbsp;|&nbsp; District: <span id="activeDistrict">—</span>
+</div>
+
+<div id="loading">Loading data...</div>
+
+<div class="table-wrap">
+  <table id="table" style="display:none;">
+    <thead><tr id="table-head"></tr></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+
+
+<script>
+const API_URL = "https://x8ki-letl-twmt.n7.xano.io/api:X6h8irt0/hunt";
+const ALLOWED_STATES = ["Gather"];
+const DISPLAY_KEYS = ["id", "District", "Name", "Sites", "State", "created_at"];
+let allData = [];
+
+async function init() {
+  try {
+    const response = await fetch(API_URL);
+    const raw = await response.json();
+
+    // Filter hanya state Gather
+    allData = raw.filter(item => ALLOWED_STATES.includes(item.State));
+
+    if (!allData || allData.length === 0) {
+      document.getElementById("loading").innerText = "Data kosong";
+      return;
+    }
+
+    const districts = [...new Set(allData.map(i => i.District))].sort((a, b) => a - b);
+    const select = document.getElementById("filterDistrict");
+    districts.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d;
+      opt.innerText = `District ${d}`;
+      select.appendChild(opt);
+    });
+
+    if (districts.length > 0) select.value = districts[0];
+
+    loadData();
+  } catch (err) {
+    document.getElementById("loading").innerText = "Gagal mengambil data";
+    console.error(err);
+  }
+}
+
+function loadData() {
+  const filterName = document.getElementById("filterName").value.toLowerCase().trim();
+  const filterDistrict = document.getElementById("filterDistrict").value;
+
+  const head = document.getElementById("table-head");
+  const body = document.getElementById("table-body");
+  const table = document.getElementById("table");
+  const loading = document.getElementById("loading");
+
+  head.innerHTML = "";
+  body.innerHTML = "";
+
+  let filtered = allData.filter(item => {
+    const matchDistrict = !filterDistrict || String(item.District) === String(filterDistrict);
+    const matchName = !filterName || (item.Name && item.Name.toLowerCase().includes(filterName));
+    return matchDistrict && matchName;
+  });
+
+  if (filtered.length === 0) {
+    loading.style.display = "block";
+    loading.innerText = "Tidak ada data ditemukan.";
+    table.style.display = "none";
+    document.getElementById("stats").style.display = "none";
+    return;
+  }
+
+  // Header
+  DISPLAY_KEYS.forEach(key => {
+    const th = document.createElement("th");
+    th.innerText = key === "created_at" ? "Created At" : key;
+    head.appendChild(th);
+  });
+  ["Path", "Action"].forEach(label => {
+    const th = document.createElement("th");
+    th.innerText = label;
+    head.appendChild(th);
+  });
+
+  // Rows
+  filtered.forEach(item => {
+    const tr = document.createElement("tr");
+
+    DISPLAY_KEYS.forEach(key => {
+      const td = document.createElement("td");
+      if (key === "created_at") {
+        td.innerText = item[key] ? new Date(item[key]).toLocaleString("id-ID") : "NaN";
+      } else if (key === "District") {
+        td.innerHTML = `<span class="badge-district">D-${item[key] ?? "NaN"}</span>`;
+      } else if (key === "State") {
+        td.innerHTML = `<span class="badge-state">${item[key] ?? "NaN"}</span>`;
+      } else {
+        td.innerText = item[key] ?? "NaN";
+        td.title = item[key] ?? "";
+      }
+      tr.appendChild(td);
+    });
+
+    // Path
+    const tdPath = document.createElement("td");
+    if (item.Path) {
+      const link = document.createElement("a");
+      link.href = item.Path;
+      link.innerText = "Open ↗";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      tdPath.appendChild(link);
+    } else {
+      tdPath.innerText = "-";
+    }
+    tr.appendChild(tdPath);
+
+    // Action
+    const tdAction = document.createElement("td");
+    const btnClaim = document.createElement("button");
+    btnClaim.innerText = "Claim";
+    btnClaim.className = "btn-claim";
+    btnClaim.onclick = async () => {
+      btnClaim.disabled = true;
+      btnClaim.innerText = "...";
+      try {
+        await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:X6h8irt0/hunt/${item.id}`, { method: "DELETE" });
+        tr.style.opacity = "0";
+        tr.style.transition = "opacity 0.3s";
+        setTimeout(() => {
+          tr.remove();
+          document.getElementById("countResult").innerText =
+            parseInt(document.getElementById("countResult").innerText) - 1;
+        }, 300);
+      } catch (e) {
+        btnClaim.disabled = false;
+        btnClaim.innerText = "Claim";
+        alert("Gagal claim item.");
+      }
+    };
+    tdAction.appendChild(btnClaim);
+    tr.appendChild(tdAction);
+
+    body.appendChild(tr);
+  });
+
+  loading.style.display = "none";
+  table.style.display = "table";
+
+  const stats = document.getElementById("stats");
+  stats.style.display = "flex";
+  document.getElementById("countResult").innerText = filtered.length;
+  document.getElementById("activeDistrict").innerText = filterDistrict ? `District ${filterDistrict}` : "Semua";
+}
+
+init();
+</script>
+</body>
+</html>

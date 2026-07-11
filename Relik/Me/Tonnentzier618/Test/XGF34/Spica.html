@@ -1,0 +1,171 @@
+<body>
+    <style>
+        /* Container for the form and image */
+        .container {
+            display: flex;
+            align-items: flex-start; /* Align items at the top */
+            gap: 20px; /* Space between the form and the image */
+        }
+
+        /* Form Styling */
+        form {
+            width: 50%; /* Adjust form width */
+            font-family: Arial, sans-serif; /* Optional font style */
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px; /* Space between labels */
+        }
+
+        form input[type="text"] {
+            width: 100%; /* Full width for inputs */
+            padding: 5px;
+            margin-bottom: 10px; /* Space below inputs */
+            box-sizing: border-box; /* Ensure padding doesn't affect total width */
+        }
+
+        form input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3; /* Change color on hover */
+        }
+
+        /* Image Styling */
+        img {
+            width: 300px; /* Fixed image width */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .text-content {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .text-content h2 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .text-content p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        form select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script>
+        // Fetch Nama list from database
+        fetch('get_nama_list.php')
+            .then(response => response.json())
+            .then(data => {
+                const terimaSelect = document.getElementById('terima-select');
+                const dariSelect = document.getElementById('dari-select');
+                
+                // Populate Terima and Dari dropdowns
+                data.forEach(nama => {
+                    const option1 = document.createElement('option');
+                    option1.value = nama;
+                    option1.textContent = nama;
+                    terimaSelect.appendChild(option1);
+                    
+                    const option2 = document.createElement('option');
+                    option2.value = nama;
+                    option2.textContent = nama;
+                    dariSelect.appendChild(option2);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching nama list:', error);
+            });
+
+        // Validation function
+        function validateDropdowns() {
+            const terima = document.getElementById('terima-select').value;
+            const dari = document.getElementById('dari-select').value;
+            const errorDiv = document.getElementById('validation-error');
+            const submitBtn = document.querySelector('input[type="submit"]');
+            
+            if (terima && dari && terima === dari) {
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+                return false;
+            } else {
+                errorDiv.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+                return true;
+            }
+        }
+
+        // Add event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const terimaSelect = document.getElementById('terima-select');
+            const dariSelect = document.getElementById('dari-select');
+            const form = document.querySelector('form');
+            
+            terimaSelect.addEventListener('change', validateDropdowns);
+            dariSelect.addEventListener('change', validateDropdowns);
+            
+            // Prevent form submission if validation fails
+            form.addEventListener('submit', function(e) {
+                if (!validateDropdowns()) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+    <div class="container">
+        <form action="Spica.php" method="get">
+            <label>Terima</label><br>
+            <select name="Spica-R" id="terima-select" required>
+                <option value="">-- Pilih Terima --</option>
+            </select><br>
+            <label>Beban</label><br>
+            <input type="text" name="Spica-W"><br>
+            <label>Prioritas</label><br>
+            <input type="text" name="Spica-P"><br>
+            <label>Monetasi</label><br>
+            <input type="text" name="Spica-M"><br>
+            <label>Tujuan</label><br>
+            <input type="text" name="Spica-O" id="tujuan-input"><br>
+            <label>Dari</label><br>
+            <select name="Spica-F" id="dari-select" required>
+                <option value="">-- Pilih Dari --</option>
+            </select><br>
+            <div id="validation-error" style="color: red; display: none; margin-top: 10px;">
+                Terima dan Dari tidak boleh sama!
+            </div>
+            <label>Senang</label><br>
+            <input type="text" name="Spica-A4" ><br>
+            <label>Sedih</label><br>
+            <input type="text" name="Spica-F2" ><br>
+            <label>Grief</label><br>
+            <input type="text" name="Spica-N0N4" ><br>
+            <input type="submit" >
+        </form>
+    
+    <div class="text-content">
+        <img src="illust_67847889_20220528_154725 copy.png" width="300" height="800">
+        <h2>Belfast</h2>
+        <p>Halo Master</p>
+    </div>
+    
+    </div>
+
+
+</body>
