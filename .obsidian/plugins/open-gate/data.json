@@ -1,0 +1,16 @@
+{
+  "uuid": "0yzvhdjsskjap3736ojkxs",
+  "gates": {
+    "aHR0cHM6Ly9zaXRlcy5nb29nbGUuY29tL3ZpZXcvdGVtcG9yYWwtbWVyY3VyeS9nYWxsZXJ5P2F1dGh1c2VyPTAjaC5oZDQ1dmgzeThjOWk=": {
+      "id": "aHR0cHM6Ly9zaXRlcy5nb29nbGUuY29tL3ZpZXcvdGVtcG9yYWwtbWVyY3VyeS9nYWxsZXJ5P2F1dGh1c2VyPTAjaC5oZDQ1dmgzeThjOWk=",
+      "title": "Mercury",
+      "icon": "<svg viewBox=\"0 0 100 100\"><image href=\"https://icon.horse/icon/sites.google.com\" height=\"100\" width=\"100\" /></svg>",
+      "hasRibbon": true,
+      "position": "right",
+      "profileKey": "open-gate",
+      "url": "https://sites.google.com/view/temporal-mercury/gallery?authuser=0#h.hd45vh3y8c9i",
+      "zoomFactor": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+    }
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "main": {
+    "id": "1c5aa24bb53b18d1",
+    "type": "split",
+    "children": [
+      {
+        "id": "f826df816b90fbcb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "263c16e0ec6de9da",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Tab baru"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1df57a41a7f5e58e",
+    "type": "split",
+    "children": [
+      {
+        "id": "28e84a69bafdb94c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "473b1c10d22687d4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Penjelajah berkas"
+            }
+          },
+          {
+            "id": "0f3b567eec9784c3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Penelusuran"
+            }
+          },
+          {
+            "id": "7aa8ef69339f7c71",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Penanda"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "298ce967261fb9d0",
+    "type": "split",
+    "children": [
+      {
+        "id": "d30d192baff614a6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "61954892d5921f52",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlink"
+            }
+          },
+          {
+            "id": "ae99e4e21431da3e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Tautan Keluar"
+            }
+          },
+          {
+            "id": "e7d03a7917e1cb7b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a1b3fb06307e1bb3",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Semua properti"
+            }
+          },
+          {
+            "id": "c23c5bbc4f9c7100",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Kerangka"
+            }
+          },
+          {
+            "id": "22d8c4f66f15ee65",
+            "type": "leaf",
+            "state": {
+              "type": "aHR0cHM6Ly9zaXRlcy5nb29nbGUuY29tL3ZpZXcvdGVtcG9yYWwtbWVyY3VyeS9nYWxsZXJ5P2F1dGh1c2VyPTAjaC5oZDQ1dmgzeThjOWk=",
+              "state": {},
+              "icon": "aHR0cHM6Ly9zaXRlcy5nb29nbGUuY29tL3ZpZXcvdGVtcG9yYWwtbWVyY3VyeS9nYWxsZXJ5P2F1dGh1c2VyPTAjaC5oZDQ1dmgzeThjOWk=",
+              "title": "Mercury"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Buka peralih cepat": false,
+      "graph:Buka tampilan grafik": false,
+      "canvas:Buat kanvas baru": false,
+      "daily-notes:Buka catatan hari ini": false,
+      "templates:Masukkan template": false,
+      "command-palette:Buka palet perintah": false,
+      "bases:Create new base": false,
+      "open-gate:Mercury": false
+    }
+  },
+  "active": "473b1c10d22687d4",
+  "lastOpenFiles": [
+    "1_Project/Relik/NewTemp/Asset/js/viewer.js",
+    "1_Project/Relik/NewTemp/Asset/js/Sirius.py",
+    "1_Project/Relik/NewTemp/Asset/js/shinano.json",
+    "1_Project/Relik/NewTemp/Asset/js/picture.js",
+    "1_Project/Relik/NewTemp/Asset/js/iframe.js",
+    "1_Project/Relik/NewTemp/Asset/js/audio.js",
+    "1_Project/Relik/NewTemp/Asset/js/array-updater-cli.html",
+    "1_Project/Relik/NewTemp/Asset/Gambar/bacc739cbd1bdd86d2ab963785b168ee.jpeg",
+    "1_Project/Relik/NewTemp/Asset/css/sirius.css",
+    "1_Project/Relik/NewTemp/Asset/Audio/Shinano_TaskCJP.ogg",
+    "1_Project/Relik/NewTemp/Asset/js",
+    "1_Project/Relik/NewTemp/Asset/Gambar",
+    "1_Project/New folder/NewTemp/Asset/Gambar/bacc739cbd1bdd86d2ab963785b168ee.jpeg",
+    "1_Project/Relik/Urakawa-Hanako/New/T18-Module/fontawesome/webfonts/fa-solid-900.svg",
+    "1_Project/Relik/Urakawa-Hanako/New/T18-Module/fontawesome/webfonts/fa-regular-400.svg",
+    "1_Project/Relik/Urakawa-Hanako/New/T18-Module/fontawesome/webfonts/fa-brands-400.svg",
+    "1_Project/Relik/Urakawa-Hanako/New/Regular/fontawesome/webfonts/fa-solid-900.svg",
+    "1_Project/Relik/Urakawa-Hanako/New/Regular/fontawesome/webfonts/fa-regular-400.svg",
+    "1_Project/Relik/Urakawa-Hanako/New/Regular/fontawesome/webfonts/fa-brands-400.svg",
+    "1_Project/Relik/Urakawa-Hanako/T18-Module/fontawesome/webfonts/fa-solid-900.svg",
+    "1_Project/Relik/Urakawa-Hanako/T18-Module/fontawesome/webfonts/fa-regular-400.svg",
+    "1_Project/Relik/KMS-Z23/Oort Proto/Log/Log Book.md",
+    "1_Project/Relik/KMS-Z23/Oort Proto/Log/Last Log.md",
+    "1_Project/Relik/KMS-Z23/Oort Proto/Log/Kelompok Fauzan.md",
+    "1_Project/Relik/KMS-Z23/Oort Proto/Log/File Aset B Data.md",
+    "1_Project/Relik/KMS-Z23/KMS Z23.md",
+    "1_Project/Relik/kama/Test.md",
+    "1_Project/New folder/KMS-Z23/Oort Proto/Log/Last Log.md",
+    "1_Project/New folder/KMS-Z23/Oort Proto/Log/Log Book.md",
+    "1_Project/New folder/KMS-Z23/Oort Proto/Log/File Aset B Data.md",
+    "1_Project/New folder/KMS-Z23/Oort Proto/Log/Kelompok Fauzan.md",
+    "1_Project/New folder/KMS-Z23/KMS Z23.md",
+    "1_Project/New folder/kama/Test.md"
+  ]
+}
