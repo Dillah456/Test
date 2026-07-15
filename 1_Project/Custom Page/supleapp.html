@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="SupleApp - Aplikasi Intervensi Kesehatan Mental Anak" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>SupleApp – Intervensi Kesehatan Mental Anak</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #2EC99A;
+      --green-dark: #1A9B76;
+      --green-light: #E6F9F3;
+      --purple: #7B5EA7;
+      --purple-light: #F0EBFA;
+      --yellow: #FFD166;
+      --yellow-light: #FFF9E6;
+      --coral: #FF6B6B;
+      --coral-light: #FFF0F0;
+      --blue: #4FACDE;
+      --blue-light: #EAF6FD;
+      --text: #1A1A2E;
+      --text-muted: #6B7280;
+      --bg: #FAFAFA;
+      --white: #FFFFFF;
+      --radius: 20px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--white);
+      border-bottom: 1.5px solid #F0F0F0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+    }
+    .logo {
+      font-family: 'Nunito', sans-serif;
+      font-size: 26px; font-weight: 900;
+      color: var(--text); text-decoration: none;
+    }
+    .logo span { color: var(--green); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-muted);
+      font-size: 15px; font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-cta {
+      background: var(--green); color: var(--white);
+      padding: 10px 22px; border-radius: 50px;
+      text-decoration: none; font-weight: 600; font-size: 14px;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--green-dark); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #E6F9F3 0%, #EAF6FD 50%, #F0EBFA 100%);
+      padding: 80px 24px 60px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(46,201,154,.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1.5px solid var(--green);
+      color: var(--green-dark); font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 50px; margin-bottom: 28px;
+    }
+    .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .hero h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(32px, 5vw, 58px); font-weight: 900;
+      line-height: 1.2; max-width: 760px; margin: 0 auto 20px;
+      color: var(--text);
+    }
+    .hero h1 .accent { color: var(--green); }
+    .hero p {
+      font-size: 17px; color: var(--text-muted);
+      max-width: 560px; margin: 0 auto 36px;
+    }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--green); color: var(--white);
+      padding: 14px 32px; border-radius: 50px;
+      text-decoration: none; font-weight: 700; font-size: 15px;
+      transition: transform .2s, background .2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
+    .btn-outline {
+      background: var(--white); color: var(--green);
+      padding: 14px 32px; border-radius: 50px;
+      text-decoration: none; font-weight: 700; font-size: 15px;
+      border: 2px solid var(--green);
+      transition: transform .2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { transform: translateY(-2px); }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--white);
+      padding: 28px 24px;
+      border-bottom: 1.5px solid #F0F0F0;
+    }
+    .stats-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Nunito', sans-serif;
+      font-size: 32px; font-weight: 900;
+      color: var(--green);
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* SECTIONS */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-badge {
+      display: inline-block;
+      background: var(--green-light); color: var(--green-dark);
+      font-size: 12px; font-weight: 700; letter-spacing: .5px;
+      padding: 5px 14px; border-radius: 50px;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(24px, 4vw, 38px); font-weight: 900;
+      margin-bottom: 12px;
+    }
+    .section-sub { color: var(--text-muted); font-size: 16px; max-width: 560px; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* INTERVENSI MENTAL - HERO SECTION */
+    .mental-hero {
+      background: linear-gradient(135deg, #1A1A2E 0%, #2D2B55 100%);
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--white);
+      position: relative; overflow: hidden;
+    }
+    .mental-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(46,201,154,.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(123,94,167,.2) 0%, transparent 60%);
+    }
+    .mental-hero-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+    .mental-hero .section-badge { background: rgba(46,201,154,.2); color: #7EECD1; }
+    .mental-hero h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(26px, 4vw, 44px); font-weight: 900;
+      margin-bottom: 16px; color: var(--white);
+    }
+    .mental-hero p { color: rgba(255,255,255,.75); font-size: 16px; max-width: 620px; margin: 0 auto 48px; }
+
+    .intervensi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .intervensi-card {
+      background: rgba(255,255,255,.08);
+      border: 1.5px solid rgba(255,255,255,.15);
+      border-radius: var(--radius);
+      padding: 28px 22px;
+      text-align: left;
+      transition: transform .2s, background .2s;
+    }
+    .intervensi-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,.13);
+    }
+    .intervensi-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 16px;
+    }
+    .intervensi-card h3 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .intervensi-card p { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.6; }
+    .intervensi-tag {
+      display: inline-block;
+      background: rgba(46,201,154,.2); color: #7EECD1;
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 50px; margin-top: 12px;
+      letter-spacing: .3px;
+    }
+
+    /* KATEGORI */
+    .kategori-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .kategori-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: var(--shadow);
+      text-decoration: none; color: var(--text);
+      transition: transform .2s, box-shadow .2s;
+      border: 1.5px solid transparent;
+    }
+    .kategori-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,.1);
+      border-color: var(--green);
+    }
+    .kategori-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .kategori-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .kategori-card span { font-size: 12px; color: var(--text-muted); }
+
+    /* FITUR */
+    .fitur-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .fitur-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      border: 1.5px solid #F0F0F0;
+      transition: transform .2s;
+    }
+    .fitur-card:hover { transform: translateY(-4px); }
+    .fitur-icon { font-size: 32px; margin-bottom: 16px; }
+    .fitur-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .fitur-card p { font-size: 14px; color: var(--text-muted); }
+
+    /* PROGRAM */
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .program-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1.5px solid #F0F0F0;
+      transition: transform .2s;
+    }
+    .program-card:hover { transform: translateY(-4px); }
+    .program-thumb {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px;
+    }
+    .program-body { padding: 24px; }
+    .program-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .program-tag {
+      background: var(--green-light); color: var(--green-dark);
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 50px;
+    }
+    .program-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-muted); }
+    .star { color: #FFD166; }
+    .program-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .program-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .program-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1.5px solid #F0F0F0; padding-top: 16px; }
+    .program-price { font-size: 18px; font-weight: 800; color: var(--green); }
+    .program-link {
+      color: var(--green); text-decoration: none;
+      font-size: 13px; font-weight: 600;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px; max-width: 900px; margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+      border: 1.5px solid #F0F0F0;
+      text-align: center;
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: var(--green);
+      background: linear-gradient(160deg, #E6F9F3 0%, #fff 60%);
+    }
+    .pricing-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--green); color: var(--white);
+      font-size: 12px; font-weight: 700; padding: 5px 18px; border-radius: 50px;
+    }
+    .pricing-plan { font-size: 13px; font-weight: 700; color: var(--text-muted); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 8px; }
+    .pricing-price { font-family: 'Nunito', sans-serif; font-size: 42px; font-weight: 900; color: var(--text); }
+    .pricing-price span { font-size: 16px; font-weight: 500; color: var(--text-muted); }
+    .pricing-desc { font-size: 14px; color: var(--text-muted); margin: 16px 0 28px; }
+    .pricing-features { list-style: none; text-align: left; margin-bottom: 28px; }
+    .pricing-features li { font-size: 14px; padding: 6px 0; border-bottom: 1px solid #F5F5F5; color: var(--text-muted); display: flex; gap: 8px; align-items: center; }
+    .pricing-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+    /* TESTIMONIAL */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .testi-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 28px; box-shadow: var(--shadow); border: 1.5px solid #F0F0F0;
+    }
+    .testi-stars { color: #FFD166; font-size: 16px; margin-bottom: 14px; }
+    .testi-text { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 20px; line-height: 1.7; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; background: var(--green-light);
+    }
+    .testi-name { font-size: 14px; font-weight: 700; }
+    .testi-role { font-size: 12px; color: var(--text-muted); }
+
+    /* ABOUT */
+    .about-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    @media (max-width: 768px) { .about-wrap { grid-template-columns: 1fr; } }
+    .about-visual {
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--purple-light) 100%);
+      border-radius: var(--radius); padding: 48px;
+      text-align: center; font-size: 80px; line-height: 1;
+    }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; }
+    .about-stat { background: var(--white); border-radius: 16px; padding: 20px; text-align: center; box-shadow: var(--shadow); }
+    .about-stat-num { font-family: 'Nunito', sans-serif; font-size: 30px; font-weight: 900; color: var(--green); }
+    .about-stat-label { font-size: 12px; color: var(--text-muted); }
+    .check-list { list-style: none; margin: 20px 0; }
+    .check-list li { padding: 8px 0; font-size: 15px; color: var(--text-muted); display: flex; gap: 10px; align-items: flex-start; }
+    .check-list li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; margin-top: 2px; }
+    .about-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+    /* CTA BANNER */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--green) 0%, #1BA87E 100%);
+      padding: 80px 24px; text-align: center; color: var(--white);
+    }
+    .cta-banner h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(26px, 4vw, 42px); font-weight: 900; margin-bottom: 14px;
+    }
+    .cta-banner p { font-size: 16px; opacity: .85; max-width: 500px; margin: 0 auto 36px; }
+    .btn-white {
+      background: var(--white); color: var(--green-dark);
+      padding: 14px 36px; border-radius: 50px;
+      text-decoration: none; font-weight: 800; font-size: 15px;
+      transition: transform .2s; display: inline-block;
+    }
+    .btn-white:hover { transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--text); color: rgba(255,255,255,.75);
+      padding: 60px 24px 32px;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } .nav-links { display: none; } }
+    .footer-logo { font-family: 'Nunito', sans-serif; font-size: 24px; font-weight: 900; color: var(--white); margin-bottom: 14px; }
+    .footer-logo span { color: var(--green); }
+    .footer-desc { font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+    .footer-social { display: flex; gap: 10px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255,255,255,.1); display: flex; align-items: center;
+      justify-content: center; font-size: 16px; text-decoration: none;
+      transition: background .2s;
+    }
+    .social-btn:hover { background: var(--green); }
+    .footer-col h4 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a { color: rgba(255,255,255,.65); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .footer-col ul a:hover { color: var(--green); }
+    .footer-bottom { border-top: 1.5px solid rgba(255,255,255,.1); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 12px; }
+    .footer-bottom p { font-size: 13px; }
+
+    /* SECTION BG VARIANTS */
+    .bg-light { background: #F8F9FA; }
+    .bg-white { background: var(--white); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">Suple<span>App</span></a>
+    <ul class="nav-links">
+      <li><a href="#intervensi">Intervensi Mental</a></li>
+      <li><a href="#program">Program</a></li>
+      <li><a href="#tentang">Tentang Kami</a></li>
+      <li><a href="#harga">Harga</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Mulai Gratis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> Platform #1 Kesehatan Mental Anak di Indonesia</div>
+  <h1>Dukung <span class="accent">Kesehatan Mental</span> Anak dengan Pendekatan Ilmiah</h1>
+  <p>SupleApp menghadirkan program intervensi psikologis berbasis bukti untuk tumbuh kembang emosional anak yang optimal dan sehat.</p>
+  <div class="hero-btns">
+    <a href="#" class="btn-primary">🌱 Mulai Sekarang</a>
+    <a href="#intervensi" class="btn-outline">Lihat Program →</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">15.000+</div><div class="stat-label">Anak Terbantu</div></div>
+    <div class="stat-item"><div class="stat-num">98%</div><div class="stat-label">Tingkat Kepuasan Orang Tua</div></div>
+    <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">Psikolog Terverifikasi</div></div>
+    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Program Aktif</div></div>
+  </div>
+</div>
+
+<!-- INTERVENSI MENTAL - MAIN SECTION -->
+<div class="mental-hero" id="intervensi">
+  <div class="mental-hero-inner">
+    <span class="section-badge">🧠 Intervensi Kesehatan Mental Anak</span>
+    <h2>Program Intervensi Berbasis Bukti untuk Anak</h2>
+    <p>Kami menggunakan pendekatan terapi kognitif-perilaku (CBT), mindfulness, dan play therapy yang telah terbukti secara klinis untuk mendukung kesehatan psikologis anak usia 3–18 tahun.</p>
+    <div class="intervensi-grid">
+      <div class="intervensi-card">
+        <div class="intervensi-icon" style="background:rgba(46,201,154,.2)">🧘</div>
+        <h3>Mindfulness untuk Anak</h3>
+        <p>Latihan pernapasan dan kesadaran penuh dirancang khusus agar mudah dipahami oleh anak-anak dari berbagai usia.</p>
+        <span class="intervensi-tag">Usia 5–12 tahun</span>
+      </div>
+      <div class="intervensi-card">
+        <div class="intervensi-icon" style="background:rgba(123,94,167,.2)">🎨</div>
+        <h3>Play Therapy & Seni Ekspresi</h3>
+        <p>Terapi bermain dan seni membantu anak mengekspresikan emosi yang sulit diverbalkan secara aman dan menyenangkan.</p>
+        <span class="intervensi-tag">Usia 3–10 tahun</span>
+      </div>
+      <div class="intervensi-card">
+        <div class="intervensi-icon" style="background:rgba(79,172,222,.2)">🧩</div>
+        <h3>CBT (Terapi Kognitif-Perilaku)</h3>
+        <p>Membantu anak mengenali pola pikir negatif dan menggantinya dengan pola yang lebih sehat dan adaptif.</p>
+        <span class="intervensi-tag">Usia 8–18 tahun</span>
+      </div>
+      <div class="intervensi-card">
+        <div class="intervensi-icon" style="background:rgba(255,209,102,.2)">👨‍👩‍👧</div>
+        <h3>Family-Based Intervention</h3>
+        <p>Melibatkan seluruh keluarga dalam proses penyembuhan untuk menciptakan lingkungan dukungan yang konsisten di rumah.</p>
+        <span class="intervensi-tag">Semua Usia</span>
+      </div>
+      <div class="intervensi-card">
+        <div class="intervensi-icon" style="background:rgba(255,107,107,.2)">💬</div>
+        <h3>Konseling Emosi</h3>
+        <p>Sesi tatap muka atau online bersama psikolog anak berpengalaman untuk menangani kecemasan, depresi, dan trauma.</p>
+        <span class="intervensi-tag">Usia 6–18 tahun</span>
+      </div>
+      <div class="intervensi-card">
+        <div class="intervensi-icon" style="background:rgba(46,201,154,.15)">📊</div>
+        <h3>Pemantauan Perkembangan</h3>
+        <p>Lacak perkembangan kesehatan mental anak secara berkala dengan laporan yang dapat dipahami orang tua dan guru.</p>
+        <span class="intervensi-tag">Dashboard Digital</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KATEGORI -->
+<section class="bg-white">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-badge">Kategori Program</span>
+      <h2 class="section-title">Temukan Program yang Tepat</h2>
+      <p class="section-sub">Berbagai kategori program dirancang khusus sesuai kebutuhan tumbuh kembang anak.</p>
+    </div>
+    <div class="kategori-grid">
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#E6F9F3">🧠</div>
+        <div><h3>Kesehatan Mental</h3><span>42 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#F0EBFA">💪</div>
+        <div><h3>Manajemen Emosi</h3><span>38 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#FFF9E6">🤝</div>
+        <div><h3>Keterampilan Sosial</h3><span>29 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#EAF6FD">📚</div>
+        <div><h3>Kesulitan Belajar</h3><span>21 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#FFF0F0">😴</div>
+        <div><h3>Gangguan Tidur</h3><span>17 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#E6F9F3">🌟</div>
+        <div><h3>Pengembangan Diri</h3><span>56 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#FFF9E6">🎯</div>
+        <div><h3>Fokus & ADHD</h3><span>24 program</span></div>
+      </a>
+      <a href="#" class="kategori-card">
+        <div class="kategori-icon" style="background:#F0EBFA">🫂</div>
+        <div><h3>Trauma & Resiliensi</h3><span>19 program</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FITUR -->
+<section class="bg-light">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-badge">Keunggulan Kami</span>
+      <h2 class="section-title">Mengapa Memilih SupleApp?</h2>
+      <p class="section-sub">Platform terintegrasi yang menghubungkan anak, orang tua, dan para profesional kesehatan mental.</p>
+    </div>
+    <div class="fitur-grid">
+      <div class="fitur-card">
+        <div class="fitur-icon">🏅</div>
+        <h3>Psikolog Berlisensi</h3>
+        <p>Semua tenaga ahli kami adalah psikolog klinis anak berlisensi dengan pengalaman minimal 5 tahun di bidangnya.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">📱</div>
+        <h3>Akses Kapan Saja</h3>
+        <p>Program dapat diakses melalui aplikasi mobile maupun web, sehingga proses terapi bisa berlanjut di mana saja.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">🔒</div>
+        <h3>Privasi Terjaga</h3>
+        <p>Data anak dan keluarga dijaga dengan enkripsi tingkat tinggi dan tidak pernah dibagikan tanpa persetujuan.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">📈</div>
+        <h3>Laporan Perkembangan</h3>
+        <p>Orang tua dan guru dapat memantau kemajuan anak secara berkala melalui laporan yang mudah dipahami.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">🌍</div>
+        <h3>Berbahasa Indonesia</h3>
+        <p>Semua konten dirancang dalam Bahasa Indonesia dengan konteks budaya lokal yang relevan untuk anak Indonesia.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">🎮</div>
+        <h3>Gamifikasi Terapi</h3>
+        <p>Pendekatan berbasis permainan membuat proses terapi menjadi lebih menyenangkan dan mudah dijalani anak.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM UNGGULAN -->
+<section class="bg-white" id="program">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-badge">Program Unggulan</span>
+      <h2 class="section-title">Program Pilihan untuk Anak</h2>
+      <p class="section-sub">Program terpopuler yang telah membantu ribuan anak dan keluarga di seluruh Indonesia.</p>
+    </div>
+    <div class="program-grid">
+      <div class="program-card">
+        <div class="program-thumb" style="background: linear-gradient(135deg, #E6F9F3, #EAF6FD)">🧘‍♀️</div>
+        <div class="program-body">
+          <div class="program-meta">
+            <span class="program-tag">Mindfulness</span>
+            <div class="program-rating"><span class="star">★</span> 4.9</div>
+          </div>
+          <h3>Mindfulness & Relaksasi Anak</h3>
+          <p>Program 8 minggu untuk membantu anak mengelola stres dan kecemasan melalui teknik mindfulness.</p>
+          <div class="program-footer">
+            <span class="program-price">Rp 299.000</span>
+            <a href="#" class="program-link">Lihat Detail →</a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-thumb" style="background: linear-gradient(135deg, #F0EBFA, #FFF0F0)">🎨</div>
+        <div class="program-body">
+          <div class="program-meta">
+            <span class="program-tag">Seni Terapi</span>
+            <div class="program-rating"><span class="star">★</span> 4.8</div>
+          </div>
+          <h3>Ekspresi Diri Melalui Seni</h3>
+          <p>Terapi seni kreatif yang membantu anak usia dini mengungkapkan emosi dengan cara yang menyenangkan.</p>
+          <div class="program-footer">
+            <span class="program-price">Rp 249.000</span>
+            <a href="#" class="program-link">Lihat Detail →</a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-thumb" style="background: linear-gradient(135deg, #FFF9E6, #E6F9F3)">🤝</div>
+        <div class="program-body">
+          <div class="program-meta">
+            <span class="program-tag">Sosial-Emosional</span>
+            <div class="program-rating"><span class="star">★</span> 4.7</div>
+          </div>
+          <h3>Kecerdasan Sosial & Empati</h3>
+          <p>Membangun kemampuan empati dan komunikasi sehat pada anak untuk kehidupan sosial yang lebih baik.</p>
+          <div class="program-footer">
+            <span class="program-price">Rp 349.000</span>
+            <a href="#" class="program-link">Lihat Detail →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="bg-light" id="tentang">
+  <div class="section-inner">
+    <div class="about-wrap">
+      <div>
+        <span class="section-badge">Tentang SupleApp</span>
+        <h2 class="section-title">Kami Peduli Tumbuh Kembang Jiwa Anak</h2>
+        <p style="color:var(--text-muted); font-size:15px; margin-bottom:8px;">SupleApp lahir dari keprihatinan mendalam terhadap meningkatnya angka gangguan kesehatan mental pada anak-anak Indonesia. Kami percaya setiap anak berhak mendapatkan dukungan psikologis yang berkualitas.</p>
+        <ul class="check-list">
+          <li>Didirikan oleh tim psikolog klinis anak berpengalaman</li>
+          <li>Didukung riset dari universitas terkemuka di Indonesia</li>
+          <li>Program dirancang sesuai kurikulum Kementerian Kesehatan RI</li>
+          <li>Terakreditasi oleh Himpunan Psikologi Indonesia (HIMPSI)</li>
+        </ul>
+        <div class="about-stats">
+          <div class="about-stat"><div class="about-stat-num">15K+</div><div class="about-stat-label">Anak Terbantu</div></div>
+          <div class="about-stat"><div class="about-stat-num">200+</div><div class="about-stat-label">Psikolog Ahli</div></div>
+          <div class="about-stat"><div class="about-stat-num">5 Tahun</div><div class="about-stat-label">Pengalaman</div></div>
+          <div class="about-stat"><div class="about-stat-num">34 Kota</div><div class="about-stat-label">Jangkauan</div></div>
+        </div>
+        <div class="about-btns" style="margin-top:28px">
+          <a href="#" class="btn-primary">Pelajari Lebih Lanjut</a>
+          <a href="#" class="btn-outline">Hubungi Kami</a>
+        </div>
+      </div>
+      <div class="about-visual">🌈<br><small style="font-size:18px; display:block; margin-top:16px; font-family:'Poppins'; font-weight:600; color:var(--green-dark)">Setiap Anak Berharga</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="bg-white">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-badge">Testimoni</span>
+      <h2 class="section-title">Kata Mereka tentang SupleApp</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Setelah 3 bulan menggunakan SupleApp, anak saya yang tadinya sangat pemalu dan sering cemas kini lebih percaya diri di sekolah. Programnya luar biasa efektif!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Ibu Dewi Lestari</div><div class="testi-role">Orang Tua, Jakarta</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Sebagai guru SD, saya sangat terbantu dengan laporan perkembangan yang diberikan SupleApp. Saya bisa lebih memahami kebutuhan murid-murid saya."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨‍🏫</div>
+          <div><div class="testi-name">Bapak Rizki Pratama</div><div class="testi-role">Guru SD, Bandung</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Program play therapy di SupleApp benar-benar membantu anak saya mengatasi trauma setelah kecelakaan. Psikolognya sabar dan profesional."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩‍👧</div>
+          <div><div class="testi-name">Ibu Sari Widyawati</div><div class="testi-role">Orang Tua, Surabaya</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="bg-light" id="harga">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-badge">Paket Harga</span>
+      <h2 class="section-title">Investasi Terbaik untuk Anak</h2>
+      <p class="section-sub">Pilih paket yang sesuai dengan kebutuhan keluarga Anda.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <p class="pricing-plan">Starter</p>
+        <div class="pricing-price">Rp 99K<span>/bulan</span></div>
+        <p class="pricing-desc">Cocok untuk memulai perjalanan kesehatan mental anak.</p>
+        <ul class="pricing-features">
+          <li>2 sesi konsultasi/bulan</li>
+          <li>Akses 10 program digital</li>
+          <li>Laporan perkembangan dasar</li>
+          <li>Chat dengan psikolog</li>
+        </ul>
+        <a href="#" class="btn-outline" style="display:block; text-align:center">Mulai Sekarang</a>
+      </div>
+      <div class="pricing-card featured">
+        <span class="pricing-badge">Terpopuler</span>
+        <p class="pricing-plan">Professional</p>
+        <div class="pricing-price">Rp 249K<span>/bulan</span></div>
+        <p class="pricing-desc">Solusi lengkap untuk tumbuh kembang optimal anak Anda.</p>
+        <ul class="pricing-features">
+          <li>8 sesi konsultasi/bulan</li>
+          <li>Akses semua program digital</li>
+          <li>Laporan perkembangan lengkap</li>
+          <li>Sesi keluarga 2x/bulan</li>
+          <li>Prioritas antrian psikolog</li>
+        </ul>
+        <a href="#" class="btn-primary" style="display:block; text-align:center">Mulai Sekarang</a>
+      </div>
+      <div class="pricing-card">
+        <p class="pricing-plan">Sekolah</p>
+        <div class="pricing-price">Custom</div>
+        <p class="pricing-desc">Untuk institusi pendidikan yang ingin mendukung kesehatan mental seluruh siswa.</p>
+        <ul class="pricing-features">
+          <li>Sesi tidak terbatas</li>
+          <li>Dashboard manajemen sekolah</li>
+          <li>Pelatihan guru & konselor</li>
+          <li>Laporan institusional</li>
+          <li>Dukungan dedikasi</li>
+        </ul>
+        <a href="#" class="btn-outline" style="display:block; text-align:center">Hubungi Kami</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <h2>Mulai Perjalanan Kesehatan Mental Anak Hari Ini</h2>
+  <p>Daftarkan anak Anda dan dapatkan akses gratis 14 hari ke seluruh program SupleApp.</p>
+  <a href="#" class="btn-white">🌱 Coba Gratis 14 Hari</a>
+</div>
+
+<!-- FOOTER -->
+<footer id="kontak">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Suple<span>App</span></div>
+        <p class="footer-desc">Platform intervensi kesehatan mental anak terpercaya di Indonesia. Mendukung tumbuh kembang jiwa anak yang sehat dan bahagia.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📘</a>
+          <a href="#" class="social-btn">📸</a>
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Program</h4>
+        <ul>
+          <li><a href="#">Mindfulness</a></li>
+          <li><a href="#">Play Therapy</a></li>
+          <li><a href="#">CBT Anak</a></li>
+          <li><a href="#">Seni Terapi</a></li>
+          <li><a href="#">Konseling</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Perusahaan</h4>
+        <ul>
+          <li><a href="#">Tentang Kami</a></li>
+          <li><a href="#">Tim Psikolog</a></li>
+          <li><a href="#">Blog & Artikel</a></li>
+          <li><a href="#">Karir</a></li>
+          <li><a href="#">Mitra</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak</h4>
+        <ul>
+          <li><a href="#">Jl. Sudirman No. 12, Jakarta</a></li>
+          <li><a href="#">+62 812-3456-7890</a></li>
+          <li><a href="#">halo@supleapp.id</a></li>
+          <li><a href="#">Senin–Jumat, 08.00–17.00</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 SupleApp. Hak Cipta Dilindungi.</p>
+      <p><a href="#" style="color:rgba(255,255,255,.5); text-decoration:none; margin:0 8px">Kebijakan Privasi</a> · <a href="#" style="color:rgba(255,255,255,.5); text-decoration:none">Syarat & Ketentuan</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
